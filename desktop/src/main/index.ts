@@ -168,11 +168,12 @@ initDesktopLogging()
 // can be overridden by the bundled app-config (appName); defaults to maliang.
 app.setName(loadAppConfig()?.appName || 'maliang')
 // Default the Chromium/Electron UI locale to Simplified Chinese.
+// Electron 33 typings do not include setLocale (added in later Electron);
+// keep the command-line switch and call setLocale only when it exists.
 app.commandLine.appendSwitch('lang', 'zh-CN')
-try {
-  app.setLocale('zh-CN')
-} catch {
-  /* setLocale may be unavailable on very old Electron builds */
+const setLocale = (app as unknown as { setLocale?: (locale: string) => void }).setLocale
+if (typeof setLocale === 'function') {
+  setLocale.call(app, 'zh-CN')
 }
   // The web layer may have overridden the name at runtime. Re-apply it here,
   // before app.getPath('userData') is read anywhere, since setName moves it.
