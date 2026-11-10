@@ -180,3 +180,17 @@ html[data-wallpaper] #sidebar {
 }
 html[data-wallpaper] .composer-card { background: rgb(var(--cw-panel) / 0.82); }
 html[data-wallpaper] .composer-card:focus-within { background: rgb(var(--cw-panel) / 0.9); }
+
+/* Light config forms: warm inset fields on the cream canvas. */
+html:not(.dark) #view-config input[type="text"],
+html:not(.dark) #view-config input[type="password"],
+html:not(.dark) #view-config input[type="number"],
+html:not(.dark) #view-config input:not([type]),
+html:not(.dark) #view-config textarea,
+html:not(.dark) #view-config select {
+    background-color: #FDF9F2;
+    border-color: #eadfce;
+}
+html:not(.dark) #view-config .bg-panel {
+    border-color: #eadfce;
+}

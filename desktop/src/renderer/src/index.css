@@ -31,22 +31,22 @@
   --danger-border: rgba(239, 68, 68, 0.3);
   --info: #3b82f6;
 
-  /* Light theme — aligned with the web console: gray surfaces/borders + slate text */
-  --bg-base: #f9fafb;        /* app background (gray-50) */
-  --bg-surface: #ffffff;     /* panels, cards */
-  --bg-surface-2: #f3f4f6;   /* nested surfaces, hover fills (gray-100) */
-  --bg-elevated: #ffffff;    /* popovers, menus, modals */
-  --bg-inset: #f9fafb;       /* inputs, composer, textareas: same gray as the page (gray-50, like the web console) */
-  --bg-inset-2: #f3f4f6;     /* nested fills that must stay visibly darker than inset: code blocks, tool output, badges (gray-100) */
+  /* Light theme — warm cream canvas matched to the mascot (#FDF9F2) */
+  --bg-base: #FDF9F2;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f3eee6;
+  --bg-elevated: #ffffff;
+  --bg-inset: #FDF9F2;
+  --bg-inset-2: #f3eee6;
 
   --text-primary: #1e293b;   /* headings, primary text (slate-800) */
   --text-secondary: #475569; /* body, labels (slate-600) */
   --text-tertiary: #64748b;  /* hints, captions (slate-500) */
   --text-disabled: #94a3b8;  /* slate-400 */
 
-  --border-default: #e5e7eb; /* gray-200 (web console border) */
-  --border-strong: #d1d5db;  /* gray-300 */
-  --border-subtle: #f3f4f6;  /* gray-100 */
+  --border-default: #eadfce;
+  --border-strong: #d9ccb8;
+  --border-subtle: #f3eee6;
 
   --overlay: rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);

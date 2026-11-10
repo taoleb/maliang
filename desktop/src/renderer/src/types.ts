@@ -40,6 +40,7 @@ export interface ElectronAPI {
   // Current app version string (e.g. "0.0.5").
   getAppVersion?: () => Promise<string>
   setUiLang?: (lang: 'zh' | 'en') => Promise<'zh' | 'en'>
+  setUiTheme?: (theme: 'light' | 'dark') => Promise<'light' | 'dark'>
   // OS-level microphone access (prompts once on macOS; true elsewhere).
   requestMicAccess?: () => Promise<boolean>
   // Launch-at-login toggle (macOS + Windows). get returns the effective state;

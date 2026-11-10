@@ -21,6 +21,7 @@ export type ResolvedTheme = 'light' | 'dark'
 
 // Appearance preference (light/dark/system).
 const PREF_KEY = 'cow_theme'
+const EXPLICIT_KEY = 'maliang_theme_explicit'
 // Selected theme id (which visual theme is active).
 const THEME_ID_KEY = 'cow_theme_id'
 
@@ -28,11 +29,28 @@ function getSystemTheme(): ResolvedTheme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
+function hasExplicitPref(): boolean {
+  return localStorage.getItem(EXPLICIT_KEY) === '1'
+}
+
 function readStoredPref(): ThemePref {
-  const saved = localStorage.getItem(PREF_KEY)
-  if (saved === 'dark' || saved === 'light' || saved === 'system') return saved
-  // First run: follow the OS appearance rather than forcing a fixed theme.
-  return 'system'
+  // Honor a saved value only after the user has used the theme toggle.
+  // Leftover cow_theme or OS dark mode must not flip a fresh install.
+  if (hasExplicitPref()) {
+    const saved = localStorage.getItem(PREF_KEY) || localStorage.getItem('maliang_theme')
+    if (saved === 'dark' || saved === 'light') return saved
+    // 'system' is no longer a first-class default; treat it as light.
+  }
+  return 'light'
+}
+
+function persistPref(pref: ThemePref) {
+  localStorage.setItem(PREF_KEY, pref === 'dark' ? 'dark' : 'light')
+  localStorage.setItem(EXPLICIT_KEY, '1')
+}
+
+function notifyShell(resolved: ResolvedTheme) {
+  void window.electronAPI?.setUiTheme?.(resolved)
 }
 
 function readStoredThemeId(): string {
@@ -221,8 +239,9 @@ function clamp01(n: number): number {
 // first paint already has the right colors (no flash of the default theme).
 export function initThemeEarly() {
   const pref = readStoredPref()
-  const resolved: ResolvedTheme = pref === 'system' ? getSystemTheme() : pref
+  const resolved: ResolvedTheme = pref === 'dark' ? 'dark' : 'light'
   applyAppearanceAndTheme(resolved, readStoredThemeId())
+  notifyShell(resolved)
 }
 
 export function useTheme() {
@@ -230,7 +249,7 @@ export function useTheme() {
   const [themeId, setThemeIdState] = useState<string>(readStoredThemeId)
   const [themes, setThemes] = useState<Theme[]>(getAllThemes)
   const [resolved, setResolved] = useState<ResolvedTheme>(() =>
-    readStoredPref() === 'system' ? getSystemTheme() : (readStoredPref() as ResolvedTheme)
+    readStoredPref() === 'dark' ? 'dark' : 'light'
   )
   // Display name; a bundled app config may override the default.
   const [appName, setAppName] = useState<string>('maliang')
@@ -256,12 +275,14 @@ export function useTheme() {
 
         // First-run default from the app config (if the theme exists).
         if (firstRun && config?.defaultTheme && getTheme(config.defaultTheme).id === config.defaultTheme) {
+          localStorage.setItem(THEME_ID_KEY, config.defaultTheme)
           setThemeIdState(config.defaultTheme) // triggers the apply effect below
           return
         }
         // Re-apply the current selection now that its definition is loaded.
-        const next: ResolvedTheme = readStoredPref() === 'system' ? getSystemTheme() : (readStoredPref() as ResolvedTheme)
+        const next: ResolvedTheme = readStoredPref() === 'dark' ? 'dark' : 'light'
         applyAppearanceAndTheme(next, readStoredThemeId())
+        notifyShell(next)
       })
       .catch(() => {})
     return () => {
@@ -271,11 +292,14 @@ export function useTheme() {
 
   // Re-apply whenever the appearance preference or theme changes.
   useEffect(() => {
-    const next: ResolvedTheme = pref === 'system' ? getSystemTheme() : pref
+    const next: ResolvedTheme = pref === 'dark' ? 'dark' : 'light'
     setResolved(next)
     applyAppearanceAndTheme(next, themeId)
-    localStorage.setItem(PREF_KEY, pref)
-    localStorage.setItem(THEME_ID_KEY, themeId)
+    notifyShell(next)
+    // Persist the appearance only after an explicit choice, so the first-run
+    // light default cannot later be mistaken for a user preference.
+    if (hasExplicitPref()) persistPref(pref)
+    if (hasStoredThemeId()) localStorage.setItem(THEME_ID_KEY, themeId)
   }, [pref, themeId])
 
   // Follow system changes only when preference is "system".
@@ -292,11 +316,20 @@ export function useTheme() {
   }, [pref, themeId])
 
   const toggleTheme = useCallback(() => {
-    setPref(resolved === 'dark' ? 'light' : 'dark')
+    const next: ThemePref = resolved === 'dark' ? 'light' : 'dark'
+    persistPref(next)
+    setPref(next)
   }, [resolved])
 
-  const setTheme = useCallback((next: ThemePref) => setPref(next), [])
-  const setThemeId = useCallback((next: string) => setThemeIdState(next), [])
+  const setTheme = useCallback((next: ThemePref) => {
+    const prefNext: ThemePref = next === 'dark' ? 'dark' : 'light'
+    persistPref(prefNext)
+    setPref(prefNext)
+  }, [])
+  const setThemeId = useCallback((next: string) => {
+    localStorage.setItem(THEME_ID_KEY, next)
+    setThemeIdState(next)
+  }, [])
 
   // Re-scan the themes folder so themes added since launch (imported, copied
   // in by hand, or written by the agent) show up without a restart. The
@@ -311,7 +344,9 @@ export function useTheme() {
       registerRuntimeThemes(await api.listThemes())
       setThemes(getAllThemes())
       const p = readStoredPref()
-      applyAppearanceAndTheme(p === 'system' ? getSystemTheme() : p, readStoredThemeId())
+      const resolvedPref: ResolvedTheme = p === 'dark' ? 'dark' : 'light'
+      applyAppearanceAndTheme(resolvedPref, readStoredThemeId())
+      notifyShell(resolvedPref)
     } catch {
       // Keep the current list.
     }
@@ -338,6 +373,7 @@ export function useTheme() {
     }
     if (res.status === 'ok') {
       await reloadThemes(true)
+      localStorage.setItem(THEME_ID_KEY, res.id)
       setThemeIdState(res.id)
     }
     return res

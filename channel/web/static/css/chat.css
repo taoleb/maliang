@@ -48,8 +48,9 @@
     cursor: text;
     padding: 10px 10px 8px;
     border-radius: 18px;
-    border: 1px solid rgb(var(--cw-slate-200));
-    background: rgb(var(--cw-slate-50));
+    border: 1px solid rgb(234, 223, 206);
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(43, 32, 18, 0.04), 0 4px 14px rgba(43, 32, 18, 0.04);
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 .composer-card .attachment-preview,
@@ -847,6 +848,13 @@
     display: flex;
     flex-direction: column;
 }
+/* Light theme: white example cards with a warm border so they sit cleanly
+   on the cream canvas next to the mascot. */
+html:not(.dark) .example-card {
+    border-color: rgb(234, 223, 206);
+    box-shadow: 0 1px 2px rgba(43, 32, 18, 0.04), 0 4px 14px rgba(43, 32, 18, 0.04);
+}
+
 .example-card > p {
     flex: 1;
     display: -webkit-box;

@@ -5,8 +5,19 @@
 // =====================================================================
 // Theme
 // =====================================================================
-// The guest page sets its own default; the console defaults to dark.
-let currentTheme = localStorage.getItem('cow_theme') || window.__MALIANG_DEFAULT_THEME__ || 'dark';
+// Fresh install is always light. A leftover cow_theme value is honored only
+// after an explicit toggle (maliang_theme_explicit=1). Do not follow the OS.
+function resolveThemePref() {
+    if (typeof window.__maliangResolveTheme__ === 'function') {
+        return window.__maliangResolveTheme__();
+    }
+    if (localStorage.getItem('maliang_theme_explicit') === '1') {
+        const saved = localStorage.getItem('cow_theme') || localStorage.getItem('maliang_theme');
+        if (saved === 'dark' || saved === 'light') return saved;
+    }
+    return window.__MALIANG_DEFAULT_THEME__ || 'light';
+}
+let currentTheme = resolveThemePref();
 
 function applyTheme() {
     const root = document.documentElement;
@@ -43,6 +54,7 @@ function rerenderMermaidDiagrams() {
 function toggleTheme() {
     currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
     localStorage.setItem('cow_theme', currentTheme);
+    localStorage.setItem('maliang_theme_explicit', '1');
     applyTheme();
 }
 

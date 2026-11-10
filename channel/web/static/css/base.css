@@ -32,9 +32,10 @@
     --cw-slate-900: 15 23 42;
     /* Accent-colored text on a tinted accent background. */
     --cw-accent-ink: 23 128 61;
-    --cw-canvas: 249 250 251;
+    /* Warm cream canvas, matched to the mascot / splash (#FDF9F2). */
+    --cw-canvas: 253 249 242;
     --cw-panel: 255 255 255;
-    --cw-sidebar: 10 10 10;
+    --cw-sidebar: 250 245 236;
     /* Panel opacity; a glass wallpaper lowers it. */
     --cw-glass-alpha: 1;
 }
@@ -42,6 +43,7 @@
     --cw-accent-ink: 110 231 160;
     --cw-canvas: 17 17 17;
     --cw-panel: 26 26 26;
+    --cw-sidebar: 10 10 10;
 }
 
 /* Mobile viewport fixes.

@@ -76,16 +76,26 @@
     (function() {
         window.__MALIANG_DEFAULT_LANG__ = '{{MALIANG_DEFAULT_LANG}}';
         window.__GUEST_LANG__ = '{{GUEST_LANG}}';
-        // Light unless the embedding site asks otherwise (?theme=dark|auto);
-        // a visitor's own toggle still wins.
+        // Light unless the embedding site asks otherwise (?theme=dark).
+        // ?theme=auto is accepted as an explicit embed request; otherwise we
+        // do not follow the visitor's OS dark mode. A visitor toggle still wins.
         var wanted = new URLSearchParams(location.search).get('theme');
         if (wanted === 'auto') {
             wanted = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         window.__MALIANG_DEFAULT_THEME__ = wanted === 'dark' ? 'dark' : 'light';
-        var theme = localStorage.getItem('cow_theme') || window.__MALIANG_DEFAULT_THEME__;
+        window.__maliangResolveTheme__ = function() {
+            if (localStorage.getItem('maliang_theme_explicit') === '1') {
+                var saved = localStorage.getItem('cow_theme') || localStorage.getItem('maliang_theme');
+                if (saved === 'dark' || saved === 'light') return saved;
+            }
+            if (wanted === 'dark' || wanted === 'light') return wanted;
+            return window.__MALIANG_DEFAULT_THEME__ || 'light';
+        };
+        var theme = window.__maliangResolveTheme__();
         var root = document.documentElement;
         if (theme === 'dark') root.classList.add('dark');
+        else root.classList.remove('dark');
         root.setAttribute('lang', window.__maliangResolveLang__());
         // The console's sheets hard-code its green; guest.css swaps it for
         // these where a page has its own color.

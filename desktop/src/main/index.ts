@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, session, shell, ipcMain, dialog, nativeImage, Notification, systemPreferences, crashReporter, Menu, clipboard, net } from 'electron'
+import { app, BrowserWindow, screen, session, shell, ipcMain, dialog, nativeImage, nativeTheme, Notification, systemPreferences, crashReporter, Menu, clipboard, net } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
@@ -23,6 +23,30 @@ import {
 // writes its own diagnostics into the SAME run.log the "open log folder" button
 // reveals and the in-app Logs page tails — one place to look for both layers.
 const MALIANG_DATA_DIR = path.join(os.homedir(), '.maliang')
+
+// Cream light background matches the mascot splash / About card and avoids a
+// dark flash while the renderer (or backend) is still starting.
+const WINDOW_BG_LIGHT = '#FDF9F2'
+const WINDOW_BG_DARK = '#0e0e10'
+
+function applyShellAppearance(mode: 'light' | 'dark') {
+  const light = mode !== 'dark'
+  try {
+    nativeTheme.themeSource = light ? 'light' : 'dark'
+  } catch {
+    /* older Electron */
+  }
+  mainWindow?.setBackgroundColor(light ? WINDOW_BG_LIGHT : WINDOW_BG_DARK)
+}
+
+// Default the Chromium/Electron chrome to light so a fresh install never
+// follows the OS dark theme before the renderer has a chance to paint.
+try {
+  nativeTheme.themeSource = 'light'
+} catch {
+  /* ignore */
+}
+
 
 // Mirror the main process's console output and any uncaught crash to run.log.
 // Packaged builds have no terminal, so every console.log/error and every
@@ -421,7 +445,7 @@ function createWindow() {
     titleBarStyle: isMac ? 'hiddenInset' : 'hidden',
     trafficLightPosition: isMac ? { x: 14, y: 16 } : undefined,
     frame: isMac ? undefined : false,
-    backgroundColor: '#0e0e10',
+    backgroundColor: WINDOW_BG_LIGHT,
     icon: getIconPath(),
     title: app.name,
     show: false,
@@ -693,6 +717,12 @@ function setupIPC() {
     rebuildAppMenu()
     rebuildTrayMenu()
     return getUiLang()
+  })
+
+  ipcMain.handle('set-ui-theme', (_event, theme: string) => {
+    const mode = theme === 'dark' ? 'dark' : 'light'
+    applyShellAppearance(mode)
+    return mode
   })
 
   ipcMain.handle('restart-backend', async () => {

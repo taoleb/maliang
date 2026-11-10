@@ -99,8 +99,21 @@
     (function() {
         // Backend-resolved default language (from maliang_lang config / auto-detect).
         window.__MALIANG_DEFAULT_LANG__ = '{{MALIANG_DEFAULT_LANG}}';
-        var theme = localStorage.getItem('cow_theme') || 'dark';
+        // Light is the first-run default. Honor a saved appearance only after
+        // the user has used the theme toggle (maliang_theme_explicit=1), so a
+        // leftover cow_theme or the OS dark-mode preference cannot flip a
+        // fresh install to dark.
+        window.__maliangResolveTheme__ = function() {
+            if (localStorage.getItem('maliang_theme_explicit') === '1') {
+                var saved = localStorage.getItem('cow_theme') || localStorage.getItem('maliang_theme');
+                if (saved === 'dark') return 'dark';
+                if (saved === 'light') return 'light';
+            }
+            return 'light';
+        };
+        var theme = window.__maliangResolveTheme__();
         if (theme === 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
         // Replay the color theme's last variables (written by themes.js) so
         // the first paint already has them.
         try {
