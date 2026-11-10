@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术日报 · 车本位前沿技术情报仪表盘</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#fff; --ink:#1c2434; --sub:#5b6780; --line:#e3e8f0;
+  --blue:#2f6fed; --teal:#0e9f8a; --amber:#e8890c; --red:#e5484d; --purple:#7c5cff; --green:#22a06b; --yellow:#f0b429;
+  --shadow:0 1px 2px rgba(20,30,60,.06),0 8px 22px rgba(20,30,60,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:13.5px/1.65 "PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+/* ===== 头部 ===== */
+header.top{background:
+  radial-gradient(900px 320px at 85% -60%,rgba(90,160,255,.5),transparent 60%),
+  radial-gradient(700px 300px at 10% -50%,rgba(0,163,141,.35),transparent 60%),
+  linear-gradient(135deg,#081633 0%,#0d2a5c 45%,#16418f 100%);
+  color:#fff;padding:26px 0 20px}
+.top-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+h1.title{font-size:26px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+h1.title .lg{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#3f8cff,#0e9f8a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 14px rgba(63,140,255,.45)}
+h1.title em{font-style:normal;font-size:12px;font-weight:500;opacity:.75;letter-spacing:2px}
+.date-chip{background:#fff;color:#0d2a5c;border-radius:9px;padding:3px 14px;font-weight:800;font-size:13px}
+.srcdate-chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:9px;padding:3px 12px;font-size:12px;font-weight:600}
+.src-chips{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.src-chips span{font-size:11.5px;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:2px 11px;background:rgba(255,255,255,.1)}
+.stats{display:flex;gap:26px;margin-top:16px;flex-wrap:wrap}
+.stats div{font-size:11.5px;opacity:.9}
+.stats b{font-size:22px;font-weight:800;display:block;line-height:1.2;background:linear-gradient(90deg,#fff,#9cc6ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* ===== 导航 ===== */
+nav.tabs{position:sticky;top:0;z-index:60;background:#ffffffee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:6px;padding:8px 20px;overflow-x:auto}
+nav.tabs a{flex:0 0 auto;text-decoration:none;color:var(--sub);font-size:12.5px;font-weight:700;padding:6px 15px;border-radius:999px;transition:.2s}
+nav.tabs a:hover{background:#eef3fe;color:var(--blue)}
+nav.tabs a.on{background:var(--blue);color:#fff}
+section{margin:22px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.card-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 18px;border-bottom:1px solid var(--line)}
+.card-h .idx{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;flex:0 0 auto}
+.card-h h2{font-size:15.5px;font-weight:800}
+.card-h .form{font-size:11.5px;color:var(--sub);background:#f1f4fa;border:1px solid var(--line);border-radius:6px;padding:2px 9px}
+.card-h .src{margin-left:auto;font-size:11.5px;color:var(--sub)}
+.card-b{padding:16px 18px}
+.note{font-size:11px;color:var(--sub);margin-top:10px}
+.sect-t{font-size:12.5px;font-weight:800;color:var(--sub);margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sect-t::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--blue)}
+/* ===== AI 洞察 ===== */
+.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:960px){.ins-grid{grid-template-columns:1fr}}
+.ins{border:1px solid var(--line);border-radius:13px;padding:13px 15px;background:linear-gradient(160deg,#f7faff,#fff);position:relative}
+.ins .n{position:absolute;top:11px;right:13px;width:23px;height:23px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ins h4{font-size:13px;margin-bottom:6px;padding-right:30px}
+.ins p{font-size:12px;color:#39435a}
+.ins .more{margin-top:8px;font-size:11.5px;color:var(--blue);cursor:pointer;font-weight:700;user-select:none}
+.ins .detail{display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:11.5px;color:var(--sub)}
+.ins.open .detail{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1}}
+/* ===== 筛选条 ===== */
+.filterbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:13px}
+.filterbar button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 15px;font-size:12px;font-weight:700;color:var(--sub);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.filterbar button:hover{border-color:var(--blue);color:var(--blue)}
+.filterbar button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.filterbar button .cnt{font-size:10px;background:rgba(0,0,0,.08);border-radius:999px;padding:0 7px;font-weight:800}
+.filterbar button.on .cnt{background:rgba(255,255,255,.25)}
+.filterbar button .mdot{width:8px;height:8px;border-radius:50%}
+/* ===== 信息流 ===== */
+.feed-grid{display:grid;grid-template-columns:1fr 300px;gap:16px}
+@media(max-width:980px){.feed-grid{grid-template-columns:1fr}}
+.masonry{columns:2;column-gap:13px}
+@media(max-width:780px){.masonry{columns:1}}
+.ncard{break-inside:avoid;display:block;text-decoration:none;border:1px solid var(--line);border-left:4px solid var(--mc,var(--blue));border-radius:12px;padding:12px 14px;margin-bottom:13px;background:#fff;transition:.2s;color:inherit}
+.ncard:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--mc,var(--blue))}
+.ncard .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;align-items:center}
+.ncard .tags span{font-size:10.5px;color:var(--blue);background:#eef3fe;border-radius:5px;padding:1px 8px;font-weight:600}
+.ncard .tags .mtag{color:#fff;background:var(--mc,var(--blue))}
+.ncard h5{font-size:13px;margin-bottom:6px;line-height:1.5}
+.ncard .sum{font-size:12px;color:#3d4759;margin-bottom:8px}
+.opp{background:linear-gradient(135deg,#fff8ef,#fff3e2);border:1px solid #f5dfc0;border-radius:9px;padding:7px 10px;font-size:11.5px;color:#7a5416;margin-bottom:9px}
+.opp b{color:#c2660a}
+.ncard .meta{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--sub);flex-wrap:wrap}
+.imp{display:flex;align-items:center;gap:4px;font-weight:700}
+.imp i{width:42px;height:5px;border-radius:3px;background:#edf1f7;overflow:hidden;display:inline-block}
+.imp i b{display:block;height:100%;background:var(--mc,var(--blue))}
+.grade{font-weight:800;border-radius:5px;padding:0 6px;color:#fff;font-size:10px}
+.grade.A{background:var(--green)}.grade.B{background:var(--blue)}.grade.C{background:#98a2b6}
+.orig{margin-left:auto;color:var(--blue);font-weight:700;white-space:nowrap}
+.radar-card{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fff}
+.radar-card h5{font-size:12px;color:var(--sub);text-align:center;margin-bottom:4px}
+/* ===== 观点 ===== */
+.op-masonry{columns:3;column-gap:13px}
+@media(max-width:1000px){.op-masonry{columns:2}}
+@media(max-width:680px){.op-masonry{columns:1}}
+.op{break-inside:avoid;border:1px solid var(--line);border-left:5px solid #9aa5b8;border-radius:12px;background:#fff;padding:12px 14px;margin-bottom:13px}
+.op.bull{border-left-color:var(--green)}.op.bear{border-left-color:var(--red)}.op.neut{border-left-color:#9aa5b8}
+.op .quote{font-size:12.8px;color:#2a3348;background:#f7f9fd;border-radius:9px;padding:9px 11px;margin-bottom:10px}
+.op .quote mark{background:linear-gradient(transparent 55%,#ffe9a8 55%);padding:0 2px}
+.op .who{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--sub)}
+.ava{width:28px;height:28px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:0 0 auto}
+.op .who .org{margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.stance{font-size:10px;font-weight:800;color:#fff;border-radius:5px;padding:1px 8px}
+.stance.bull{background:var(--green)}.stance.bear{background:var(--red)}.stance.neut{background:#9aa5b8}
+.scene{font-size:10px;background:#f1f4fa;border-radius:5px;padding:1px 8px;color:var(--sub)}
+.opsrc{font-size:10.5px;color:var(--blue);text-decoration:none;font-weight:700}
+.opsrc:hover{text-decoration:underline}
+.vs-box{margin-top:16px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.vs-h{background:#f6f8fc;padding:9px 15px;font-size:12.5px;font-weight:800;color:var(--sub)}
+.vs-grid{display:grid;grid-template-columns:1fr 64px 1fr;align-items:stretch}
+@media(max-width:820px){.vs-grid{grid-template-columns:1fr}}
+.vs-side{padding:14px 16px}
+.vs-side.l{background:#f0faf4}.vs-side.r{background:#fdf3f3}
+.vs-side h6{font-size:12px;margin-bottom:7px}
+.vs-side p{font-size:11.5px;color:#39435a}
+.vs-mid{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;background:linear-gradient(160deg,var(--green),var(--red));writing-mode:vertical-lr;letter-spacing:2px}
+@media(max-width:820px){.vs-mid{writing-mode:horizontal-tb;padding:4px}}
+.vs-tl{display:flex;justify-content:space-between;padding:12px 20px;border-top:1px dashed var(--line);font-size:10.5px;color:var(--sub);position:relative;flex-wrap:wrap;gap:6px}
+.vs-tl::before{content:"";position:absolute;left:28px;right:28px;top:19px;height:2px;background:#e3e8f0}
+.vs-tl span{position:relative;z-index:1;background:#fff;padding:0 6px}
+.vs-tl b{display:block;text-align:center}
+/* ===== 技术卡片 ===== */
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+@media(max-width:1080px){.tgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.tgrid{grid-template-columns:1fr}}
+.tcard{perspective:1100px;height:340px;position:relative;cursor:pointer}
+.tinner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.tcard.flip .tinner{transform:rotateY(180deg)}
+.tface{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 15px;overflow:hidden}
+.tback{transform:rotateY(180deg);background:#fbfcff}
+.tlogo{height:58px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin-bottom:10px}
+.tface h4{font-size:13.5px;margin-bottom:6px}
+.tface .def{font-size:11.5px;color:#39435a;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tmetrics{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.tm{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--sub);margin-bottom:7px}
+.tm .bar{width:52%;height:6px;background:#edf1f7;border-radius:3px;overflow:hidden}
+.tm .bar i{display:block;height:100%;border-radius:3px}
+.tm b{color:var(--ink)}
+.rating{font-weight:800;color:#fff;border-radius:5px;padding:1px 9px;font-size:10.5px}
+.flip-hint{position:absolute;bottom:9px;right:13px;font-size:10px;color:#b6bfd0}
+.tback h6{font-size:11px;color:var(--sub);margin:7px 0 5px}
+.tback .sketch{background:#fff;border:1px dashed #c9d2e0;border-radius:10px}
+.mini5{display:flex;align-items:flex-start;gap:0;margin-top:3px}
+.mini5 .st{flex:1;text-align:center;position:relative;font-size:9.5px;color:var(--sub)}
+.mini5 .st::before{content:"";display:block;width:9px;height:9px;border-radius:50%;background:var(--blue);margin:0 auto 4px;box-shadow:0 0 0 3px #e3ecff}
+.mini5 .st::after{content:"";position:absolute;top:4px;left:-50%;width:100%;height:2px;background:#dbe4f2;z-index:-1}
+.mini5 .st:first-child::after{display:none}
+.tcloud{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tcloud span{font-size:10px;background:#eef3fe;color:var(--blue);border-radius:5px;padding:1px 8px}
+/* ===== 专题中心 ===== */
+.topic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+@media(max-width:860px){.topic-grid{grid-template-columns:1fr}}
+.ttopic{border:1px solid var(--line);border-radius:13px;padding:14px 16px;background:linear-gradient(165deg,#fbfcff,#fff);position:relative;transition:.2s}
+.ttopic:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.ttopic .tno{position:absolute;top:13px;right:14px;font-size:26px;font-weight:900;color:#e8edf6;line-height:1}
+.ttopic h4{font-size:13.5px;margin-bottom:5px;padding-right:44px}
+.ttopic .why{font-size:11.5px;color:#c2660a;background:#fff6ea;border:1px solid #f3e2c8;border-radius:7px;padding:4px 9px;margin-bottom:9px;display:inline-block}
+.ttopic ul{list-style:none;margin-bottom:11px}
+.ttopic li{font-size:11.8px;color:#3d4759;padding-left:16px;position:relative;margin-bottom:3px}
+.ttopic li::before{content:"▪";position:absolute;left:3px;color:var(--blue)}
+.ttopic .btns{display:flex;gap:8px;flex-wrap:wrap}
+.ttopic .btns button{border:1px solid var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:5px 13px;font-size:11.5px;font-weight:700;cursor:pointer;transition:.15s}
+.ttopic .btns button:hover{background:var(--blue);color:#fff}
+.ttopic .btns button.done{background:var(--green);border-color:var(--green);color:#fff}
+.topic-how{background:#f1f6ff;border:1px dashed #b9cdf5;border-radius:11px;padding:11px 14px;font-size:12px;color:#33507f;margin-bottom:14px}
+/* ===== M5 七日全景 ===== */
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}
+@media(max-width:1000px){.wk-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:620px){.wk-grid{grid-template-columns:repeat(2,1fr)}}
+.wk-day{border:1px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;position:relative;overflow:hidden;transition:.2s}
+.wk-day:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.wk-day.is-today{border-color:var(--blue);box-shadow:0 0 0 1.5px var(--blue)}
+.wk-day .dh{display:flex;align-items:baseline;gap:7px;margin-bottom:2px}
+.wk-day .dw{font-size:12px;font-weight:800;color:var(--ink)}
+.wk-day .dd{font-size:10px;color:var(--sub)}
+.wk-day .today-tag{font-size:9px;background:var(--blue);color:#fff;border-radius:4px;padding:0 6px;margin-left:auto}
+.wk-day .cnt{font-size:22px;font-weight:800;color:var(--blue);line-height:1.1}
+.wk-day .cnt small{font-size:10px;color:var(--sub);font-weight:600}
+.wk-bar{height:5px;background:#edf1f7;border-radius:3px;margin:7px 0 8px;overflow:hidden}
+.wk-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:3px}
+.wk-cats{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.wk-cats span{font-size:9px;background:#f1f4fa;color:var(--sub);border-radius:4px;padding:0 6px}
+.wk-cats span:first-child{background:#eef3fe;color:var(--blue);font-weight:700}
+.wk-picks{border-top:1px dashed var(--line);padding-top:7px}
+.wk-picks a{display:block;font-size:10.5px;color:#39435a;text-decoration:none;line-height:1.45;margin-bottom:5px;padding-left:11px;position:relative}
+.wk-picks a::before{content:"▪";position:absolute;left:1px;color:var(--teal)}
+.wk-picks a:hover{color:var(--blue)}
+.wk-picks .cat{color:var(--teal);font-weight:700}
+.wk-trends{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+@media(max-width:860px){.wk-trends{grid-template-columns:1fr}}
+.wk-trend{border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:10px;background:#fff;padding:9px 12px}
+.wk-trend h6{font-size:11.5px;color:var(--ink);margin-bottom:3px}
+.wk-trend h6 b{color:var(--teal)}
+.wk-trend p{font-size:11px;color:#3d4759;line-height:1.5}
+footer{margin:30px 0 44px;text-align:center;font-size:11px;color:#98a2b6}
+#tip{position:fixed;z-index:100;background:#101828;color:#e6edf8;font-size:11px;border-radius:9px;padding:8px 11px;max-width:290px;pointer-events:none;display:none;box-shadow:0 8px 24px rgba(0,0,0,.3);line-height:1.5}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="top-row">
+    <h1 class="title"><span class="lg">🛰</span>技术日报<em>TECH INTEL DAILY · 车本位前沿技术情报</em></h1>
+    <span class="date-chip" id="dateChip">----</span>
+    <span class="srcdate-chip" id="srcDateChip">信源日 ----</span>
+    <div class="src-chips" id="srcChips"></div>
+  </div>
+  <div class="stats" id="statsBar"></div>
+</div></header>
+
+<nav class="tabs"><div class="wrap">
+  <a href="#m1" class="on">📡 情报信息流</a>
+  <a href="#m2">💬 大牛观点</a>
+  <a href="#m3">🃏 技术卡片</a>
+  <a href="#m4">🎯 专题中心</a>
+  <a href="#m5">📅 七日全景</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ M1 情报信息流 ============ -->
+<section id="m1"><div class="card">
+  <div class="card-h">
+    <div class="idx" style="background:var(--blue)">M1</div><h2>情报信息流 · 昨日全球技术动态</h2>
+    <span class="form">AI 洞察 + 多板块瀑布流（整卡可点原文）</span>
+    <span class="src" id="m1src"></span>
+  </div>
+  <div class="card-b">
+    <div class="sect-t">AI 智能摘要 · 今日关键洞察</div>
+    <div class="ins-grid" id="insGrid"></div>
+
+    <div class="feed-grid" style="margin-top:18px">
+      <div>
+        <div class="sect-t">板块信息流 · 每条附【上车机会点】与原文链接</div>
+        <div class="filterbar" id="filterbar"></div>
+        <div class="masonry" id="masonry"></div>
+      </div>
+      <div>
+        <div class="radar-card">
+          <h5>情报雷达 · 当日各领域信息密度</h5>
+          <svg id="radar" viewBox="0 0 280 268" width="100%"></svg>
+        </div>
+        <div class="note">雷达半径 = 当日该领域资讯密度指数（0–100），按真实收录条数估算。</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ M2 大牛观点 ============ -->
+<section id="m2"><div class="card">
+  <div class="card-h">
+    <div class="idx" style="background:var(--amber)">M2</div><h2>大牛观点摘录 · 只收据名权威人物</h2>
+    <span class="form">观点瀑布流 + 交锋区 + 信源评级盾标 + 原文直达</span>
+    <span class="src">A=官方/顶级期刊　B=权威媒体　C=行业媒体</span>
+  </div>
+  <div class="card-b">
+    <div class="op-masonry" id="opGrid"></div>
+    <div class="vs-box" id="vsBox"></div>
+    <div class="note">观点均来自具名权威人物（院士 / 部委负责人 / 车企高管 / 首席科学家 / 权威机构负责人）的真实公开表态，点击"原文"可核实。</div>
+  </div>
+</div></section>
+
+<!-- ============ M3 技术卡片 ============ -->
+<section id="m3"><div class="card">
+  <div class="card-h">
+    <div class="idx" style="background:var(--purple)">M3</div><h2>技术简介卡片 · 今日焦点技术档案</h2>
+    <span class="form">点击翻转 → 原理简图 / 突破时间轴 / 标签云</span>
+    <span class="src">由当日条目提炼</span>
+  </div>
+  <div class="card-b"><div class="tgrid" id="tgrid"></div></div>
+</div></section>
+
+<!-- ============ M4 专题中心 ============ -->
+<section id="m4"><div class="card">
+  <div class="card-h">
+    <div class="idx" style="background:var(--teal)">M4</div><h2>专题中心 · 从日报到深研</h2>
+    <span class="form">一键复制专题生成指令 → 专题 PPT / HTML 深研报告</span>
+    <span class="src">基于当日条目 + 追加定向搜索</span>
+  </div>
+  <div class="card-b">
+    <div class="topic-how">💡 看到想深挖的条目？复制下方指令发给我（或直接说"<b>生成专题：××，PPT 版 / HTML 版</b>"），我将基于当日情报 + 追加 2-3 轮定向搜索，产出 8-12 页专题 PPT（长安模板风，结论落到对长安的含义）或单文件 HTML 深研长页。</div>
+    <div class="topic-grid" id="topicGrid"></div>
+  </div>
+</div></section>
+
+<!-- ============ M5 七日全景（周情报库） ============ -->
+<section id="m5"><div class="card">
+  <div class="card-h">
+    <div class="idx" style="background:#5b6780">M5</div><h2>七日全景 · 周情报库每日热度</h2>
+    <span class="form">来自 6606 周情报库：每天条数 + 类目分布 + 每日精选（整条可点原文）</span>
+    <span class="src" id="m5src"></span>
+  </div>
+  <div class="card-b">
+    <div class="sect-t">近 7 天 · 每日收录量与热点类目</div>
+    <div class="wk-grid" id="wkGrid"></div>
+    <div class="sect-t" style="margin-top:18px">本周分类趋势摘要</div>
+    <div class="wk-trends" id="wkTrends"></div>
+    <div class="note" id="wkNote">板块数量与每日条数按当日真实收录动态呈现，不与日报六板块一一对应。</div>
+  </div>
+</div></section>
+
+<footer id="footer"></footer>
+</div>
+<div id="tip"></div>
+
+<!-- 数据槽：由 scripts/build_daily.py 注入 JSON，勿手改 -->
+<script id="tdb-data" type="application/json">{}</script>
+
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("tdb-data").textContent||"{}");
+const $=id=>document.getElementById(id);
+const tip=$("tip");
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+function showTip(e,html){tip.style.display="block";tip.style.left=Math.min(e.clientX+14,innerWidth-310)+"px";tip.style.top=(e.clientY+16)+"px";tip.innerHTML=html;}
+function hideTip(){tip.style.display="none";}
+const MODS={};(DATA.modules||[]).forEach(m=>MODS[m.key]=m);
+const STN={bull:"看好",bear:"谨慎",neut:"中立"};
+
+/* ===== 头部 ===== */
+(function(){
+  const WD=["周日","周一","周二","周三","周四","周五","周六"];
+  const d=DATA.date||"";let wd=DATA.weekday||"";
+  if(d&&!wd){const p=d.split("-").map(Number);wd=WD[new Date(p[0],p[1]-1,p[2]).getDay()];}
+  $("dateChip").textContent=d?`${d} · ${wd}`:"";
+  $("srcDateChip").textContent=`信源日 ${DATA.source_date||""} · 全部为前一日信源`;
+  $("srcChips").innerHTML=(DATA.src_chips||[]).map(s=>`<span>${esc(s)}</span>`).join("");
+  const st=DATA.stats||{};
+  $("statsBar").innerHTML=[
+    [st.today??"-","今日收录条目"],[st.week??"-","本周累计"],[st.experts??"-","大牛观点"],
+    [st.topics??"-","专题候选"],[st.peak??"-","领域热度峰值"]
+  ].map(x=>`<div><b>${esc(x[0])}</b>${esc(x[1])}</div>`).join("");
+  $("m1src").textContent=`信源日 ${DATA.source_date||""} · 逐条核实日期`;
+  $("footer").textContent=`技术日报 · 车本位前沿技术情报 —— 内部研究参考；全部资讯基于 ${DATA.source_date||""} 公开报道聚合，共引用 ${ (DATA.news||[]).length+(DATA.ops||[]).length } 条可点击原文来源 · 生成于 ${d}`;
+})();
+
+/* nav */
+const navL=[...document.querySelectorAll("nav.tabs a")];
+navL.forEach(a=>a.onclick=()=>{navL.forEach(x=>x.classList.remove("on"));a.classList.add("on");});
+
+/* ===== M1 洞察 ===== */
+(function(){
+  const INS=DATA.insights||[];
+  $("insGrid").innerHTML=INS.map((x,i)=>`<div class="ins" id="ins${i}"><span class="n">${i+1}</span><h4>${esc(x.title)}</h4><p>${esc(x.body)}</p><div class="more" data-i="${i}">展开详细简报 ⌄</div><div class="detail">${esc(x.detail)}</div></div>`).join("");
+  document.querySelectorAll(".ins .more").forEach(m=>m.onclick=()=>{const c=$("ins"+m.dataset.i);c.classList.toggle("open");m.textContent=c.classList.contains("open")?"收起简报 ⌃":"展开详细简报 ⌄";});
+})();
+
+/* ===== M1 筛选 + 信息流 ===== */
+(function(){
+  const NEWS=DATA.news||[];
+  let cur="all";
+  const bar=$("filterbar");
+  const chips=[{key:"all",name:"全部",color:"#2f6fed"},...(DATA.modules||[])];
+  bar.innerHTML=chips.map(c=>{
+    const cnt=c.key==="all"?NEWS.length:NEWS.filter(n=>n.module===c.key).length;
+    return `<button data-k="${c.key}" class="${c.key==="all"?"on":""}">${c.key!=="all"?`<span class="mdot" style="background:${c.color}"></span>`:""}${esc(c.name)}<span class="cnt">${cnt}</span></button>`;
+  }).join("");
+  function render(){
+    const list=NEWS.filter(n=>cur==="all"||n.module===cur);
+    $("masonry").innerHTML=list.map(n=>{
+      const m=MODS[n.module]||{name:n.module,color:"#2f6fed"};
+      return `<a class="ncard" style="--mc:${m.color}" href="${esc(n.url)}" target="_blank" rel="noopener">
+        <div class="tags"><span class="mtag">${esc(m.name)}</span>${(n.tags||[]).map(t=>`<span>${esc(t)}</span>`).join("")}</div>
+        <h5>${esc(n.title)}</h5>
+        <div class="sum">${esc(n.summary)}</div>
+        <div class="opp"><b>🚗 上车机会点</b>｜${esc(n.opp)}</div>
+        <div class="meta">
+          <span>${esc(n.source||"")}</span><span class="grade ${esc(n.grade||"C")}">${esc(n.grade||"C")} 级</span>
+          <span>信源日 ${esc(n.sdate||DATA.source_date||"")}</span>
+          <span class="imp">影响力 ${n.impact||6}<i><b style="width:${(n.impact||6)*10}%"></b></i></span>
+          <span class="orig">原文 ↗</span>
+        </div></a>`;
+    }).join("");
+  }
+  bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    cur=b.dataset.k;
+    bar.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+    render();
+  });
+  render();
+})();
+
+/* ===== M1 雷达 ===== */
+(function(){
+  const D=DATA.radar||[];if(!D.length)return;
+  const cx=140,cy=136,R=94,N=D.length;
+  const pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/N;return[cx+Math.cos(a)*R*v/100,cy+Math.sin(a)*R*v/100];};
+  let s="";
+  [25,50,75,100].forEach(g=>{s+=`<polygon points="${Array.from({length:N},(_,i)=>pt(i,g).join(",")).join(" ")}" fill="none" stroke="#e3e8f0"/>`;});
+  for(let i=0;i<N;i++){const[x,y]=pt(i,100);s+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e3e8f0"/>`;}
+  s+=`<polygon points="${D.map((d,i)=>pt(i,d[1]).join(",")).join(" ")}" fill="rgba(47,111,237,.16)" stroke="#2f6fed" stroke-width="2"/>`;
+  D.forEach((d,i)=>{const[x,y]=pt(i,d[1]);s+=`<circle cx="${x}" cy="${y}" r="3.5" fill="#2f6fed" stroke="#fff" stroke-width="1.5"/>`;
+    const[lx,ly]=pt(i,121);s+=`<text x="${lx}" y="${ly}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1c2434">${esc(d[0])}</text><text x="${lx}" y="${ly+12}" text-anchor="middle" font-size="9.5" fill="#2f6fed" font-weight="700">${d[1]}</text>`;});
+  $("radar").innerHTML=s;
+})();
+
+/* ===== M2 观点 ===== */
+(function(){
+  const OPS=DATA.ops||[];
+  $("opGrid").innerHTML=OPS.map(o=>`<div class="op ${esc(o.stance)}">
+    <div class="quote">“${o.quote}”</div>
+    <div class="who"><span class="ava" style="background:${esc(o.color||"#2f6fed")}">${esc((o.name||"?").slice(0,1))}</span>
+      <span><b>${esc(o.name)}</b><br>${esc(o.title||"")}</span>
+      <span class="org"><span class="scene">${esc(o.scene||"")}</span><span class="grade ${esc(o.grade||"C")}">🛡${esc(o.grade||"C")}</span>${o.url?`<a class="opsrc" href="${esc(o.url)}" target="_blank" rel="noopener">原文↗</a>`:""}</span>
+    </div>
+    <div class="who" style="margin-top:8px"><span class="stance ${esc(o.stance)}">${STN[o.stance]||"中立"}</span></div>
+  </div>`).join("");
+  const V=DATA.versus;
+  if(V){
+    $("vsBox").innerHTML=`<div class="vs-h">⚔ 观点交锋 · ${esc(V.topic)}</div>
+    <div class="vs-grid">
+      <div class="vs-side l"><h6 style="color:var(--green)">🟢 ${esc((V.left||{}).label||"看好")}</h6><p>“${(V.left||{}).quote}”——${esc((V.left||{}).name)}（${esc((V.left||{}).title)}）</p></div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side r"><h6 style="color:var(--red)">🔴 ${esc((V.right||{}).label||"谨慎")}</h6><p>“${(V.right||{}).quote}”——${esc((V.right||{}).name)}（${esc((V.right||{}).title)}）</p></div>
+    </div>
+    ${(V.timeline||[]).length?`<div class="vs-tl">${V.timeline.map(t=>`<span><b>${esc(t.t)}</b>${esc(t.d)}</span>`).join("")}</div>`:""}`;
+  }
+})();
+
+/* ===== M3 技术卡片 ===== */
+(function(){
+  const TC=DATA.techs||[];
+  $("tgrid").innerHTML=TC.map((c,i)=>`<div class="tcard" data-i="${i}">
+    <div class="tinner">
+      <div class="tface"><div class="tlogo" style="background:linear-gradient(120deg,${esc(c.color)},${esc(c.color)}99)">${esc(c.icon)}</div><h4>${esc(c.name)}</h4><div class="def">${esc(c.def)}</div>
+        <div class="tmetrics">
+          <div class="tm"><span>成熟度</span><span class="bar"><i style="width:${c.maturity||0}%;background:${esc(c.color)}"></i></span><b>${c.maturity||0}%</b></div>
+          <div class="tm"><span>关注度趋势</span><span style="color:var(--red);font-weight:800">↑ ${c.trend||0}</span></div>
+          <div class="tm"><span>商业价值评级</span><span class="rating" style="background:${esc(c.color)}">${esc(c.rating||"B")}</span></div>
+        </div><span class="flip-hint">点击翻转 ↻</span></div>
+      <div class="tface tback"><h6>技术原理简图（手绘风格）</h6>${c.sketch||""}<h6>关键突破时间轴</h6><div class="mini5">${(c.steps||[]).map(x=>`<div class="st">${esc(x)}</div>`).join("")}</div><h6>相关技术标签云</h6><div class="tcloud">${(c.cloud||[]).map(t=>`<span>${esc(t)}</span>`).join("")}</div><span class="flip-hint">点击返回 ↺</span></div>
+    </div></div>`).join("");
+  document.querySelectorAll(".tcard").forEach(c=>c.onclick=()=>c.classList.toggle("flip"));
+})();
+
+/* ===== M4 专题中心 ===== */
+(function(){
+  const T=DATA.topics||[];
+  $("topicGrid").innerHTML=T.map((t,i)=>`<div class="ttopic">
+    <span class="tno">0${i+1}</span>
+    <h4>${esc(t.title)}</h4>
+    <span class="why">💡 ${esc(t.why)}</span>
+    <ul>${(t.points||[]).map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+    <div class="btns">
+      <button data-cmd="生成专题：${esc(t.title)}（PPT 版，长安模板风，结论落到对长安的含义）">📊 复制 PPT 专题指令</button>
+      <button data-cmd="生成专题：${esc(t.title)}（HTML 深研长页）">📄 复制 HTML 专题指令</button>
+    </div></div>`).join("");
+  $("topicGrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const cmd=b.dataset.cmd;
+    const done=()=>{b.classList.add("done");const old=b.textContent;b.textContent="✓ 已复制，粘贴给我即可";setTimeout(()=>{b.classList.remove("done");b.textContent=old;},2200);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(cmd).then(done).catch(()=>fallback());}
+    else fallback();
+    function fallback(){const ta=document.createElement("textarea");ta.value=cmd;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();}
+  });
+})();
+
+/* ===== M5 七日全景（周情报库） ===== */
+(function(){
+  const WK=DATA.weekly;
+  if(!WK||!(WK.days||[]).length){
+    const sec=$("m5");if(sec)sec.style.display="none";
+    const navA=document.querySelector('nav.tabs a[href="#m5"]');if(navA)navA.style.display="none";
+    return;
+  }
+  const days=WK.days;
+  const max=Math.max(...days.map(d=>d.count||0),1);
+  $("m5src").textContent=`${WK.source||""} · 周库累计 ${WK.week_total??"-"} 条`;
+  const today=DATA.date||"";
+  $("wkGrid").innerHTML=days.map(d=>{
+    const cats=Object.entries(d.cats||{});
+    const isToday=d.date===today;
+    const picks=(d.picks||[]).map(p=>`<a href="${esc(p.url)}" target="_blank" rel="noopener"><span class="cat">[${esc(p.cat||"")}]</span> ${esc(p.title)}</a>`).join("");
+    return `<div class="wk-day ${isToday?"is-today":""}">
+      <div class="dh"><span class="dw">${esc(d.weekday||"")}</span><span class="dd">${esc((d.date||"").slice(5))}</span>${isToday?'<span class="today-tag">今日</span>':""}</div>
+      <div class="cnt">${d.count||0}<small> 条</small></div>
+      <div class="wk-bar"><i style="width:${Math.round((d.count||0)/max*100)}%"></i></div>
+      <div class="wk-cats">${cats.slice(0,3).map(c=>`<span>${esc(c[0])}·${c[1]}</span>`).join("")}</div>
+      <div class="wk-picks">${picks}</div>
+    </div>`;
+  }).join("");
+  $("wkTrends").innerHTML=(WK.trends||[]).map(t=>`<div class="wk-trend"><h6>◆ <b>${esc(t.cat||"")}</b> 周趋势</h6><p>${esc(t.summary||"")}</p></div>`).join("");
+})();
+</script>
+</body>
+</html>

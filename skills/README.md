@@ -2,6 +2,17 @@
 
 Skills are reusable instruction sets that extend the agent's capabilities. Each skill is a `SKILL.md` file in its own directory, providing specialized knowledge, workflows, and tool integrations for specific tasks.
 
+
+## Built-in automotive intelligence pack
+
+Fresh installs also ship these enabled-by-default skills (长安前瞻院):
+
+- `tech-atlas` — local 462-item emerging-tech atlas, optional cloud refresh
+- `tech-daily-brief` — interactive daily technology briefing HTML
+- `capital-intelligence-v2` / `competitive-intelligence-v2` / `demand-intelligence-v2` / `industry-intelligence-v2` / `policy-intelligence-v2` — automotive intelligence analysis v2
+
+They live under this directory like the other builtins, so the web console, desktop package, and Docker image all pick them up. New skills are merged into `skills_config.json` as `enabled: true` on first list.
+
 ## Skill Hub
 
 Browse, search, and install skills from [Skill Hub](https://EXAMPLE-DISABLED-NO-SKILL-HUB/).
