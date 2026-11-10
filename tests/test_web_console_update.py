@@ -168,7 +168,17 @@ def test_version_payload_does_not_call_github(monkeypatch):
     assert called == []
 
 
+def test_check_for_updates_is_disabled_without_a_repo(monkeypatch):
+    monkeypatch.delenv("MALIANG_UPDATE_REPO", raising=False)
+    monkeypatch.setattr("cli.update_service.GITHUB_REPO", "DISABLED/maliang")
+    result = check_for_updates("2.1.8")
+    assert result["up_to_date"] is True
+    assert result["latest"] is None
+    assert "MALIANG_UPDATE_REPO" in result["unsupported_reason"]
+
+
 def test_check_for_updates_uses_github_and_filters(monkeypatch):
+    monkeypatch.setenv("MALIANG_UPDATE_REPO", "example/maliang")
     monkeypatch.setattr(
         "cli.update_service.fetch_github_releases",
         lambda timeout=20: [
@@ -185,6 +195,7 @@ def test_check_for_updates_uses_github_and_filters(monkeypatch):
 
 
 def test_check_up_to_date(monkeypatch):
+    monkeypatch.setenv("MALIANG_UPDATE_REPO", "example/maliang")
     monkeypatch.setattr(
         "cli.update_service.fetch_github_releases",
         lambda timeout=20: [

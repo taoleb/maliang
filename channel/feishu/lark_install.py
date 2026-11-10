@@ -50,13 +50,11 @@ VENDOR_VERSION = "1.7.1-1"
 # with a warning).
 VENDOR_SHA256 = "a96de70291e43b4829a5f717035806835f116bf4dc1d0a2d2ed551908a825381"
 
-# Tried in order; the same mirrors the desktop installers use. Feishu is a
-# China-only product, so the domestic CDN comes first. Any mirror is safe
-# because the payload is checked against VENDOR_SHA256.
-VENDOR_URLS = (
-    "(upstream-cdn-removed)/desktop/vendor/feishu-vendor-{version}.zip",
-    "https://cdn.maliang.local/desktop/vendor/feishu-vendor-{version}.zip",
-)
+# No default vendor CDN ships with maliang. Set MALIANG_FEISHU_VENDOR_URL
+# (and optional extra entries in VENDOR_URLS) to the department's own
+# mirrors. Any mirror is safe because the payload is checked against
+# VENDOR_SHA256.
+VENDOR_URLS = ()
 
 DOWNLOAD_TIMEOUT = 120
 
@@ -147,8 +145,13 @@ def _safe_extract(payload: bytes, dest: str) -> None:
 
 def _download() -> bytes:
     """Fetch the bundle, falling back through the mirrors on failure."""
+    urls = vendor_urls()
+    if not urls:
+        raise OSError(
+            "No Feishu vendor URL is configured. Set MALIANG_FEISHU_VENDOR_URL."
+        )
     last = None
-    for url in vendor_urls():
+    for url in urls:
         try:
             payload = _fetch(url)
             _verify(payload)

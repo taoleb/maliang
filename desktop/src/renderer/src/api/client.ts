@@ -517,7 +517,7 @@ class ApiClient {
       const res = await this.request<UploadResult>('/upload', {
         method: 'POST',
         body: JSON.stringify(body),
-        headers: { 'X-Cow-Desktop-Token': token },
+        headers: { 'X-Maliang-Desktop-Token': token },
       })
       if (res?.status === 'success') return res
       console.warn('[api] import by path declined, falling back to upload:', res?.message)

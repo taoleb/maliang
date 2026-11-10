@@ -98,7 +98,7 @@ def _upload_local_path(console, agent_id, tmp_path):
         json.dumps({"local_path": str(source)}).encode(),
         {
             "Content-Type": "application/json",
-            "X-Cow-Desktop-Token": DESKTOP_TOKEN,
+            "X-Maliang-Desktop-Token": DESKTOP_TOKEN,
         },
     )
 

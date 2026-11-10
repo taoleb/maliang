@@ -26,7 +26,7 @@ class AllowlistGuardTest(unittest.TestCase):
     def test_allowlisted_host_does_not_resolve(self):
         with patch.object(url_safety.socket, "getaddrinfo") as gai:
             with strict_url_guard(["maliang.local"]):
-                validate_url_safe("./docs/zh/intro/index.md")
+                validate_url_safe("https://maliang.local/zh/intro/index.md")
         gai.assert_not_called()
 
     def test_host_outside_the_allowlist_is_refused(self):

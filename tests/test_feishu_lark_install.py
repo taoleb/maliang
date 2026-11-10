@@ -58,12 +58,9 @@ def test_vendor_dir_is_versioned(monkeypatch, tmp_path):
     assert lark_install.vendor_dir().endswith(lark_install.VENDOR_VERSION)
 
 
-def test_vendor_urls_prefer_the_china_mirror(monkeypatch):
+def test_vendor_urls_are_empty_without_an_override(monkeypatch):
     monkeypatch.delenv("MALIANG_FEISHU_VENDOR_URL", raising=False)
-    urls = lark_install.vendor_urls()
-    assert len(urls) > 1, "expected a fallback mirror"
-    assert "link-ai" in urls[0], "the China CDN should be tried first"
-    assert all(lark_install.VENDOR_VERSION in u for u in urls)
+    assert lark_install.vendor_urls() == []
 
 
 def test_vendor_url_can_be_overridden(monkeypatch):
@@ -73,6 +70,14 @@ def test_vendor_url_can_be_overridden(monkeypatch):
 
 def test_download_falls_back_to_next_mirror(monkeypatch):
     payload = _make_bundle()
+    monkeypatch.setattr(
+        lark_install,
+        "VENDOR_URLS",
+        (
+            "https://mirror-a.example/feishu-vendor-{version}.zip",
+            "https://mirror-b.example/feishu-vendor-{version}.zip",
+        ),
+    )
     monkeypatch.setattr(lark_install, "VENDOR_SHA256",
                         hashlib.sha256(payload).hexdigest())
     tried = []
@@ -130,6 +135,7 @@ def test_ensure_reuses_previously_unpacked_bundle(offline, monkeypatch):
 
 def test_ensure_downloads_and_unpacks(offline, monkeypatch):
     monkeypatch.setenv("MALIANG_DESKTOP", "1")
+    monkeypatch.setenv("MALIANG_FEISHU_VENDOR_URL", "https://example.test/feishu-vendor.zip")
     payload = _make_bundle()
     monkeypatch.setattr(lark_install, "VENDOR_SHA256",
                         hashlib.sha256(payload).hexdigest())
@@ -148,6 +154,7 @@ def test_ensure_downloads_and_unpacks(offline, monkeypatch):
 
 def test_ensure_rejects_checksum_mismatch(offline, monkeypatch):
     monkeypatch.setenv("MALIANG_DESKTOP", "1")
+    monkeypatch.setenv("MALIANG_FEISHU_VENDOR_URL", "https://example.test/feishu-vendor.zip")
     monkeypatch.setattr(lark_install, "VENDOR_SHA256", "0" * 64)
     monkeypatch.setattr(lark_install, "_fetch", lambda url: _make_bundle())
 
