@@ -69,6 +69,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Current app version (e.g. "0.0.5"), shown in the NavRail footer.
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  setUiLang: (lang: 'zh' | 'en') => ipcRenderer.invoke('set-ui-lang', lang),
+
 
   // Ask for OS-level microphone access (prompts once on macOS; true elsewhere).
   requestMicAccess: () => ipcRenderer.invoke('mic-request-access') as Promise<boolean>,

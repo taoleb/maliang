@@ -85,13 +85,16 @@
         if (v.indexOf('en') === 0) return 'en';
         return '';
     };
-    // Resolve the console language by priority:
-    //   user choice (localStorage) -> backend-detected -> browser -> 'zh'.
+    // Resolve the console language:
+    //   explicit user choice (after using the language switcher) ->
+    //   backend default (maliang_lang, now "zh") -> Simplified Chinese.
+    // Do not follow the browser/OS locale or a leftover localStorage value
+    // from a previous session, so a fresh install always opens in Chinese.
     window.__maliangResolveLang__ = function() {
-        return window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang'))
-            || window.__maliangNormalizeLang__(window.__MALIANG_DEFAULT_LANG__)
-            || window.__maliangNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
-            || 'zh';
+        if (localStorage.getItem('maliang_lang_explicit') === '1') {
+            return window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang')) || 'zh';
+        }
+        return window.__maliangNormalizeLang__(window.__MALIANG_DEFAULT_LANG__) || 'zh';
     };
     (function() {
         // Backend-resolved default language (from maliang_lang config / auto-detect).

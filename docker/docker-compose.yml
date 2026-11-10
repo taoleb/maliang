@@ -8,7 +8,7 @@ services:
     ports:
       - "9899:9899"
     environment:
-      MALIANG_LANG: 'auto'
+      MALIANG_LANG: 'zh'
       # Empty: web console only. Multiple: 'web, weixin, feishu'
       CHANNEL_TYPE: ''
       # Empty: deepseek-flash

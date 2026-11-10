@@ -1,4 +1,5 @@
 import { app, Tray, Menu, BrowserWindow, nativeImage } from 'electron'
+import { labels } from './i18n-labels'
 
 let tray: Tray | null = null
 
@@ -33,19 +34,7 @@ export function createTray({ getWindow, iconPath, onQuit }: TrayDeps): Tray | nu
     win.focus()
   }
 
-  const contextMenu = Menu.buildFromTemplate([
-    { label: `Show ${app.name}`, click: showWindow },
-    {
-      label: 'New Chat',
-      click: () => {
-        showWindow()
-        getWindow()?.webContents.send('menu-action', 'new-chat')
-      },
-    },
-    { type: 'separator' },
-    { label: 'Quit', click: onQuit },
-  ])
-  tray.setContextMenu(contextMenu)
+  applyTrayMenu(getWindow, showWindow, onQuit)
 
   // Single click restores the window (common Windows/Linux behavior).
   tray.on('click', showWindow)
@@ -55,6 +44,39 @@ export function createTray({ getWindow, iconPath, onQuit }: TrayDeps): Tray | nu
 
 // Live tray instance (Windows/Linux only), so its icon can be updated at
 // runtime. Null on macOS or before createTray().
+
+let trayMenuDeps: { getWindow: () => BrowserWindow | null; showWindow: () => void; onQuit: () => void } | null = null
+
+function applyTrayMenu(
+  getWindow: () => BrowserWindow | null,
+  showWindow: () => void,
+  onQuit: () => void,
+) {
+  if (!tray) return
+  trayMenuDeps = { getWindow, showWindow, onQuit }
+  const l = labels()
+  tray.setToolTip(app.name)
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      { label: l.showApp(app.name), click: showWindow },
+      {
+        label: l.newChat,
+        click: () => {
+          showWindow()
+          getWindow()?.webContents.send('menu-action', 'new-chat')
+        },
+      },
+      { type: 'separator' },
+      { label: l.quit, click: onQuit },
+    ]),
+  )
+}
+
+export function rebuildTrayMenu() {
+  if (!tray || !trayMenuDeps) return
+  applyTrayMenu(trayMenuDeps.getWindow, trayMenuDeps.showWindow, trayMenuDeps.onQuit)
+}
+
 export function getTray(): Tray | null {
   return tray
 }

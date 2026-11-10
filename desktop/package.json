@@ -111,13 +111,21 @@
       "shortcutName": "maliang",
       "installerSidebar": "resources/installerSidebar.bmp",
       "uninstallerSidebar": "resources/installerSidebar.bmp",
-      "include": "build/installer.nsh"
+      "include": "build/installer.nsh",
+      "installerLanguages": [
+        "zh_CN"
+      ],
+      "displayLanguageSelector": false
     },
     "publish": {
       "provider": "generic",
       "url": ""
     },
-    "copyright": "Copyright 长安前瞻院. See LICENSE and NOTICE."
+    "copyright": "Copyright 长安前瞻院. See LICENSE and NOTICE.",
+    "electronLanguages": [
+      "zh-CN",
+      "zh"
+    ]
   },
   "overrides": {
     "js-yaml": "4.3.1",

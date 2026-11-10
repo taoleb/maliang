@@ -1165,6 +1165,7 @@ const translations: Record<string, Record<string, string>> = {
     logs_connecting: '日志流将在连接后显示...',
     logs_download: '下载日志',
     logs_download_failed: '日志下载失败',
+    coming_soon: '此功能即将推出。',
     status_starting: '正在启动 Agent...',
     status_starting_desc: '正在初始化客户端，请稍候',
     status_starting_slow: '启动比平时慢，仍在重试中...',
@@ -2385,6 +2386,7 @@ const translations: Record<string, Record<string, string>> = {
     logs_connecting: 'Log streaming will connect shortly...',
     logs_download: 'Download logs',
     logs_download_failed: 'Failed to download logs',
+    coming_soon: 'Coming soon in this iteration.',
     status_starting: 'Starting Agent...',
     status_starting_desc: 'Initializing the client, please wait',
     status_starting_slow: 'Taking longer than usual, still retrying...',
@@ -2441,16 +2443,17 @@ const translations: Record<string, Record<string, string>> = {
 
 export type Lang = 'zh' | 'en'
 
-// First-run default: follow the OS language so zh-* systems start in Chinese
-// and everyone else in English. Once the user picks a language it's persisted
-// in maliang_lang and always wins. Falls back to 'en' when the locale is unknown.
+// Fresh install always starts in Simplified Chinese. A previous localStorage
+// value is honored only after the user has used the language switcher
+// (maliang_lang_explicit=1), so leftover or OS locale values cannot flip a
+// first run to English.
 function detectDefaultLang(): Lang {
-  const locale = (window.electronAPI?.systemLocale || navigator.language || '').toLowerCase()
-  return locale.startsWith('zh') ? 'zh' : 'en'
+  return 'zh'
 }
 
+const savedExplicit = localStorage.getItem('maliang_lang_explicit') === '1'
 const savedLang = localStorage.getItem('maliang_lang') as Lang | null
-let currentLang: Lang = savedLang === 'zh' || savedLang === 'en' ? savedLang : detectDefaultLang()
+let currentLang: Lang = savedExplicit && (savedLang === 'zh' || savedLang === 'en') ? savedLang : detectDefaultLang()
 
 export function t(key: string): string {
   return translations[currentLang]?.[key] || translations['en']?.[key] || key
@@ -2470,6 +2473,8 @@ export function getLang(): Lang {
 export function setLang(lang: Lang) {
   currentLang = lang
   localStorage.setItem('maliang_lang', lang)
+  localStorage.setItem('maliang_lang_explicit', '1')
+  void window.electronAPI?.setUiLang?.(lang)
 }
 
 /** Resolve a possibly-localized label ({zh,en} or plain string) for the current language. */

@@ -21,10 +21,10 @@ Resolution priority (highest first):
      system locale is a strong signal that beats a shell-default LANG)
   3. Standard locale env vars: LC_ALL > LC_MESSAGES > LANG
   4. Python locale module
-  5. Default -> English
+  5. Default -> Simplified Chinese
 
-A value of "auto" (the default) triggers detection (steps 2-5). Explicitly
-setting "zh", "zh-Hant", or "en" locks the language and skips detection.
+A value of "zh" (the default) locks Simplified Chinese. "auto" triggers
+detection (steps 2-5). Explicitly setting "zh", "zh-Hant", or "en" skips detection.
 
 Note: For backwards compatibility, zh-tw, zh-hk, and other regional variants
 are automatically normalized to zh-Hant during detection.
@@ -39,7 +39,7 @@ ZH = "zh"
 ZH_HANT = "zh-Hant"
 EN = "en"
 SUPPORTED = (ZH, ZH_HANT, EN)
-DEFAULT_LANG = EN
+DEFAULT_LANG = ZH
 
 # Mapped Simplified to Traditional characters in this codebase.
 # The two strings below are paired positionally by to_traditional(), so they
@@ -213,7 +213,7 @@ def detect_language():
          LANG like en_US.UTF-8)
       2. locale env vars LC_ALL / LC_MESSAGES / LANG (primary signal on Linux)
       3. Python locale module
-      4. default English
+      4. default Simplified Chinese
     """
     if os.environ.get("CLOUD_DEPLOYMENT_ID"):
         return ZH

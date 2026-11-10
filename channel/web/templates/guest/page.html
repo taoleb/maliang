@@ -67,8 +67,9 @@
     // speaks first and the instance default is the fallback.
     window.__maliangResolveLang__ = function() {
         return window.__maliangNormalizeLang__(window.__GUEST_LANG__)
-            || window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang'))
-            || window.__maliangNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
+            || (localStorage.getItem('maliang_lang_explicit') === '1'
+                ? window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang'))
+                : '')
             || window.__maliangNormalizeLang__(window.__MALIANG_DEFAULT_LANG__)
             || 'zh';
     };

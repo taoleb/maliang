@@ -230,6 +230,7 @@ const I18N = {
         models_embedding_saved_msg: '请在聊天框输入 /memory rebuild-index 重建索引。',
         models_embedding_saved_ok: '去执行',
         models_pick_provider: '待选择',
+        models_api_key: 'API 密钥', models_api_base: 'API 地址', models_instance_url: '实例地址',
         models_manage_api_key: '管理 API Key',
         models_clear_confirm_title: '清除厂商凭据',
         models_clear_confirm_msg: '确认清除该厂商的 API Key 与 Base URL 吗？相关能力将不再可用。',
@@ -1053,6 +1054,7 @@ const I18N = {
         models_embedding_saved_msg: '請在聊天框輸入 /memory rebuild-index 重建索引。',
         models_embedding_saved_ok: '去執行',
         models_pick_provider: '待選擇',
+        models_api_key: 'API 金鑰', models_api_base: 'API 位址', models_instance_url: '實例位址',
         models_manage_api_key: '管理 API Key',
         models_clear_confirm_title: '清除廠商憑據',
         models_clear_confirm_msg: '確認清除該廠商的 API Key 與 Base URL 嗎？相關能力將不再可用。',
@@ -1871,6 +1873,7 @@ const I18N = {
         models_embedding_saved_msg: 'Send /memory rebuild-index in the chat to rebuild the index.',
         models_embedding_saved_ok: 'Go',
         models_pick_provider: 'Pick a provider',
+        models_api_key: 'API Key', models_api_base: 'API Base', models_instance_url: 'Instance URL',
         models_manage_api_key: 'Manage API keys',
         models_clear_confirm_title: 'Clear provider credentials',
         models_clear_confirm_msg: 'Remove this provider\'s API Key and Base URL? Capabilities relying on it will stop working.',
@@ -2488,10 +2491,10 @@ let currentLang = (typeof window.__maliangResolveLang__ === 'function')
             if (v.indexOf('en') === 0) return 'en';
             return '';
         };
-        return norm(localStorage.getItem('maliang_lang'))
-            || norm(window.__MALIANG_DEFAULT_LANG__)
-            || norm(navigator.language)
-            || 'zh';
+        if (localStorage.getItem('maliang_lang_explicit') === '1') {
+            return norm(localStorage.getItem('maliang_lang')) || 'zh';
+        }
+        return norm(window.__MALIANG_DEFAULT_LANG__) || 'zh';
     })();
 
 // An empty string is a real translation (e.g. a unit English leaves out).
@@ -2561,6 +2564,7 @@ function setLanguage(lang) {
     }
     currentLang = next;
     localStorage.setItem('maliang_lang', currentLang);
+    localStorage.setItem('maliang_lang_explicit', '1');
     applyI18n();
     _applyInputTooltips();
     // Keep the language switch button and config selector visually in sync.

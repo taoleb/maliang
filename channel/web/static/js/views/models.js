@@ -981,7 +981,7 @@ function openSearchKeyModal(providerId, providerMeta) {
                     w-full max-w-md mx-4 p-6 shadow-xl">
             <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-1">${t('models_search_' + providerId + '_title')}</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">${descText}</p>
-            <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">${providerId === 'searxng' ? 'Instance URL' : 'API Key'}</label>
+            <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">${providerId === 'searxng' ? t('models_instance_url') : t('models_api_key')}</label>
             <input id="search-key-input" type="text" autocomplete="off" data-1p-ignore data-lpignore="true"
                    class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600
                           bg-slate-50 dark:bg-white/5 text-sm text-slate-800 dark:text-slate-100
@@ -1140,7 +1140,7 @@ function openDeepseekSearchModal() {
             <label class="${labelCls}">Base URL</label>
             <input id="search-ds-base" type="text" autocomplete="off" class="${inputCls}"
                    value="${escapeHtml(prov.api_base || '')}" placeholder="https://api.deepseek.com/v1" />
-            <label class="${labelCls} mt-4">API Key</label>
+            <label class="${labelCls} mt-4">${t('models_api_key')}</label>
             <input id="search-key-input" type="text" autocomplete="off" data-1p-ignore data-lpignore="true"
                    class="${inputCls} ${masked ? 'cfg-key-masked' : ''}"
                    value="${escapeHtml(masked)}" data-masked="${masked ? '1' : ''}" placeholder="sk-..." />

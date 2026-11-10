@@ -1,5 +1,5 @@
 {
-  "maliang_lang": "auto",
+  "maliang_lang": "zh",
   "channel_type": "web",
   "model": "deepseek-flash",
   "deepseek_api_key": "",

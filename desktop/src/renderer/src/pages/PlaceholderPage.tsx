@@ -1,5 +1,6 @@
 import React from 'react'
 import { Construction } from 'lucide-react'
+import { t } from '../i18n'
 
 interface PlaceholderPageProps {
   title: string
@@ -13,7 +14,7 @@ const PlaceholderPage: React.FC<PlaceholderPageProps> = ({ title, hint }) => (
       <Construction size={26} className="text-content-tertiary" />
     </div>
     <h2 className="text-lg font-semibold text-content mb-1">{title}</h2>
-    <p className="text-sm text-content-tertiary max-w-sm">{hint || 'Coming soon in this iteration.'}</p>
+    <p className="text-sm text-content-tertiary max-w-sm">{hint || t('coming_soon')}</p>
   </div>
 )
 

@@ -4,8 +4,9 @@ import fs from 'fs'
 import os from 'os'
 import http from 'http'
 import { PythonBackend, BackendError } from './python-manager'
-import { buildAppMenu } from './menu'
-import { createTray, destroyTray, getTray } from './tray'
+import { buildAppMenu, rebuildAppMenu } from './menu'
+import { createTray, destroyTray, getTray, rebuildTrayMenu } from './tray'
+import { isZhUi, labels, setUiLang, getUiLang } from './i18n-labels'
 import { initUpdater, checkForUpdates, startDownload, quitAndInstall, setUpdateLanguage, setUpdateFeedQuery } from './updater'
 import { setupThemeIPC, loadAppConfig } from './themes'
 import { setupHttpRelayIPC } from './http-relay'
@@ -142,6 +143,13 @@ initDesktopLogging()
 // where the default Electron binary would otherwise report "Electron". The name
 // can be overridden by the bundled app-config (appName); defaults to maliang.
 app.setName(loadAppConfig()?.appName || 'maliang')
+// Default the Chromium/Electron UI locale to Simplified Chinese.
+app.commandLine.appendSwitch('lang', 'zh-CN')
+try {
+  app.setLocale('zh-CN')
+} catch {
+  /* setLocale may be unavailable on very old Electron builds */
+}
   // The web layer may have overridden the name at runtime. Re-apply it here,
   // before app.getPath('userData') is read anywhere, since setName moves it.
 applyCachedAppName()
@@ -306,11 +314,7 @@ function saveWindowState() {
 }
 
 function isZhLocale(): boolean {
-  try {
-    return /^zh/i.test(app.getLocale() || '')
-  } catch {
-    return false
-  }
+  return isZhUi()
 }
 
 // Read an image's bytes regardless of scheme: http(s) backend URLs go through
@@ -387,10 +391,7 @@ async function saveImageFromUrl(srcURL: string): Promise<void> {
     fs.writeFileSync(result.filePath, buf)
   } catch (err) {
     console.error('[Electron] Save image failed:', err)
-    dialog.showErrorBox(
-      isZhLocale() ? '保存失败' : 'Save failed',
-      isZhLocale() ? '无法保存该图片。' : 'Could not save the image.'
-    )
+    dialog.showErrorBox(labels().saveFailed, labels().saveFailedDetail)
   }
 }
 
@@ -519,14 +520,14 @@ function createWindow() {
   // the lightbox) downloadable on desktop, matching the browser console.
   mainWindow.webContents.on('context-menu', (_e, params) => {
     if (params.mediaType !== 'image' || !params.srcURL) return
-    const zh = isZhLocale()
+    const l = labels()
     const menu = Menu.buildFromTemplate([
       {
-        label: zh ? '图片另存为…' : 'Save Image As…',
+        label: l.saveImageAs,
         click: () => void saveImageFromUrl(params.srcURL),
       },
       {
-        label: zh ? '复制图片' : 'Copy Image',
+        label: l.copyImage,
         click: () => void copyImageFromUrl(params.srcURL),
       },
     ])
@@ -687,6 +688,13 @@ function setupIPC() {
 
   ipcMain.handle('get-lan-addresses', () => listLanAddresses())
 
+  ipcMain.handle('set-ui-lang', (_event, lang: string) => {
+    setUiLang(lang)
+    rebuildAppMenu()
+    rebuildTrayMenu()
+    return getUiLang()
+  })
+
   ipcMain.handle('restart-backend', async () => {
     await pythonBackend?.restart()
     return true
@@ -702,7 +710,7 @@ function setupIPC() {
   ipcMain.handle('select-file', async (_event, filters?: Electron.FileFilter[]) => {
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
-      filters: filters || [{ name: 'All Files', extensions: ['*'] }],
+      filters: filters || [{ name: labels().allFiles, extensions: ['*'] }],
     })
     return result.canceled ? null : result.filePaths[0]
   })

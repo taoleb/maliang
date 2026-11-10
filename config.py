@@ -17,10 +17,11 @@ from cli.config_json import deep_merge_dicts as _deep_merge_dicts, merge_duplica
 # They merely document the expected format — put real values in config.json.
 available_setting = {
     # global UI language for CLI, startup logs, error messages, agent prompts
-    # and channel replies. Options: "auto" (detect from system locale, default),
-    # "zh" (Chinese) or "en" (English). An explicit value locks the language.
-    # value: auto/en/zh
-    "maliang_lang": "auto",
+    # and channel replies. Options: "zh" (Simplified Chinese, default),
+    # "en" (English), "zh-Hant", or "auto" (detect from system locale).
+    # An explicit value locks the language.
+    # value: zh/en/zh-Hant/auto
+    "maliang_lang": "zh",
     # openai api config
     "open_ai_api_key": "",  # openai api key
     # openai api base; when use_azure_chatgpt is true, set the matching api base
@@ -95,7 +96,7 @@ available_setting = {
     # chatgpt session params
     "expires_in_seconds": 3600,  # idle session expiry time
     # persona description (only used in chat mode)
-    "character_desc": "You are a helpful AI assistant. You aim to answer and solve any questions people have, and can communicate in multiple languages.",
+    "character_desc": "你是一个乐于助人的 AI 助手。默认用简体中文与用户交流，解答问题并协助完成任务。若用户明确要求使用其他语言，再切换过去。",
     "conversation_max_tokens": 1000,  # max characters of context memory
     # chatgpt rate limit config
     "rate_limit_chatgpt": 20,  # chatgpt call rate limit

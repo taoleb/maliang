@@ -1,6 +1,7 @@
 import { app, Menu, BrowserWindow, shell } from 'electron'
 import type { MenuItemConstructorOptions } from 'electron'
 import { loadAppConfig } from './themes'
+import { labels } from './i18n-labels'
 
 const isMac = process.platform === 'darwin'
 const SKILL_HUB_URL = 'https://EXAMPLE-DISABLED-NO-SKILL-HUB/'
@@ -11,82 +12,85 @@ function emit(win: BrowserWindow | null, action: string) {
   win?.webContents.send('menu-action', action)
 }
 
+let currentGetWindow: (() => BrowserWindow | null) | null = null
+
 /**
- * Build a minimal, purpose-built application menu. We intentionally drop most of
- * Electron's verbose defaults and keep only items that are actually useful for
- * this app, plus the shortcuts users expect (New Chat, Settings, Reload, etc).
+ * Build a minimal, purpose-built application menu. Labels follow the current
+ * UI language (Simplified Chinese by default).
  */
 export function buildAppMenu(getWindow: () => BrowserWindow | null) {
+  currentGetWindow = getWindow
   const win = () => getWindow()
+  const l = labels()
 
   const appMenu: MenuItemConstructorOptions[] = isMac
     ? [
         {
           label: app.name,
           submenu: [
-            { label: 'About maliang', click: () => emit(win(), 'open-about') },
+            { label: l.about, click: () => emit(win(), 'open-about') },
             { type: 'separator' },
-            { label: 'Settings…', accelerator: 'Cmd+,', click: () => emit(win(), 'open-settings') },
+            { label: l.settings, accelerator: 'Cmd+,', click: () => emit(win(), 'open-settings') },
             { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideOthers' },
-            { role: 'unhide' },
+            { role: 'hide', label: l.hide },
+            { role: 'hideOthers', label: l.hideOthers },
+            { role: 'unhide', label: l.unhide },
             { type: 'separator' },
-            { role: 'quit' },
+            { role: 'quit', label: l.quit },
           ],
         },
       ]
     : []
 
   const fileMenu: MenuItemConstructorOptions = {
-    label: 'File',
+    label: l.file,
     submenu: [
-      { label: 'New Chat', accelerator: 'CmdOrCtrl+N', click: () => emit(win(), 'new-chat') },
+      { label: l.newChat, accelerator: 'CmdOrCtrl+N', click: () => emit(win(), 'new-chat') },
       ...(!isMac
         ? ([
-            { label: 'Settings', accelerator: 'Ctrl+,', click: () => emit(win(), 'open-settings') },
+            { label: l.settingsShort, accelerator: 'Ctrl+,', click: () => emit(win(), 'open-settings') },
             { type: 'separator' },
-            { role: 'quit' },
+            { role: 'quit', label: l.quit },
           ] as MenuItemConstructorOptions[])
         : []),
     ],
   }
 
   const editMenu: MenuItemConstructorOptions = {
-    label: 'Edit',
+    label: l.edit,
     submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
+      { role: 'undo', label: l.undo },
+      { role: 'redo', label: l.redo },
       { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'selectAll' },
+      { role: 'cut', label: l.cut },
+      { role: 'copy', label: l.copy },
+      { role: 'paste', label: l.paste },
+      { role: 'selectAll', label: l.selectAll },
     ],
   }
 
   const viewMenu: MenuItemConstructorOptions = {
-    label: 'View',
+    label: l.view,
     submenu: [
-      { role: 'reload' },
-      { role: 'toggleDevTools' },
+      { role: 'reload', label: l.reload },
+      { role: 'toggleDevTools', label: l.toggleDevTools },
       { type: 'separator' },
-      { role: 'resetZoom' },
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
+      { role: 'resetZoom', label: l.resetZoom },
+      { role: 'zoomIn', label: l.zoomIn },
+      { role: 'zoomOut', label: l.zoomOut },
       { type: 'separator' },
-      { role: 'togglefullscreen' },
+      { role: 'togglefullscreen', label: l.toggleFullscreen },
     ],
   }
 
   const windowMenu: MenuItemConstructorOptions = {
-    label: 'Window',
+    label: l.window,
     submenu: [
-      { role: 'minimize' },
-      ...(isMac ? ([{ role: 'zoom' }] as MenuItemConstructorOptions[]) : []),
+      { role: 'minimize', label: l.minimize },
+      ...(isMac ? ([{ role: 'zoom' as const, label: l.zoom }] as MenuItemConstructorOptions[]) : []),
       { type: 'separator' },
       // Explicit Close so Cmd/Ctrl+W reliably triggers our close-to-tray hide.
-      { label: 'Close Window', accelerator: 'CmdOrCtrl+W', click: () => win()?.close() },
+      { label: l.closeWindow, accelerator: 'CmdOrCtrl+W', click: () => win()?.close() },
     ],
   }
 
@@ -100,14 +104,14 @@ export function buildAppMenu(getWindow: () => BrowserWindow | null) {
     appConfig?.skillHub && skillHubUrl && skillHubUrl.startsWith('http') && !skillHubUrl.includes('EXAMPLE-DISABLED'),
   )
   const linkItems: MenuItemConstructorOptions[] = [
-    ...(docsUrl ? [{ label: 'Documentation', click: () => shell.openExternal(docsUrl) }] : []),
-    ...(skillHubEnabled ? [{ label: 'Skill Hub', click: () => shell.openExternal(skillHubUrl) }] : []),
+    ...(docsUrl ? [{ label: l.documentation, click: () => shell.openExternal(docsUrl) }] : []),
+    ...(skillHubEnabled ? [{ label: l.skillHub, click: () => shell.openExternal(skillHubUrl) }] : []),
   ]
   const helpMenu: MenuItemConstructorOptions = {
-    label: 'Help',
+    label: l.help,
     submenu: [
-      { label: 'About maliang', click: () => emit(win(), 'open-about') },
-      { label: 'View Logs', click: () => emit(win(), 'view-logs') },
+      { label: l.about, click: () => emit(win(), 'open-about') },
+      { label: l.viewLogs, click: () => emit(win(), 'view-logs') },
       ...(linkItems.length ? [{ type: 'separator' } as MenuItemConstructorOptions, ...linkItems] : []),
     ],
   }
@@ -122,4 +126,8 @@ export function buildAppMenu(getWindow: () => BrowserWindow | null) {
   ]
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}
+
+export function rebuildAppMenu() {
+  if (currentGetWindow) buildAppMenu(currentGetWindow)
 }
