@@ -29,7 +29,7 @@ const _CT_DARK_BORDERS = {
 
 // Same palettes as the desktop client (desktop/src/renderer/src/theme/themes.ts).
 const BUILTIN_COLOR_THEMES = [
-    { id: 'default', name: 'Meadow', preview: { accent: '#4abe6e', bg: '#f9fafb', surface: '#ffffff' } },
+    { id: 'default', name: 'Ink Gold', preview: { accent: '#C9A24A', bg: '#FDF9F2', surface: '#ffffff' } },
     {
         id: 'ocean', name: 'Ocean', preview: { accent: '#3370ff', bg: '#f7f9fc', surface: '#ffffff' },
         light: { colors: {
@@ -491,7 +491,7 @@ document.addEventListener('click', (e) => {
 // ---- Custom theme dialog ----------------------------------------------------
 
 function _themeDocsUrl() {
-    return `${currentLang === 'zh' ? './docs/zh' : 'https://docs.maliang.local'}/extensions/custom-theme`;
+    return `${currentLang === 'zh' ? './docs/zh' : './docs'}/extensions/custom-theme`;
 }
 
 function openThemeAddModal() {

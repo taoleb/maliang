@@ -102,8 +102,8 @@ export const DEFAULT_THEME_ID = 'default'
 // 'default' maps to the base :root / .dark values in index.css (no overrides).
 export const DEFAULT_THEME: Theme = {
   id: DEFAULT_THEME_ID,
-  name: 'Meadow',
-  preview: { accent: '#4abe6e', bg: '#f9fafb', surface: '#ffffff' },
+  name: 'Ink Gold',
+  preview: { accent: '#C9A24A', bg: '#FDF9F2', surface: '#ffffff' },
 }
 
 // Dark-mode borders are shared: translucent white reads well on any tint.
@@ -420,7 +420,7 @@ function normalizeTheme(raw: unknown): Theme | null {
 function derivePreview(theme: Theme): { accent: string; bg: string; surface: string } {
   const c = theme.dark?.colors ?? theme.light?.colors ?? {}
   return {
-    accent: c.accent ?? '#4abe6e',
+    accent: c.accent ?? '#C9A24A',
     bg: c.bgBase ?? '#111111',
     surface: c.bgSurface ?? '#1c1c1f',
   }

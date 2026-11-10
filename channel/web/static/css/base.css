@@ -10,6 +10,44 @@
    slate scales and the stylesheets read these; a theme overrides them inline
    on <html> (static/js/core/themes.js). */
 :root {
+    /* Brand gold, from the mascot trim: #C9A24A, deeper gold for hover. */
+    --cw-primary-50: 251 246 232;
+    --cw-primary-100: 243 230 196;
+    --cw-primary-200: 232 212 154;
+    --cw-primary-300: 217 188 106;
+    --cw-primary-400: 201 162 74;    /* #C9A24A */
+    --cw-primary-500: 168 135 46;    /* #A8872E */
+    --cw-primary-600: 143 108 34;    /* #8F6C22 */
+    --cw-primary-700: 115 87 28;
+    --cw-primary-800: 90 68 22;
+    --cw-primary-900: 63 47 15;
+    /* Warm neutrals + ink text, so slate utilities sit on the cream palette. */
+    --cw-slate-50: 253 249 242;      /* #FDF9F2 canvas */
+    --cw-slate-100: 243 238 230;
+    --cw-slate-200: 234 223 206;     /* #EADFCE */
+    --cw-slate-300: 217 204 184;
+    --cw-slate-400: 148 132 110;
+    --cw-slate-500: 107 92 74;
+    --cw-slate-600: 84 68 52;
+    --cw-slate-700: 62 48 34;
+    --cw-slate-800: 28 22 14;        /* ink #1C160E */
+    --cw-slate-900: 20 16 10;
+    /* Accent-colored text on a tinted accent background. */
+    --cw-accent-ink: 63 47 15;
+    --cw-on-accent: 28 22 14;
+    /* Warm cream canvas, matched to the mascot / splash (#FDF9F2). */
+    --cw-canvas: 253 249 242;
+    --cw-panel: 255 255 255;
+    --cw-sidebar: 250 245 236;
+    /* Panel opacity; a glass wallpaper lowers it. */
+    --cw-glass-alpha: 1;
+    --cw-font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Hiragino Sans GB", system-ui, sans-serif;
+    --cw-radius: 0.5rem;
+    --cw-radius-lg: 0.75rem;
+    --cw-shadow: 0 1px 2px rgba(43, 32, 18, 0.04), 0 6px 16px rgba(43, 32, 18, 0.05);
+}
+.dark {
+    /* Dark appearance keeps the original green brand and cool neutrals. */
     --cw-primary-50: 237 253 243;
     --cw-primary-100: 212 250 226;
     --cw-primary-200: 171 244 199;
@@ -30,17 +68,8 @@
     --cw-slate-700: 51 65 85;
     --cw-slate-800: 30 41 59;
     --cw-slate-900: 15 23 42;
-    /* Accent-colored text on a tinted accent background. */
-    --cw-accent-ink: 23 128 61;
-    /* Warm cream canvas, matched to the mascot / splash (#FDF9F2). */
-    --cw-canvas: 253 249 242;
-    --cw-panel: 255 255 255;
-    --cw-sidebar: 250 245 236;
-    /* Panel opacity; a glass wallpaper lowers it. */
-    --cw-glass-alpha: 1;
-}
-.dark {
     --cw-accent-ink: 110 231 160;
+    --cw-on-accent: 255 255 255;
     --cw-canvas: 17 17 17;
     --cw-panel: 26 26 26;
     --cw-sidebar: 10 10 10;
@@ -154,3 +183,12 @@
     height: 100%;
 }
 
+
+body, .font-sans {
+    font-family: var(--cw-font-sans);
+    line-height: 1.65;
+    color: rgb(var(--cw-slate-800));
+}
+.dark body, .dark .font-sans {
+    color: rgb(var(--cw-slate-200));
+}

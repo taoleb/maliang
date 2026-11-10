@@ -1,0 +1,290 @@
+/* Light-theme design system for maliang.
+   Gold / ink / cream, derived from the mascot. Dark appearance is untouched
+   (all rules are scoped to html:not(.dark)). */
+
+html:not(.dark) {
+    color-scheme: light;
+}
+
+/* ---- Typography ---- */
+html:not(.dark) body {
+    font-family: var(--cw-font-sans);
+    color: rgb(var(--cw-slate-800));
+    line-height: 1.65;
+    background-color: rgb(var(--cw-canvas));
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Header / chrome ---- */
+html:not(.dark) header,
+html:not(.dark) #chat-composer {
+    background: rgb(var(--cw-canvas));
+    border-color: rgb(var(--cw-slate-200));
+}
+html:not(.dark) header .hover\:bg-slate-100:hover,
+html:not(.dark) #lang-menu button:hover {
+    background-color: rgb(var(--cw-slate-100));
+}
+html:not(.dark) #lang-menu {
+    background: #fff;
+    border: 1px solid rgb(var(--cw-slate-200));
+    box-shadow: var(--cw-shadow);
+    border-radius: var(--cw-radius-lg);
+}
+
+/* ---- Form controls: one cream field language ---- */
+html:not(.dark) input[type="text"],
+html:not(.dark) input[type="password"],
+html:not(.dark) input[type="number"],
+html:not(.dark) input[type="email"],
+html:not(.dark) input[type="search"],
+html:not(.dark) input[type="url"],
+html:not(.dark) input:not([type]),
+html:not(.dark) textarea,
+html:not(.dark) select,
+html:not(.dark) .cfg-dropdown-selected {
+    background-color: rgb(var(--cw-slate-50));
+    border-color: rgb(var(--cw-slate-200));
+    color: rgb(var(--cw-slate-800));
+    border-radius: var(--cw-radius);
+    box-shadow: none;
+}
+html:not(.dark) input[type="text"]:hover,
+html:not(.dark) input[type="password"]:hover,
+html:not(.dark) input[type="number"]:hover,
+html:not(.dark) input[type="email"]:hover,
+html:not(.dark) input[type="search"]:hover,
+html:not(.dark) input[type="url"]:hover,
+html:not(.dark) input:not([type]):hover,
+html:not(.dark) textarea:hover,
+html:not(.dark) select:hover,
+html:not(.dark) .cfg-dropdown-selected:hover {
+    border-color: rgb(var(--cw-slate-300));
+}
+html:not(.dark) input[type="text"]:focus,
+html:not(.dark) input[type="password"]:focus,
+html:not(.dark) input[type="number"]:focus,
+html:not(.dark) input[type="email"]:focus,
+html:not(.dark) input[type="search"]:focus,
+html:not(.dark) input[type="url"]:focus,
+html:not(.dark) input:not([type]):focus,
+html:not(.dark) textarea:focus,
+html:not(.dark) select:focus,
+html:not(.dark) .cfg-dropdown.open .cfg-dropdown-selected,
+html:not(.dark) .cfg-dropdown:focus .cfg-dropdown-selected {
+    outline: none;
+    border-color: rgb(var(--cw-primary-400));
+    box-shadow: 0 0 0 3px rgb(var(--cw-primary-400) / 0.18);
+    background-color: #fff;
+}
+html:not(.dark) .cfg-dropdown-menu {
+    background: #fff;
+    border-color: rgb(var(--cw-slate-200));
+    box-shadow: var(--cw-shadow);
+    border-radius: var(--cw-radius-lg);
+}
+html:not(.dark) .cfg-dropdown-item:hover {
+    background: rgb(var(--cw-primary-50));
+    color: rgb(var(--cw-slate-800));
+}
+html:not(.dark) .cfg-dropdown-item.active {
+    background: rgb(var(--cw-primary-100));
+    color: rgb(var(--cw-primary-800));
+}
+
+/* ---- Segmented tabs ---- */
+html:not(.dark) .config-tab,
+html:not(.dark) .knowledge-tab,
+html:not(.dark) .memory-tab,
+html:not(.dark) .cfg-api-lang {
+    color: rgb(var(--cw-slate-600));
+}
+html:not(.dark) .config-tab.active,
+html:not(.dark) .knowledge-tab.active,
+html:not(.dark) .memory-tab.active,
+html:not(.dark) .cfg-api-lang.active {
+    background: #fff;
+    color: rgb(var(--cw-slate-800));
+    box-shadow: 0 1px 2px rgba(43, 32, 18, 0.06);
+}
+html:not(.dark) .flex.items-center.bg-slate-100 {
+    background-color: rgb(var(--cw-slate-100));
+}
+
+/* ---- Checkboxes / radios / toggles ---- */
+html:not(.dark) input[type="checkbox"],
+html:not(.dark) input[type="radio"] {
+    accent-color: rgb(var(--cw-primary-400));
+}
+html:not(.dark) .bg-slate-200.peer-checked\:bg-primary-400,
+html:not(.dark) .peer-checked\:bg-primary-400 {
+    --tw-bg-opacity: 1;
+}
+
+/* ---- Primary buttons: gold fill, ink label ---- */
+html:not(.dark) .bg-primary-500,
+html:not(.dark) .bg-primary-400,
+html:not(.dark) button.bg-primary-500,
+html:not(.dark) #login-btn,
+html:not(.dark) .composer-send-btn {
+    background-color: rgb(var(--cw-primary-400));
+    color: rgb(var(--cw-on-accent));
+}
+html:not(.dark) .bg-primary-500:hover,
+html:not(.dark) .hover\:bg-primary-600:hover,
+html:not(.dark) #login-btn:hover,
+html:not(.dark) .composer-send-btn:hover:not(:disabled) {
+    background-color: rgb(var(--cw-primary-500));
+    color: rgb(var(--cw-on-accent));
+}
+html:not(.dark) .composer-send-btn:disabled {
+    color: #fff;
+}
+
+/* ---- Cards, panels, tables, code, badges ---- */
+html:not(.dark) .bg-panel,
+html:not(.dark) .rounded-xl.border {
+    border-color: rgb(var(--cw-slate-200));
+}
+html:not(.dark) table,
+html:not(.dark) thead,
+html:not(.dark) tbody,
+html:not(.dark) th,
+html:not(.dark) td {
+    border-color: rgb(var(--cw-slate-200));
+}
+html:not(.dark) thead,
+html:not(.dark) th {
+    background-color: rgb(var(--cw-slate-50));
+    color: rgb(var(--cw-slate-700));
+}
+html:not(.dark) pre,
+html:not(.dark) code,
+html:not(.dark) .hljs,
+html:not(.dark) .bg-slate-50,
+html:not(.dark) .bg-slate-100 {
+    background-color: rgb(var(--cw-slate-50));
+}
+html:not(.dark) pre,
+html:not(.dark) code:not(a code) {
+    border-color: rgb(var(--cw-slate-200));
+}
+html:not(.dark) .badge,
+html:not(.dark) [class*="badge"] {
+    border-color: rgb(var(--cw-slate-200));
+}
+
+/* ---- Tooltips, modals, popovers ---- */
+html:not(.dark) [data-tooltip]::after {
+    background: rgb(var(--cw-slate-800));
+    color: #FDF9F2;
+    border-radius: 8px;
+    box-shadow: var(--cw-shadow);
+}
+html:not(.dark) .modal,
+html:not(.dark) [class*="modal"] .bg-panel,
+html:not(.dark) .composer-menu {
+    background: #fff;
+    border-color: rgb(var(--cw-slate-200));
+    box-shadow: var(--cw-shadow);
+}
+
+/* ---- Scrollbars ---- */
+html:not(.dark) * {
+    scrollbar-color: rgb(var(--cw-slate-300)) transparent;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb {
+    background: rgb(var(--cw-slate-300));
+    border-radius: 3px;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--cw-primary-300));
+}
+
+/* ---- Welcome / mascot ---- */
+html:not(.dark) .welcome-mascot,
+html:not(.dark) #login-overlay .welcome-mascot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 11.5rem;
+    height: 11.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgb(var(--cw-canvas));
+    box-shadow: 0 0 0 3px rgb(var(--cw-primary-400) / 0.28), 0 16px 32px rgba(43, 32, 18, 0.08);
+}
+html:not(.dark) .welcome-mascot img,
+html:not(.dark) #login-overlay .welcome-mascot img {
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center 18%;
+    /* Feather any hard rectangular edge in the GIF into the cream canvas. */
+    -webkit-mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
+            mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
+}
+html:not(.dark) #welcome-title {
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    color: rgb(var(--cw-slate-800));
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+html:not(.dark) #welcome-subtitle {
+    color: rgb(var(--cw-slate-600));
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 28rem;
+}
+
+/* Quick-action cards */
+html:not(.dark) .example-card {
+    background: #fff;
+    border: 1px solid rgb(var(--cw-slate-200));
+    border-radius: 0.85rem;
+    box-shadow: 0 1px 2px rgba(43, 32, 18, 0.04);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+html:not(.dark) .example-card:hover {
+    border-color: rgb(var(--cw-primary-400));
+    box-shadow: 0 8px 22px rgba(201, 162, 74, 0.16);
+    transform: translateY(-1px);
+}
+
+/* Composer on cream */
+html:not(.dark) .composer-card {
+    background: #fff;
+    border-color: rgb(var(--cw-slate-200));
+    box-shadow: var(--cw-shadow);
+}
+html:not(.dark) .composer-card:focus-within {
+    border-color: rgb(var(--cw-primary-400));
+    box-shadow: 0 0 0 3px rgb(var(--cw-primary-400) / 0.18);
+}
+
+/* Active nav already uses primary-50 / primary-800 from sessions.css */
+html:not(.dark) #sidebar .sidebar-item.active {
+    background: rgb(var(--cw-primary-50));
+    color: rgb(var(--cw-primary-800));
+}
+html:not(.dark) #sidebar .sidebar-item.active .item-icon {
+    color: rgb(var(--cw-primary-600));
+}
+
+/* Empty-state and section chips: gold on cream, not leftover rainbow fills. */
+html:not(.dark) .w-16.h-16.rounded-2xl {
+    background-color: rgb(var(--cw-primary-50)) !important;
+}
+html:not(.dark) .w-16.h-16.rounded-2xl i {
+    color: rgb(var(--cw-primary-600)) !important;
+}
+html:not(.dark) #view-config .w-9.h-9.rounded-lg,
+html:not(.dark) #view-skills .w-9.h-9.rounded-lg {
+    background-color: rgb(var(--cw-primary-50)) !important;
+}
+html:not(.dark) #view-config .w-9.h-9.rounded-lg i,
+html:not(.dark) #view-skills .w-9.h-9.rounded-lg i {
+    color: rgb(var(--cw-primary-600)) !important;
+}

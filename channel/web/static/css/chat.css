@@ -231,11 +231,11 @@
     border: none;
     border-radius: 9px;
     background: rgb(var(--cw-primary-400));
-    color: #fff;
+    color: rgb(var(--cw-on-accent, 255 255 255));
     cursor: pointer;
     transition: background 0.12s ease, opacity 0.12s ease;
 }
-.composer-send-btn:hover:not(:disabled) { background: #35A55A; }
+.composer-send-btn:hover:not(:disabled) { background: rgb(var(--cw-primary-500)); }
 .composer-send-btn:disabled { background: rgb(var(--cw-slate-300)); cursor: not-allowed; }
 .dark .composer-send-btn:disabled { background: rgb(var(--cw-slate-600)); }
 .composer-steer-btn {
@@ -1217,4 +1217,28 @@ html:not(.dark) .example-card {
 }
 .dark .chat-scroll-to-bottom:hover {
     color: #4ade80;
+}
+
+/* Mascot frame used on the empty-chat and login screens. Light-theme gold
+   ring / feathering lives in brand-light.css. */
+.welcome-mascot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 11.5rem;
+    height: 11.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: transparent;
+}
+.welcome-mascot img {
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center 18%;
+}
+.dark .welcome-mascot {
+    box-shadow: none;
+    background: transparent;
 }

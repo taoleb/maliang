@@ -2547,7 +2547,7 @@ function applyI18n() {
     _syncLangControls();
     // Point the docs link to the locale-specific documentation site.
     const docsLink = document.getElementById('docs-link');
-    if (docsLink) docsLink.href = currentLang === 'zh' ? './docs/zh' : 'https://docs.maliang.local';
+    if (docsLink) docsLink.href = currentLang === 'zh' ? './docs/zh' : './docs';
     // Workspace panel content is rendered by JS, not data-i18n attributes.
     if (typeof relocalizeWorkspacePanel === 'function') relocalizeWorkspacePanel();
 }

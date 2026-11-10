@@ -12,16 +12,16 @@
    ============================================================ */
 
 :root {
-  /* Brand accent (maliang green), used sparingly */
-  --accent: #4abe6e;
-  --accent-hover: #35a85b;
-  --accent-active: #228547;
-  --accent-soft: rgba(74, 190, 110, 0.12);
-  --accent-contrast: #ffffff;
+  /* Brand accent — mascot gold, used sparingly */
+  --accent: #C9A24A;
+  --accent-hover: #A8872E;
+  --accent-active: #8F6C22;
+  --accent-soft: rgba(201, 162, 74, 0.14);
+  --accent-contrast: #1C160E;
 
   /* User message bubble (defaults to solid accent; themes may override) */
   --bubble-user-bg: var(--accent);
-  --bubble-user-text: #ffffff;
+  --bubble-user-text: #1C160E;
 
   /* Status colors */
   --success: #4abe6e;
@@ -39,10 +39,10 @@
   --bg-inset: #FDF9F2;
   --bg-inset-2: #f3eee6;
 
-  --text-primary: #1e293b;   /* headings, primary text (slate-800) */
-  --text-secondary: #475569; /* body, labels (slate-600) */
-  --text-tertiary: #64748b;  /* hints, captions (slate-500) */
-  --text-disabled: #94a3b8;  /* slate-400 */
+  --text-primary: #1C160E;   /* ink */
+  --text-secondary: #544434;
+  --text-tertiary: #6B5C4A;
+  --text-disabled: #94826E;
 
   --border-default: #eadfce;
   --border-strong: #d9ccb8;
@@ -62,7 +62,7 @@
   --radius-card: 12px;
   --radius-btn: 8px;
   --radius-sm: 6px;
-  --font-sans: 'Inter', system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-sans: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC', 'Hiragino Sans GB', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
   /* Wallpaper layer — empty by default (solid theme). A theme sets these
@@ -99,7 +99,13 @@
   --border-strong: rgba(255, 255, 255, 0.14);
   --border-subtle: rgba(255, 255, 255, 0.04);
 
+  --accent: #4abe6e;
+  --accent-hover: #35a85b;
+  --accent-active: #228547;
+  --accent-soft: rgba(74, 190, 110, 0.16);
   --accent-contrast: #0e0e10;
+  --bubble-user-bg: var(--accent);
+  --bubble-user-text: #ffffff;
 
   --overlay: rgba(0, 0, 0, 0.6);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -1238,3 +1244,30 @@ body[data-wallpaper='on'] .art-day-label {
 }
 .art-toast.show { opacity: 1; transform: translate(-50%, 0); }
 .dark .art-toast { background: #2a2a2e; color: #f1f5f9; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8); }
+
+/* Mascot presentation on the empty-chat / about / login screens. */
+.mascot-frame {
+  width: 11.5rem;
+  height: 11.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-base);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent), 0 16px 32px rgba(43, 32, 18, 0.08);
+}
+.mascot-frame img {
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  object-position: center 18%;
+  margin: -10%;
+}
+html:not(.dark) .mascot-frame img {
+  -webkit-mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
+          mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
+}
+.dark .mascot-frame {
+  box-shadow: none;
+  background: transparent;
+}
