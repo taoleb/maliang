@@ -9,4 +9,4 @@
 
 - `desktop/resources/icon.ico` / `icon.png` / `icon.icns`
 - `channel/web/static/favicon.ico`、`logo.jpg`、`mascot.gif`
-- `desktop/build/installerSidebar.bmp`、`installerWelcome.bmp`（NSIS 欢迎/完成页，奶油色底）
+- `desktop/resources/installerSidebar.bmp`、`desktop/resources/installerWelcome.bmp`（NSIS 欢迎/完成页，奶油色底）

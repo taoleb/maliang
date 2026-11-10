@@ -109,8 +109,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "maliang",
-      "installerSidebar": "build/installerSidebar.bmp",
-      "uninstallerSidebar": "build/installerSidebar.bmp",
+      "installerSidebar": "resources/installerSidebar.bmp",
+      "uninstallerSidebar": "resources/installerSidebar.bmp",
       "include": "build/installer.nsh"
     },
     "publish": {

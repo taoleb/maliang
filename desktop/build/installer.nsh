@@ -1,6 +1,6 @@
 # maliang Windows installer hooks.
 # Welcome / finish artwork is the NSIS MUI sidebar bitmap
-# (build/installerSidebar.bmp), a still of the mascot on a cream background.
+# (resources/installerSidebar.bmp), a still of the mascot on a cream background.
 # Animated GIFs cannot be used as the installer sidebar or as the .ico;
 # the looping mascot is used in the app splash, empty chat, and About dialog.
 
