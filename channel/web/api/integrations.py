@@ -164,7 +164,7 @@ def _state(host: str = None, port: int = None) -> dict:
         "lan_urls": lan_urls(host, port),
         "listen": {"host": host, "port": port},
         # The desktop app owns its backend's port.
-        "port_fixed": os.environ.get("COW_DESKTOP") == "1",
+        "port_fixed": os.environ.get("MALIANG_DESKTOP") == "1",
         "local_only": is_loopback_host(host),
         "password_set": _is_password_enabled(),
     }
@@ -232,7 +232,7 @@ def _port_problem(host: str, port: int) -> str:
         return "invalid_port"
     if port == _listen["port"]:
         return ""
-    if os.environ.get("COW_DESKTOP") == "1":
+    if os.environ.get("MALIANG_DESKTOP") == "1":
         return "port_fixed"
     return "" if can_bind(host, port) else "port_in_use"
 

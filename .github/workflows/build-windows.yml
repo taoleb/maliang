@@ -1,0 +1,53 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+    paths:
+      - "desktop/**"
+      - "app.py"
+      - "requirements.txt"
+      - ".github/workflows/build-windows.yml"
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Build Python backend
+        shell: pwsh
+        run: |
+          python -m venv desktop/build/.venv-build
+          .\desktop\build\.venv-build\Scripts\pip install -U pip
+          .\desktop\build\.venv-build\Scripts\pip install -r desktop/build/requirements-desktop.txt
+          .\desktop\build\.venv-build\Scripts\pip install pyinstaller
+          .\desktop\build\.venv-build\Scripts\pyinstaller desktop/build/maliang-backend.spec --noconfirm --distpath desktop/build/dist --workpath desktop/build/build-work
+
+      - name: Install frontend dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - name: Package NSIS installer
+        working-directory: desktop
+        # Unsigned build is expected unless signing secrets are provided.
+        run: npm run dist:win -- --config electron-builder.win.js
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: maliang-windows-x64
+          path: desktop/release/*.exe
+          if-no-files-found: error

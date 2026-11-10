@@ -732,7 +732,7 @@ class TestSharedTranscriptStaysCurrent:
             [
                 {
                     "role": "user",
-                    "content": [{"type": "text", "text": "CowAgent repo is here"}],
+                    "content": [{"type": "text", "text": "maliang repo is here"}],
                 },
                 {
                     "role": "assistant",

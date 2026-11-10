@@ -1,9 +1,9 @@
 ---
 title: Telegram
-description: "BotFather で作成した Telegram Bot に CowAgent を接続します。DM とグループ（@メンションまたは返信）に対応し、Long Polling で公開 IP は不要です。"
+description: "BotFather で作成した Telegram Bot に maliang を接続します。DM とグループ（@メンションまたは返信）に対応し、Long Polling で公開 IP は不要です。"
 ---
 
-> 公式の Telegram Bot API を通じて CowAgent を接続します。1 対 1 チャットおよびグループチャット（@メンションまたはボットへの返信で起動）に対応。Long Polling 方式のため公開 IP は不要で、すぐに利用できます。
+> 公式の Telegram Bot API を通じて maliang を接続します。1 対 1 チャットおよびグループチャット（@メンションまたはボットへの返信で起動）に対応。Long Polling 方式のため公開 IP は不要で、すぐに利用できます。
 
 
 ## 1. 接続手順
@@ -12,8 +12,8 @@ description: "BotFather で作成した Telegram Bot に CowAgent を接続し�
 
 1. Telegram で公式アカウント [@BotFather](https://t.me/BotFather) を開きます。
 2. `/newbot` を送り、案内に従って入力します:
-   - **Bot 名**（表示名、例: `My CowAgent Bot`）
-   - **Bot ユーザー名**（`bot` で終わる必要があります、例: `my_cowagent_bot`）
+   - **Bot 名**（表示名、例: `My maliang Bot`）
+   - **Bot ユーザー名**（`bot` で終わる必要があります、例: `my_maliang_bot`）
 3. 作成完了後、BotFather から **HTTP API Token**（例: `123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ`）が返されます。大切に保管してください。
 
 <Tip>
@@ -34,7 +34,7 @@ description: "BotFather で作成した Telegram Bot に CowAgent を接続し�
   設定後もグループで反応しない場合は、Bot を一度グループから外して再度追加してみてください。
 </Note>
 
-### ステップ 3: CowAgent に接続
+### ステップ 3: maliang に接続
 
 <Tabs>
   <Tab title="Web コンソール（推奨）">
@@ -62,7 +62,7 @@ description: "BotFather で作成した Telegram Bot に CowAgent を接続し�
 ログに以下のような出力が表示されれば接続成功です:
 
 ```
-[Telegram] Bot logged in as @my_cowagent_bot (id=123456789)
+[Telegram] Bot logged in as @my_maliang_bot (id=123456789)
 [Telegram] Registered 10 bot commands
 [Telegram] ✅ Telegram bot ready, polling for updates
 ```
@@ -106,7 +106,7 @@ description: "BotFather で作成した Telegram Bot に CowAgent を接続し�
 
 接続が完了したら:
 
-- **1 対 1 チャット**: Telegram で Bot のユーザー名（例: `@my_cowagent_bot`）を検索し、`Start` をタップして会話を開始します。
+- **1 対 1 チャット**: Telegram で Bot のユーザー名（例: `@my_maliang_bot`）を検索し、`Start` をタップして会話を開始します。
 - **グループチャット**: Bot をグループに追加し、`@bot こんにちは` または **Bot のメッセージに返信** することで起動します。グループで反応しない場合は [ステップ 2](#ステップ-2-グループ利用時-privacy-mode-を無効化) の Privacy Mode 設定を確認してください。
 
 画像やファイルを送るときは、添付欄の上の入力欄に **キャプション**（説明・質問）を直接書いて一緒に送信できます。Bot は添付ファイルとキャプションを合わせて回答します。先に添付を送り、その後に質問を送る形でも、2 つのメッセージは自動でまとめて処理されます。

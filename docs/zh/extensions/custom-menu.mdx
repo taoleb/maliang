@@ -6,7 +6,7 @@ description: "自定义 Web 控制台和桌面客户端的侧边栏菜单：拖�
 侧边栏菜单可以按自己的习惯调整：重新排序和分组、隐藏不常用的页面，还可以把 Agent 生成的网页、文档或任意网址放进菜单，像内置页面一样一键打开。Web 控制台和桌面客户端共用同一份菜单。
 
 <Frame caption="把 Agent 维护的运营看板放进「工作台」分组，点击即可在控制台内打开">
-  <img src="https://cdn.link-ai.tech/doc/custom-menu-zh.png" alt="自定义菜单" width="800" />
+  <img src="(upstream-cdn-removed)/doc/custom-menu-zh.png" alt="自定义菜单" width="800" />
 </Frame>
 
 ## 编辑菜单
@@ -20,7 +20,7 @@ description: "自定义 Web 控制台和桌面客户端的侧边栏菜单：拖�
 - 在「产物」页预览网页或 Markdown 文档时，点击「添加到菜单」
 
 <Frame caption="菜单编辑器：拖动排序、分组，添加产物与网页链接">
-  <img src="https://cdn.link-ai.tech/doc/customer-menu-config-zh.png" alt="菜单编辑器" width="800" />
+  <img src="(upstream-cdn-removed)/doc/customer-menu-config-zh.png" alt="菜单编辑器" width="800" />
 </Frame>
 
 在编辑器中修改后点击「保存」即可生效。
@@ -70,7 +70,7 @@ description: "自定义 Web 控制台和桌面客户端的侧边栏菜单：拖�
 
 ### 存储位置
 
-菜单保存在默认智能体工作空间的 `system/menu.json` 中（源码部署默认为 `~/cow/system/menu.json`），由 Web 控制台和桌面客户端共同读取。某一端没有的页面会在该端跳过，同时保留在菜单中供另一端使用。
+菜单保存在默认智能体工作空间的 `system/menu.json` 中（源码部署默认为 `~/maliang/system/menu.json`），由 Web 控制台和桌面客户端共同读取。某一端没有的页面会在该端跳过，同时保留在菜单中供另一端使用。
 
 ### 文件格式
 
@@ -85,7 +85,7 @@ description: "自定义 Web 控制台和桌面客户端的侧边栏菜单：拖�
       "title": "",
       "items": [
         { "id": "chat", "type": "builtin", "view": "chat", "title": "", "icon": "", "hidden": false },
-        { "id": "m_report", "type": "artifact", "title": "周报", "icon": "chart", "path": "/Users/me/cow/websites/report.html" },
+        { "id": "m_report", "type": "artifact", "title": "周报", "icon": "chart", "path": "/Users/me/maliang/websites/report.html" },
         { "id": "m_board", "type": "url", "title": "看板", "icon": "gauge", "url": "https://example.com/board", "open": "embed" }
       ]
     }

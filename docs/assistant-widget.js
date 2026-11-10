@@ -2,10 +2,10 @@
 // way any site embeds one. Chinese pages get the Chinese assistant, every
 // other page the English one. `?chat=open` opens the window on arrival.
 (function () {
-  var HOST = 'https://ask.cowagent.ai';
+  var HOST = 'https://ask.maliang.local';
   var SHARES = {
-    zh: { token: 'uyc00EYyjB3eym5_uhGdixkF', title: 'CowAgent 开源助手' },
-    en: { token: 'c2CAAU0eKg5U-W-mOY6JAF8u', title: 'CowAgent Assistant' }
+    zh: { token: 'uyc00EYyjB3eym5_uhGdixkF', title: 'maliang 开源助手' },
+    en: { token: 'c2CAAU0eKg5U-W-mOY6JAF8u', title: 'maliang Assistant' }
   };
   var current = '';
 
@@ -16,7 +16,7 @@
   function mount(lang, open) {
     if (lang === current) return;
     // Pages change without a reload, so a language switch swaps the window.
-    document.querySelectorAll('.cow-guest-btn, .cow-guest-panel').forEach(function (el) { el.remove(); });
+    document.querySelectorAll('.maliang-guest-btn, .maliang-guest-panel').forEach(function (el) { el.remove(); });
     current = lang;
     var share = SHARES[lang];
     var script = document.createElement('script');

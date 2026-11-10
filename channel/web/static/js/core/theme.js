@@ -6,7 +6,7 @@
 // Theme
 // =====================================================================
 // The guest page sets its own default; the console defaults to dark.
-let currentTheme = localStorage.getItem('cow_theme') || window.__COW_DEFAULT_THEME__ || 'dark';
+let currentTheme = localStorage.getItem('cow_theme') || window.__MALIANG_DEFAULT_THEME__ || 'dark';
 
 function applyTheme() {
     const root = document.documentElement;

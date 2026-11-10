@@ -1,13 +1,13 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    CowAgent installer & management script for Windows.
+    maliang installer & management script for Windows.
 .DESCRIPTION
     One-liner install:
-      irm https://cdn.link-ai.tech/code/cow/run.ps1 | iex
+      irm  | iex
     Or from a local clone:
       .\scripts\run.ps1              # install / configure
-      .\scripts\run.ps1 start        # start service  (delegates to cow CLI)
+      .\scripts\run.ps1 start        # start service  (delegates to maliang CLI)
       .\scripts\run.ps1 stop|restart|status|logs|config|update|help
 #>
 
@@ -111,7 +111,7 @@ if (-not $IsProjectDir) {
     $IsProjectDir = (Test-Path "$BaseDir\app.py") -and (Test-Path "$BaseDir\config-template.json")
 }
 
-# Initialize $UiLang for management commands: prefer cow_lang from an existing
+# Initialize $UiLang for management commands: prefer maliang_lang from an existing
 # config.json, otherwise fall back to environment detection.
 function Initialize-UiLang {
     if ($script:UiLang) { return }
@@ -119,7 +119,7 @@ function Initialize-UiLang {
     if (Test-Path "$BaseDir\config.json") {
         try {
             $cfg = Get-Content "$BaseDir\config.json" -Raw | ConvertFrom-Json
-            if ($cfg.cow_lang) { $cfgLang = "$($cfg.cow_lang)" }
+            if ($cfg.maliang_lang) { $cfgLang = "$($cfg.maliang_lang)" }
         } catch {}
     }
     switch ($cfgLang) {
@@ -279,11 +279,11 @@ function Assert-Python {
 
 # ── clone project ────────────────────────────────────────────────
 function Install-Project {
-    if (Test-Path "CowAgent") {
+    if (Test-Path "maliang") {
         # Auto-backup the existing directory without prompting.
-        $backup = "CowAgent_backup_$(Get-Date -Format 'yyyyMMddHHmmss')"
-        Rename-Item "CowAgent" $backup
-        Write-Warn ((T "已存在 CowAgent 目录，已自动备份为" "Existing 'CowAgent' directory backed up to") + " '$backup'")
+        $backup = "maliang_backup_$(Get-Date -Format 'yyyyMMddHHmmss')"
+        Rename-Item "maliang" $backup
+        Write-Warn ((T "已存在 maliang 目录，已自动备份为" "Existing 'maliang' directory backed up to") + " '$backup'")
     }
 
     $gitBin = Get-Command git -ErrorAction SilentlyContinue
@@ -293,7 +293,7 @@ function Install-Project {
         exit 1
     }
 
-    Write-Cow (T "正在克隆 CowAgent 项目..." "Cloning CowAgent project...")
+    Write-Cow (T "正在克隆 maliang 项目..." "Cloning maliang project...")
     $cloneOk = $false
 
     # Test GitHub connectivity before attempting clone
@@ -301,33 +301,33 @@ function Install-Project {
         $null = Invoke-WebRequest -Uri "https://github.com" -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
         Write-Cow (T "GitHub 可达，正在从 GitHub 克隆..." "GitHub is reachable, cloning from GitHub...")
         $prevEAP = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-        git clone --depth 10 --progress "https://github.com/zhayujie/CowAgent.git" 2>&1 | ForEach-Object { Write-Host $_ }
+        git clone --depth 10 --progress ".git" 2>&1 | ForEach-Object { Write-Host $_ }
         if ($LASTEXITCODE -eq 0) { $cloneOk = $true }
         $ErrorActionPreference = $prevEAP
         if (-not $cloneOk) {
-            if (Test-Path "CowAgent") { Remove-Item -Recurse -Force "CowAgent" }
+            if (Test-Path "maliang") { Remove-Item -Recurse -Force "maliang" }
         }
     } catch {}
 
     if (-not $cloneOk) {
         Write-Warn (T "GitHub 克隆失败或超时，切换到 Gitee 镜像..." "GitHub clone failed or timed out, switching to Gitee mirror...")
         $prevEAP = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-        git clone --depth 10 --progress "https://gitee.com/zhayujie/CowAgent.git" 2>&1 | ForEach-Object { Write-Host $_ }
+        git clone --depth 10 --progress "https://gitee.com/DISABLED/maliang.git" 2>&1 | ForEach-Object { Write-Host $_ }
         if ($LASTEXITCODE -eq 0) { $cloneOk = $true }
         $ErrorActionPreference = $prevEAP
         if (-not $cloneOk) {
-            if (Test-Path "CowAgent") { Remove-Item -Recurse -Force "CowAgent" }
+            if (Test-Path "maliang") { Remove-Item -Recurse -Force "maliang" }
         }
     }
 
     if (-not $cloneOk) {
         Write-Err (T "GitHub 和 Gitee 均克隆失败，请检查网络连接。" "Clone failed from both GitHub and Gitee. Please check your network connection.")
-        Write-Err (T "你也可以手动克隆: git clone https://gitee.com/zhayujie/CowAgent.git" "You can also manually clone: git clone https://gitee.com/zhayujie/CowAgent.git")
+        Write-Err (T "你也可以手动克隆: git clone https://gitee.com/DISABLED/maliang.git" "You can also manually clone: git clone https://gitee.com/DISABLED/maliang.git")
         Read-Host (T "按回车退出" "Press Enter to exit")
         exit 1
     }
 
-    Set-Location "CowAgent"
+    Set-Location "maliang"
     $script:BaseDir = $PWD.Path
     $script:IsProjectDir = $true
     Write-Cow ((T "项目已克隆" "Project cloned") + ": $BaseDir")
@@ -397,23 +397,23 @@ function Install-Dependencies {
         Write-Warn (T "部分依赖可能有问题，但继续安装..." "Some dependencies may have issues, but continuing...")
     }
 
-    Write-Cow (T "正在注册 cow CLI..." "Registering cow CLI...")
+    Write-Cow (T "正在注册 maliang CLI..." "Registering maliang CLI...")
     $prevEAP = $ErrorActionPreference; $ErrorActionPreference = "Continue"
     & $PythonCmd -m pip install -e $BaseDir @pipMirror 2>&1 | Out-Null
     $ErrorActionPreference = $prevEAP
 
-    # Add the Scripts dir (where pip puts cow.exe) to PATH, both for this
-    # session and persistently, so `cow` keeps working after a reboot.
+    # Add the Scripts dir (where pip puts maliang.exe) to PATH, both for this
+    # session and persistently, so `maliang` keeps working after a reboot.
     $scriptsDir = & $PythonCmd -c "import sysconfig; print(sysconfig.get_path('scripts'))" 2>$null
     if ($scriptsDir -and (Test-Path $scriptsDir)) {
         Add-ScriptsDirToPath $scriptsDir
     }
 
-    $cowBin = Get-Command cow -ErrorAction SilentlyContinue
-    if ($cowBin) {
-        Write-Cow ((T "cow CLI 注册成功" "cow CLI registered") + ": $($cowBin.Source)")
+    $maliangBin = Get-Command maliang -ErrorAction SilentlyContinue
+    if ($maliangBin) {
+        Write-Cow ((T "maliang CLI 注册成功" "maliang CLI registered") + ": $($maliangBin.Source)")
     } else {
-        Write-Warn ((T "cow CLI 不在 PATH 中，你可以使用" "cow CLI not in PATH. You can use") + ": $PythonCmd -m cli.cli")
+        Write-Warn ((T "maliang CLI 不在 PATH 中，你可以使用" "maliang CLI not in PATH. You can use") + ": $PythonCmd -m cli.cli")
     }
 
     # Optional: bundle ripgrep for a faster search_files tool. Never fatal.
@@ -450,11 +450,11 @@ function Install-Ripgrep {
         # GitHub first, then the jsDelivr/Gitee-style mirror for zh networks.
         $urls = @(
             "https://github.com/BurntSushi/ripgrep/releases/download/$RgVersion/$asset",
-            "https://cdn.link-ai.tech/code/cow/vendor/$asset"
+            "vendor/$asset"
         )
 
-        $tmpZip = Join-Path $env:TEMP "cow-$asset"
-        $tmpDir = Join-Path $env:TEMP "cow-rg-$([guid]::NewGuid().ToString('N'))"
+        $tmpZip = Join-Path $env:TEMP "maliang-$asset"
+        $tmpDir = Join-Path $env:TEMP "maliang-rg-$([guid]::NewGuid().ToString('N'))"
         $downloaded = $false
         foreach ($u in $urls) {
             try {
@@ -493,7 +493,7 @@ function Install-Ripgrep {
 }
 
 # Add the Python Scripts dir to PATH for this session and persist it to the
-# user PATH (User scope needs no admin rights), so `cow` survives a reboot.
+# user PATH (User scope needs no admin rights), so `maliang` survives a reboot.
 function Add-ScriptsDirToPath {
     param([string]$ScriptsDir)
 
@@ -518,7 +518,7 @@ function Add-ScriptsDirToPath {
         if (-not $already) {
             $newPath = if ($userPath) { "$userPath;$ScriptsDir" } else { $ScriptsDir }
             [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-            Write-Cow ((T "已将 cow 命令目录加入用户 PATH（重启后仍可用）" "Added cow command directory to user PATH (persists after reboot)") + ": $ScriptsDir")
+            Write-Cow ((T "已将 maliang 命令目录加入用户 PATH（重启后仍可用）" "Added maliang command directory to user PATH (persists after reboot)") + ": $ScriptsDir")
         }
     } catch {
         Write-Warn (T "无法自动写入持久化 PATH，重启后可能需要重新配置。" "Could not persist PATH automatically; you may need to reconfigure after reboot.")
@@ -719,7 +719,7 @@ function New-ConfigFile {
     $config = [ordered]@{
         channel_type              = if ($script:ChannelType) { $script:ChannelType } else { "web" }
         model                     = if ($script:ModelName)  { $script:ModelName }  else { "" }
-        cow_lang                  = if ($script:InstallLang) { $script:InstallLang } else { "auto" }
+        maliang_lang                  = if ($script:InstallLang) { $script:InstallLang } else { "auto" }
         open_ai_api_key           = ""
         open_ai_api_base          = "https://api.openai.com/v1"
         claude_api_key            = ""
@@ -772,50 +772,50 @@ function New-ConfigFile {
     Write-Cow (T "配置文件创建成功。" "Configuration file created.")
 }
 
-# Resolve the `cow` command, self-healing PATH if needed. When `cow` is missing
+# Resolve the `maliang` command, self-healing PATH if needed. When `maliang` is missing
 # (e.g. an older install whose PATH was never persisted), locate the Scripts dir,
 # re-add it to PATH (session + persistent), and retry. Returns $true if callable.
 function Resolve-CowCommand {
-    if (Get-Command cow -ErrorAction SilentlyContinue) { return $true }
+    if (Get-Command maliang -ErrorAction SilentlyContinue) { return $true }
 
     $py = if ($PythonCmd) { $PythonCmd } else { Find-Python }
     if ($py) {
         $scriptsDir = & $py -c "import sysconfig; print(sysconfig.get_path('scripts'))" 2>$null
-        if ($scriptsDir -and (Test-Path "$scriptsDir\cow.exe")) {
+        if ($scriptsDir -and (Test-Path "$scriptsDir\maliang.exe")) {
             Add-ScriptsDirToPath $scriptsDir
-            if (Get-Command cow -ErrorAction SilentlyContinue) { return $true }
+            if (Get-Command maliang -ErrorAction SilentlyContinue) { return $true }
         }
     }
     return $false
 }
 
-# ── start via cow CLI ─────────────────────────────────────────────
-function Start-CowAgent {
-    Write-Cow (T "正在启动 CowAgent..." "Starting CowAgent...")
+# ── start via maliang CLI ─────────────────────────────────────────────
+function Start-maliang {
+    Write-Cow (T "正在启动 maliang..." "Starting maliang...")
     if (Resolve-CowCommand) {
-        & cow start
+        & maliang start
     } else {
-        Write-Warn (T "未找到 cow CLI，直接启动..." "cow CLI not found, starting directly...")
+        Write-Warn (T "未找到 maliang CLI，直接启动..." "maliang CLI not found, starting directly...")
         & $PythonCmd "$BaseDir\app.py"
     }
 }
 
-# ── delegate management commands to cow CLI ──────────────────────
+# ── delegate management commands to maliang CLI ──────────────────────
 function Invoke-CowCommand {
     param([string]$Cmd)
     if (Resolve-CowCommand) {
-        & cow $Cmd
+        & maliang $Cmd
     } else {
         # Fall back to the module entrypoint so management commands still work
-        # even when cow.exe isn't on PATH (e.g. right after a fresh reboot on
+        # even when maliang.exe isn't on PATH (e.g. right after a fresh reboot on
         # an older install).
         $py = if ($PythonCmd) { $PythonCmd } else { Find-Python }
         if ($py -and (Test-Path "$BaseDir\app.py")) {
-            Write-Warn (T "未找到 cow 命令，使用 python -m cli.cli 兜底运行..." "cow command not found, falling back to python -m cli.cli...")
+            Write-Warn (T "未找到 maliang 命令，使用 python -m cli.cli 兜底运行..." "maliang command not found, falling back to python -m cli.cli...")
             Push-Location $BaseDir
             try { & $py -m cli.cli $Cmd } finally { Pop-Location }
         } else {
-            Write-Err (T "未找到 cow CLI，请先不带参数运行本脚本进行安装。" "cow CLI not found. Run this script without arguments first to install.")
+            Write-Err (T "未找到 maliang CLI，请先不带参数运行本脚本进行安装。" "maliang CLI not found. Run this script without arguments first to install.")
             exit 1
         }
     }
@@ -824,7 +824,7 @@ function Invoke-CowCommand {
 # ── usage ─────────────────────────────────────────────────────────
 function Show-Usage {
     Write-Info "========================================="
-    Write-Info "   CowAgent Management Script (Windows)"
+    Write-Info "   maliang Management Script (Windows)"
     Write-Info "========================================="
     Write-Host ""
     Write-Host (T "用法:" "Usage:")
@@ -847,7 +847,7 @@ function Show-Usage {
 function Install-Mode {
     Clear-Host
     Write-Info "========================================="
-    Write-Info "   CowAgent Installation (Windows)"
+    Write-Info "   maliang Installation (Windows)"
     Write-Info "========================================="
     Write-Host ""
 
@@ -881,20 +881,20 @@ function Install-Mode {
     # Auto-start after configuration for a true out-of-the-box experience.
     Write-Host ""
     if ($script:AccessInfo) { Write-Cow $script:AccessInfo }
-    Write-Warn (T "提示：需要让 Agent 浏览网页时，运行 cow install-browser 安装浏览器工具" "Tip: to let the Agent browse the web, run 'cow install-browser' to install the browser tool")
-    Start-CowAgent
+    Write-Warn (T "提示：需要让 Agent 浏览网页时，运行 maliang install-browser 安装浏览器工具" "Tip: to let the Agent browse the web, run 'maliang install-browser' to install the browser tool")
+    Start-maliang
 }
 
 # ── update ────────────────────────────────────────────────────────
 function Update-Project {
-    Write-Cow (T "正在更新 CowAgent..." "Updating CowAgent...")
+    Write-Cow (T "正在更新 maliang..." "Updating maliang...")
     Set-Location $BaseDir
 
     # Stop if running
-    $cowBin = Get-Command cow -ErrorAction SilentlyContinue
-    if ($cowBin) {
+    $maliangBin = Get-Command maliang -ErrorAction SilentlyContinue
+    if ($maliangBin) {
         $prevEAP = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-        & cow stop 2>&1 | Out-Null
+        & maliang stop 2>&1 | Out-Null
         $ErrorActionPreference = $prevEAP
     }
 
@@ -907,7 +907,7 @@ function Update-Project {
         if ($pullExit -ne 0) {
             Write-Warn (T "GitHub 拉取失败，尝试 Gitee..." "GitHub failed, trying Gitee...")
             $ErrorActionPreference = "Continue"
-            git remote set-url origin https://gitee.com/zhayujie/CowAgent.git 2>&1 | Out-Null
+            git remote set-url origin https://gitee.com/DISABLED/maliang.git 2>&1 | Out-Null
             git pull 2>&1 | Out-Null
             $ErrorActionPreference = $prevEAP
         }
@@ -918,9 +918,9 @@ function Update-Project {
     Assert-Python
     Install-Dependencies
 
-    # Start via python -m cli.cli instead of cow.exe, because the exe may
+    # Start via python -m cli.cli instead of maliang.exe, because the exe may
     # still be cached/locked from the previous installation on Windows.
-    Write-Cow (T "正在启动 CowAgent..." "Starting CowAgent...")
+    Write-Cow (T "正在启动 maliang..." "Starting maliang...")
     & $PythonCmd -m cli.cli start
 }
 

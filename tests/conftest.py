@@ -22,10 +22,10 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-# Redirecting agent_workspace is not enough: ~/.cow/.env, a restore target
+# Redirecting agent_workspace is not enough: ~/.maliang/.env, a restore target
 # without agent_workspace and every other "~" path resolve through the home
 # directory itself. Set before any test module is imported.
-_FAKE_HOME = tempfile.mkdtemp(prefix="cow-tests-home-")
+_FAKE_HOME = tempfile.mkdtemp(prefix="maliang-tests-home-")
 for _name in ("HOME", "USERPROFILE"):
     os.environ[_name] = _FAKE_HOME
 atexit.register(shutil.rmtree, _FAKE_HOME, ignore_errors=True)
@@ -33,8 +33,8 @@ atexit.register(shutil.rmtree, _FAKE_HOME, ignore_errors=True)
 # A source checkout's data root is the checkout itself, so load_config() would
 # read the developer's real config.json and mirror its API keys into
 # os.environ, where later tests can pick them up and call real providers.
-_FAKE_DATA_ROOT = tempfile.mkdtemp(prefix="cow-tests-data-")
-os.environ["COW_DATA_DIR"] = _FAKE_DATA_ROOT
+_FAKE_DATA_ROOT = tempfile.mkdtemp(prefix="maliang-tests-data-")
+os.environ["MALIANG_DATA_DIR"] = _FAKE_DATA_ROOT
 atexit.register(shutil.rmtree, _FAKE_DATA_ROOT, ignore_errors=True)
 
 _WEB_DIR = os.path.join(os.path.dirname(__file__), "..", "channel", "web")
@@ -129,8 +129,8 @@ def console_template_cache_not_poisoned():
 def workspace_out_of_the_way():
     import config as config_module
 
-    with tempfile.TemporaryDirectory(prefix="cow-tests-") as tmp:
-        workspace = os.path.join(tmp, "cow")
+    with tempfile.TemporaryDirectory(prefix="maliang-tests-") as tmp:
+        workspace = os.path.join(tmp, "maliang")
         real_load = config_module.load_config
 
         def load_then_redirect():

@@ -65,7 +65,7 @@ WRITE_ACTIONS = [
 @pytest.fixture
 def console(tmp_path, monkeypatch):
     original = config.config
-    monkeypatch.setenv("COW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(tmp_path))
     path = tmp_path / "config.json"
     path.write_text(json.dumps(SEED), encoding="utf-8")
     config.load_config()

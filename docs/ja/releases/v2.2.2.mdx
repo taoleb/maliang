@@ -1,9 +1,9 @@
 ---
 title: v2.2.2
-description: "CowAgent 2.2.2：ゲストページ（独立ページとウィンドウ埋め込み）の追加、カスタムテーマ対応、メインモデルのネイティブマルチモーダル入力、新モデルの追加、ツール・チャネル・セキュリティの改善"
+description: "maliang 2.2.2：ゲストページ（独立ページとウィンドウ埋め込み）の追加、カスタムテーマ対応、メインモデルのネイティブマルチモーダル入力、新モデルの追加、ツール・チャネル・セキュリティの改善"
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.2.2) | [中文](https://docs.cowagent.ai/zh/releases/v2.2.2)
+🌐 [English](./docs/releases/v2.2.2) | [中文](./docs/zh/releases/v2.2.2)
 
 ## 💬 ゲストページ
 
@@ -12,13 +12,13 @@ Agent を独立したチャットページとして公開したり、チャッ�
 - **独立ページ**：ページごとに専用のリンクを発行し、訪問者の会話履歴を保持します。名前、アイコン、テーマカラー、ウェルカムメッセージ、おすすめの質問をカスタマイズできます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-page-dark.png" alt="ゲストページ" width="800" />
+  <img src="screenshots/en/guest-share-page-dark.png" alt="ゲストページ" width="800" />
 </Frame>
 
-- **ウィンドウ埋め込み**：コードを 1 つ貼り付けるだけで Web サイトに埋め込め、ページ右下にチャットボタンが表示されます。埋め込みを許可するサイトを制限でき、設定画面で埋め込み後の表示をそのままプレビューできます。[CowAgent 公式サイト](https://cowagent.ai/?chat=open)で実際に試せます。
+- **ウィンドウ埋め込み**：コードを 1 つ貼り付けるだけで Web サイトに埋め込め、ページ右下にチャットボタンが表示されます。埋め込みを許可するサイトを制限でき、設定画面で埋め込み後の表示をそのままプレビューできます。[maliang 公式サイト](./?chat=open)で実際に試せます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-embed.png" alt="Web ページに埋め込む" width="800" />
+  <img src="screenshots/en/guest-share-embed.png" alt="Web ページに埋め込む" width="800" />
 </Frame>
 
 - **データの分離**：訪問者に応答する Agent は、そのページに開放したツール、スキル、参考資料だけを使用でき、あなたのメモリ、会話、ワークスペースにはアクセスできません。コマンドは実行できず、ネットワークリクエストは公開アドレスに限られます。新しく作成したページでは、ファイルの書き込み、ファイルの送信、Web 検索は既定でオフになります。
@@ -26,27 +26,27 @@ Agent を独立したチャットページとして公開したり、チャッ�
 - **アクセス制御**：アクセスパスワード、1 人 1 日あたりの質問数、有効期限に対応します。訪問者ごとに会話記録を確認でき、リンクのリセット、ページの停止や削除もいつでも行えます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-editor.png" alt="ゲストページの編集" width="800" />
+  <img src="screenshots/en/guest-share-editor.png" alt="ゲストページの編集" width="800" />
 </Frame>
 
 Thanks @LanydLi #3113
 
-関連ドキュメント：[ゲストページ](https://docs.cowagent.ai/ja/extensions/guest-share)
+関連ドキュメント：[ゲストページ](./docs/ja/extensions/guest-share)
 
 
 ## 🎨 カスタムテーマ
 
 Web コンソールとデスクトップクライアントがテーマの切り替えに対応しました。両者は同じテーマフォルダを共有します：
 
-- **テーマのインポート**：テーマの zip パッケージまたはフォルダをドラッグするだけでインポートでき、配色、背景壁紙、新規チャット画面のアイコンをカスタマイズできます。テーマは `~/cow/system/themes/` に保存されます。
+- **テーマのインポート**：テーマの zip パッケージまたはフォルダをドラッグするだけでインポートでき、配色、背景壁紙、新規チャット画面のアイコンをカスタマイズできます。テーマは `~/maliang/system/themes/` に保存されます。
 - **Agent によるテーマ生成**：希望のスタイルを伝えるか参考画像を添付すると、Agent が配色、壁紙、アイコンを生成し、そのまま切り替えて使えます。
 - **内蔵テーマ**：Meadow、Ocean、Clay、Sakura、Lavender の 5 つの配色テーマを用意しており、いずれもライトモードとダークモードの両方に対応しています。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-custom-theme.png" alt="カスタムテーマ" width="800" />
+  <img src="screenshots/en/web-console-custom-theme.png" alt="カスタムテーマ" width="800" />
 </Frame>
 
-関連ドキュメント：[カスタムテーマ](https://docs.cowagent.ai/ja/extensions/custom-theme)
+関連ドキュメント：[カスタムテーマ](./docs/ja/extensions/custom-theme)
 
 ## 🖼 メインモデルによる画像理解の改善
 
@@ -67,10 +67,10 @@ Web コンソールとデスクトップクライアントがテーマの切り�
 - **チャット API**：同じ会話への同時リクエストを順番に処理します（Thanks @rudycelekli #3751）。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-integrations.png" alt="連携設定" width="800" />
+  <img src="screenshots/en/web-console-integrations.png" alt="連携設定" width="800" />
 </Frame>
 
-関連ドキュメント：[Web コンソール - アクセス URL](https://docs.cowagent.ai/ja/channels/web#アクセス-url)
+関連ドキュメント：[Web コンソール - アクセス URL](./docs/ja/channels/web#アクセス-url)
 
 ## 🤖 モデル機能
 
@@ -137,7 +137,7 @@ Web コンソールとデスクトップクライアントがテーマの切り�
 
 ## 📦 アップグレード方法
 
-- **ソースデプロイ**：`cow update` でワンクリック更新するか、Web コンソールのサイドバーのバージョンメニューから更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](https://docs.cowagent.ai/ja/guide/upgrade)を参照してください。
-- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ](https://cowagent.ai/download/)から最新版を入手できます。
+- **ソースデプロイ**：`maliang update` でワンクリック更新するか、Web コンソールのサイドバーのバージョンメニューから更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](./docs/ja/guide/upgrade)を参照してください。
+- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ]()から最新版を入手できます。
 
-**リリース日**：2026.10.30 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.2.1...2.2.2)
+**リリース日**：2026.10.30 | [Full Changelog](/compare/2.2.1...2.2.2)

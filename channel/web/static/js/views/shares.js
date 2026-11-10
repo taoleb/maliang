@@ -25,8 +25,8 @@ const SHARE_DEFAULT_COLOR = '#4abe6e';
 const SHARE_COLORS = ['#14b8a6', '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899', '#f97316', '#475569'];
 const SHARE_LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 const SHARE_LOGO_MAX = 2 * 1024 * 1024;
-const SHARE_FOOTER_TEXT = 'Powered by CowAgent';
-const SHARE_FOOTER_URL = 'https://cowagent.ai';
+const SHARE_FOOTER_TEXT = 'Powered by maliang';
+const SHARE_FOOTER_URL = 'https://maliang.local';
 // Labels are each language's own name; '' follows the visitor's browser.
 const SHARE_LANGUAGES = [
     { value: '', label: '' },
@@ -1078,7 +1078,7 @@ function toggleSharePreview() {
 
 window.addEventListener('message', (e) => {
     const frame = document.querySelector('#share-preview-panel iframe');
-    if (frame && e.source === frame.contentWindow && e.data && e.data.type === 'cow-guest:close') {
+    if (frame && e.source === frame.contentWindow && e.data && e.data.type === 'maliang-guest:close') {
         _setSharePreviewOpen(false);
     }
 });

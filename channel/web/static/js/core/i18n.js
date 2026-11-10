@@ -589,7 +589,7 @@ const I18N = {
         artifacts_meta_session: '会话', artifacts_meta_size: '大小',
         sidebar_collapse: '收起侧边栏', sidebar_expand: '展开侧边栏',
         ws_default_workspace: '默认空间', ws_sel_title: '选择工作空间',
-        ws_sel_default_hint: '使用默认工作空间（~/cow）', ws_sel_recents: '最近使用',
+        ws_sel_default_hint: '使用默认工作空间（~/maliang）', ws_sel_recents: '最近使用',
         ws_sel_open: '打开项目…', ws_sel_new: '新建项目', ws_sel_new_placeholder: '项目名称',
         ws_sel_create: '创建', ws_sel_up: '上一级',
         ws_sel_new_subtitle: '将在 {root} 下创建新项目目录', ws_sel_new_hint: '仅填写项目名称，不含路径分隔符',
@@ -813,7 +813,7 @@ const I18N = {
         shares_ref_add: '添加参考资料', shares_ref_custom: '其他目录…', shares_ref_kb: '知识库',
         shares_ref_path_ph: '目录的绝对路径', shares_ref_note_ph: '说明（可选），如：产品文档，回答功能和价格问题时查阅',
         shares_field_rules: '访客规则', shares_field_rules_tip: '会写入 Agent 的系统提示词。建议写清：你是谁、为谁服务，能回答哪些问题、超出范围时如何回复，以及回复的语气和格式。留空则只遵循平台默认规则',
-        shares_field_rules_ph: '例如：\n你是 CowAgent 的智能助手，帮助开发者解答安装、配置和使用中遇到的问题，回答简洁友好。',
+        shares_field_rules_ph: '例如：\n你是 maliang 的智能助手，帮助开发者解答安装、配置和使用中遇到的问题，回答简洁友好。',
         shares_tool_read: '读取文件', shares_tool_ls: '浏览目录', shares_tool_search_files: '搜索文件',
         shares_tool_write: '写入文件', shares_tool_edit: '编辑文件', shares_tool_send: '发送文件',
         shares_tool_web_search: '联网搜索', shares_tool_web_fetch: '读取网页', shares_tool_vision: '图片理解', shares_tool_time: '当前时间',
@@ -1412,7 +1412,7 @@ const I18N = {
         artifacts_meta_session: '會話', artifacts_meta_size: '大小',
         sidebar_collapse: '收合側邊欄', sidebar_expand: '展開側邊欄',
         ws_default_workspace: '預設空間', ws_sel_title: '選擇工作空間',
-        ws_sel_default_hint: '使用預設工作空間（~/cow）', ws_sel_recents: '最近使用',
+        ws_sel_default_hint: '使用預設工作空間（~/maliang）', ws_sel_recents: '最近使用',
         ws_sel_open: '開啟專案…', ws_sel_new: '新建專案', ws_sel_new_placeholder: '專案名稱',
         ws_sel_create: '建立', ws_sel_up: '上一層',
         ws_sel_new_subtitle: '將在 {root} 下建立新專案目錄', ws_sel_new_hint: '僅填寫專案名稱，不含路徑分隔符',
@@ -1632,7 +1632,7 @@ const I18N = {
         shares_ref_add: '新增參考資料', shares_ref_custom: '其他目錄…', shares_ref_kb: '知識庫',
         shares_ref_path_ph: '目錄的絕對路徑', shares_ref_note_ph: '說明（選填），如：產品文件，回答功能和價格問題時查閱',
         shares_field_rules: '訪客規則', shares_field_rules_tip: '會寫入 Agent 的系統提示詞。建議寫清：你是誰、為誰服務，能回答哪些問題、超出範圍時如何回覆，以及回覆的語氣和格式。留空則只遵循平台預設規則',
-        shares_field_rules_ph: '例如：\n你是 CowAgent 的智慧助手，幫助開發者解答安裝、設定和使用中遇到的問題，回答簡潔友善。',
+        shares_field_rules_ph: '例如：\n你是 maliang 的智慧助手，幫助開發者解答安裝、設定和使用中遇到的問題，回答簡潔友善。',
         shares_tool_read: '讀取檔案', shares_tool_ls: '瀏覽目錄', shares_tool_search_files: '搜尋檔案',
         shares_tool_write: '寫入檔案', shares_tool_edit: '編輯檔案', shares_tool_send: '傳送檔案',
         shares_tool_web_search: '聯網搜尋', shares_tool_web_fetch: '讀取網頁', shares_tool_vision: '圖片理解', shares_tool_time: '目前時間',
@@ -2230,7 +2230,7 @@ const I18N = {
         artifacts_meta_session: 'Chat', artifacts_meta_size: 'Size',
         sidebar_collapse: 'Collapse sidebar', sidebar_expand: 'Expand sidebar',
         ws_default_workspace: 'Default', ws_sel_title: 'Select workspace',
-        ws_sel_default_hint: 'Use the default workspace (~/cow)', ws_sel_recents: 'Recent',
+        ws_sel_default_hint: 'Use the default workspace (~/maliang)', ws_sel_recents: 'Recent',
         ws_sel_open: 'Open project…', ws_sel_new: 'New project', ws_sel_new_placeholder: 'Project name',
         ws_sel_create: 'Create', ws_sel_up: 'Up',
         ws_sel_new_subtitle: 'Creates a new project directory under {root}', ws_sel_new_hint: 'Project name only, no path separators',
@@ -2454,7 +2454,7 @@ const I18N = {
         shares_ref_add: 'Add a reference', shares_ref_custom: 'Other folder…', shares_ref_kb: 'Knowledge',
         shares_ref_path_ph: 'Absolute path of the folder', shares_ref_note_ph: 'Note (optional), e.g. product docs, for feature and pricing questions',
         shares_field_rules: 'Guest rules', shares_field_rules_tip: 'Written into the Agent\'s system prompt. Say who it is and who it serves, what it may answer and how to reply when a question is out of scope, and the tone and format of replies. Leave empty to follow only the platform defaults',
-        shares_field_rules_ph: 'For example:\nYou are the CowAgent assistant and help developers with installation, configuration and usage, with short and friendly replies.',
+        shares_field_rules_ph: 'For example:\nYou are the maliang assistant and help developers with installation, configuration and usage, with short and friendly replies.',
         shares_tool_read: 'Read files', shares_tool_ls: 'List folders', shares_tool_search_files: 'Search files',
         shares_tool_write: 'Write files', shares_tool_edit: 'Edit files', shares_tool_send: 'Send files',
         shares_tool_web_search: 'Web search', shares_tool_web_fetch: 'Fetch pages', shares_tool_vision: 'Vision', shares_tool_time: 'Time',
@@ -2472,10 +2472,10 @@ const I18N = {
 };
 
 // Resolve language by priority: user choice (localStorage) -> backend-detected
-// (cow_lang) -> browser language -> 'zh'. Shares __cowResolveLang__ defined in
+// (maliang_lang) -> browser language -> 'zh'. Shares __maliangResolveLang__ defined in
 // chat.html; falls back to a local resolver if loaded standalone.
-let currentLang = (typeof window.__cowResolveLang__ === 'function')
-    ? window.__cowResolveLang__()
+let currentLang = (typeof window.__maliangResolveLang__ === 'function')
+    ? window.__maliangResolveLang__()
     : (function () {
         const norm = (raw) => {
             if (!raw) return '';
@@ -2488,8 +2488,8 @@ let currentLang = (typeof window.__cowResolveLang__ === 'function')
             if (v.indexOf('en') === 0) return 'en';
             return '';
         };
-        return norm(localStorage.getItem('cow_lang'))
-            || norm(window.__COW_DEFAULT_LANG__)
+        return norm(localStorage.getItem('maliang_lang'))
+            || norm(window.__MALIANG_DEFAULT_LANG__)
             || norm(navigator.language)
             || 'zh';
     })();
@@ -2544,14 +2544,14 @@ function applyI18n() {
     _syncLangControls();
     // Point the docs link to the locale-specific documentation site.
     const docsLink = document.getElementById('docs-link');
-    if (docsLink) docsLink.href = currentLang === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai';
+    if (docsLink) docsLink.href = currentLang === 'zh' ? './docs/zh' : 'https://docs.maliang.local';
     // Workspace panel content is rendered by JS, not data-i18n attributes.
     if (typeof relocalizeWorkspacePanel === 'function') relocalizeWorkspacePanel();
 }
 
 // Single entry point for switching language. Updates the in-memory language,
 // persists the user choice locally, re-renders the UI, and binds the choice to
-// the backend `cow_lang` config so logs / agent replies / CLI follow suit.
+// the backend `maliang_lang` config so logs / agent replies / CLI follow suit.
 function setLanguage(lang) {
     const next = (lang === 'en' || lang === 'zh' || lang === 'zh-Hant') ? lang : 'zh';
     if (next === currentLang) {
@@ -2560,7 +2560,7 @@ function setLanguage(lang) {
         return;
     }
     currentLang = next;
-    localStorage.setItem('cow_lang', currentLang);
+    localStorage.setItem('maliang_lang', currentLang);
     applyI18n();
     _applyInputTooltips();
     // Keep the language switch button and config selector visually in sync.
@@ -2573,14 +2573,14 @@ function setLanguage(lang) {
     });
 }
 
-// Persist the language to the backend `cow_lang` config (best-effort; the UI
+// Persist the language to the backend `maliang_lang` config (best-effort; the UI
 // has already switched locally, so a network failure is non-blocking).
 function syncLanguageToBackend(lang, callback) {
     try {
         fetch('/config', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ updates: { cow_lang: lang } })
+            body: JSON.stringify({ updates: { maliang_lang: lang } })
         })
         .then(() => { if (callback) callback(); })
         .catch(() => { if (callback) callback(); });

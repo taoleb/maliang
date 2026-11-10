@@ -87,7 +87,7 @@ def registry(tmp_path):
     """
     pinned = AgentRegistry(
         [
-            AgentProfile("agent-abc", "CowAgent", str(tmp_path / "cow")),
+            AgentProfile("agent-abc", "maliang", str(tmp_path / "maliang")),
             AgentProfile("ops", "Ops", str(tmp_path / "ops")),
         ],
         default_agent_id="agent-abc",
@@ -112,7 +112,7 @@ def test_a_member_invited_by_the_default_alias_stays_on_the_roster(registry):
 
     assert [item["id"] for item in roster] == ["ops", "agent-abc"]
     # Reachable by what a roster carries: the display name, or the real id.
-    assert addressed_agent_id("@CowAgent hi", roster) == "agent-abc"
+    assert addressed_agent_id("@maliang hi", roster) == "agent-abc"
     assert addressed_agent_id("@agent-abc hi", roster) == "agent-abc"
 
 
@@ -175,7 +175,7 @@ def test_the_session_team_panel_resolves_the_default_alias_too(registry):
     state = _session_team_state({"members": ["default"]}, "ops")
 
     assert [member["id"] for member in state["members"]] == ["agent-abc"]
-    assert state["members"][0]["name"] == "CowAgent"
+    assert state["members"][0]["name"] == "maliang"
     assert state["members"][0]["available"] is True
 
 

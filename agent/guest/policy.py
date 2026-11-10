@@ -39,12 +39,12 @@ _WORKSPACE_PRIVATE = (
 # Credential stores under the home directory.
 _HOME_PRIVATE = (
     ".ssh", ".aws", ".gnupg", ".config", ".kube", ".docker", ".netrc",
-    ".cow", ".git-credentials", ".npmrc", ".pypirc", "Library/Keychains",
+    ".maliang", ".git-credentials", ".npmrc", ".pypirc", "Library/Keychains",
 )
 
 def path_key(path: str) -> str:
     """A comparable form of ``path``: symlinks resolved, case folded where the
-    file system usually ignores case (so ``~/COW`` cannot slip past ``~/cow``)."""
+    file system usually ignores case (so ``~/COW`` cannot slip past ``~/maliang``)."""
     real = os.path.normcase(os.path.realpath(os.path.expanduser(path)))
     if sys.platform == "darwin":
         real = real.lower()

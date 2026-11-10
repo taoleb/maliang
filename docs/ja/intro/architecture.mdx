@@ -1,15 +1,15 @@
 ---
 title: アーキテクチャ
-description: "CowAgent のシステム構成とコア設計。チャネル、Agent コア、モデル、ツール、スキル、記憶、ナレッジの連携と、メッセージ受信から計画・ツール実行・応答までの流れを解説。"
+description: "maliang のシステム構成とコア設計。チャネル、Agent コア、モデル、ツール、スキル、記憶、ナレッジの連携と、メッセージ受信から計画・ツール実行・応答までの流れを解説。"
 ---
 
-CowAgent はすぐに使えるスーパー AI アシスタントであり、完全な Agent harness フレームワークでもあります。複雑なタスク計画、長期記憶、Skill の拡張性、自己進化、マルチエージェント協働などの能力を備えています。
+maliang はすぐに使えるスーパー AI アシスタントであり、完全な Agent harness フレームワークでもあります。複雑なタスク計画、長期記憶、Skill の拡張性、自己進化、マルチエージェント協働などの能力を備えています。
 
 ## システムアーキテクチャ
 
-CowAgent のアーキテクチャは以下のコアモジュールで構成されています：
+maliang のアーキテクチャは以下のコアモジュールで構成されています：
 
-<img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/architecture/en/architecture.jpg" alt="CowAgent Architecture" />
+<img src="architecture/en/architecture.jpg" alt="maliang Architecture" />
 
 | モジュール | 説明 |
 | --- | --- |
@@ -22,11 +22,11 @@ CowAgent のアーキテクチャは以下のコアモジュールで構成さ�
 | **Skills** | Skill の読み込み・管理。Skill Hub や GitHub からのワンクリックインストール、または会話を通じたカスタム Skill の作成をサポート |
 | **Models** | モデル層。OpenAI、Claude、Gemini、DeepSeek、MiniMax、GLM、Qwen など主要 LLM への統一アクセスを提供 |
 | **Channels** | メッセージチャネル層。Web コンソール、WeChat、Feishu、DingTalk、WeCom、公式アカウントなど複数チャネルを統一プロトコルでサポート |
-| **CLI** | コマンドラインシステム。ターミナルコマンド（`cow`）とチャットコマンド（`/`）で、プロセス管理、Skill インストール、設定変更、ナレッジベース管理などをサポート |
+| **CLI** | コマンドラインシステム。ターミナルコマンド（`maliang`）とチャットコマンド（`/`）で、プロセス管理、Skill インストール、設定変更、ナレッジベース管理などをサポート |
 
 ## Agent モードのワークフロー
 
-Agent モードが有効な場合、CowAgent は以下のワークフローで自律的な Agent として動作します：
+Agent モードが有効な場合、maliang は以下のワークフローで自律的な Agent として動作します：
 
 1. **メッセージ受信** — チャネルを通じてユーザーの入力を受信
 2. **意図の理解** — タスク要件とコンテキストを分析
@@ -39,10 +39,10 @@ Agent モードが有効な場合、CowAgent は以下のワークフローで�
 
 ### システムワークスペース {#system-workspace}
 
-Agent のシステムワークスペースはデフォルトで `~/cow` にあり、システムプロンプト、記憶ファイル、Skill ファイルを格納しています：
+Agent のシステムワークスペースはデフォルトで `~/maliang` にあり、システムプロンプト、記憶ファイル、Skill ファイルを格納しています：
 
 ```
-~/cow/
+~/maliang/
 ├── system.md          # Agent システムプロンプト
 ├── user.md            # ユーザープロフィール
 ├── MEMORY.md          # コアメモリ
@@ -59,10 +59,10 @@ Agent のシステムワークスペースはデフォルトで `~/cow` にあ�
     └── <agent-id>/    # 非デフォルト Agent 専用のワークスペース
 ```
 
-シークレットキーはセキュリティのため `~/.cow` ディレクトリに別途保存されます：
+シークレットキーはセキュリティのため `~/.maliang` ディレクトリに別途保存されます：
 
 ```
-~/.cow/
+~/.maliang/
 └── .env               # Skill 用のシークレットキー
 ```
 
@@ -72,9 +72,9 @@ Agent のシステムワークスペースはデフォルトで `~/cow` にあ�
 
 ### マルチエージェントワークスペース {#multi-agent-workspace}
 
-[Agent チーム](/ja/multi-agent/team) を構成すると、各 Agent はそれぞれ完全なワークスペースを持ちます。デフォルト Agent はインスタンスのルート `~/cow` を使用し、その他のメンバーは `~/cow/agents/<agent-id>/` 以下に配置されます。これによりストレージは「システム共有」「メンバーごとに分離」「共有／分離を選択可能」の 3 種類に分かれます：
+[Agent チーム](/ja/multi-agent/team) を構成すると、各 Agent はそれぞれ完全なワークスペースを持ちます。デフォルト Agent はインスタンスのルート `~/maliang` を使用し、その他のメンバーは `~/maliang/agents/<agent-id>/` 以下に配置されます。これによりストレージは「システム共有」「メンバーごとに分離」「共有／分離を選択可能」の 3 種類に分かれます：
 
-- **システム共有**：シークレットファイル（`~/.cow/.env`）とチーム設定（`~/cow/agents/team.json`）はインスタンス全体で共有されます。
+- **システム共有**：シークレットファイル（`~/.maliang/.env`）とチーム設定（`~/maliang/agents/team.json`）はインスタンス全体で共有されます。
 - **メンバーごとに分離**：各 Agent のコアファイル（`SYSTEM.md`、`USER.md`、`AGENT.md`、`RULE.md`）、記憶（`MEMORY.md`、`memory/`）、生成ファイルはそれぞれのワークスペース内にあり、メンバー間で互いに見えません。
 - **共有／分離を選択可能**：Skill とナレッジベースはチームで共有することも、特定のメンバー専用にすることもでき、両モードはいつでも切り替えられます。
 
@@ -94,23 +94,23 @@ Agent のシステムワークスペースはデフォルトで `~/cow` にあ�
 ```json
 {
   "agent": true,
-  "agent_workspace": "~/cow",
+  "agent_workspace": "~/maliang",
   "agent_max_context_tokens": 200000,
   "agent_max_context_turns": 30,
   "agent_max_steps": 100,
   "agent_permission_mode": "full-access",
-  "cow_lang": "auto"
+  "maliang_lang": "auto"
 }
 ```
 
 | パラメータ | 説明 | デフォルト値 |
 | --- | --- | --- |
 | `agent` | Agent モードの有効化 | `true` |
-| `agent_workspace` | ワークスペースのパス | `~/cow` |
+| `agent_workspace` | ワークスペースのパス | `~/maliang` |
 | `agent_max_context_tokens` | 最大コンテキストトークン数 | `200000` |
 | `agent_max_context_turns` | 最大コンテキストターン数 | `30` |
 | `agent_max_steps` | タスクあたりの最大判断ステップ数 | `100` |
 | `agent_permission_mode` | 新規セッションが引き継ぐグローバルのデフォルト権限：`read-only` / `workspace-write` / `full-access` | `full-access` |
 | `knowledge` | パーソナルナレッジベースの有効化 | `true` |
 | `self_evolution_enabled` | 自己進化の有効化（新規インストールではデフォルト有効） | `false` |
-| `cow_lang` | UI・コマンド文言・システムプロンプトなどの言語。`auto` で自動検出、`zh` / `en` も指定可 | `auto` |
+| `maliang_lang` | UI・コマンド文言・システムプロンプトなどの言語。`auto` で自動検出、`zh` / `en` も指定可 | `auto` |

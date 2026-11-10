@@ -360,8 +360,8 @@ class QQChannel(ChatChannel):
                 "shard": [0, 1],
                 "properties": {
                     "$os": "linux",
-                    "$browser": "chatgpt-on-wechat",
-                    "$device": "chatgpt-on-wechat",
+                    "$browser": "maliang",
+                    "$device": "maliang",
                 },
             },
         })

@@ -47,13 +47,13 @@ def _channel(monkeypatch):
 
 def test_local_video_is_uploaded_as_a_file(monkeypatch):
     ch, target = _channel(monkeypatch)
-    asyncio.run(ch._async_send(Reply(ReplyType.VIDEO, "file:///srv/cow/tmp/clip.mp4"), 7))
+    asyncio.run(ch._async_send(Reply(ReplyType.VIDEO, "file:///srv/maliang/tmp/clip.mp4"), 7))
 
     assert len(target.sends) == 1, target.sends
     args, kwargs = target.sends[0]
     file = kwargs.get("file")
     assert isinstance(file, _FakeFile), f"video posted as a text bubble: {args} {kwargs}"
-    assert file.fp == "/srv/cow/tmp/clip.mp4"
+    assert file.fp == "/srv/maliang/tmp/clip.mp4"
     assert not args, f"the local path must not be posted as text: {args}"
 
 

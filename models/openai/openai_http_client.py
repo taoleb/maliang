@@ -39,8 +39,8 @@ DEFAULT_API_BASE = "https://api.openai.com/v1"
 DEFAULT_TIMEOUT = 600  # seconds; matches old openai SDK default
 
 
-_APP_TITLE = "CowAgent"
-_APP_REFERER = "https://github.com/zhayujie/CowAgent"
+_APP_TITLE = "maliang"
+_APP_REFERER = "https://changanqianzhan.local/maliang"
 
 
 # Optional client-source tag. Only sent to the source-tagged hosts below, so no
@@ -69,7 +69,7 @@ _ATTRIBUTION_HEADERS_BY_HOST: Dict[str, Dict[str, str]] = {
 }
 
 # Hosts that also receive the client-source tag. Resolved per request rather
-# than baked into the table above, so COW_DESKTOP set after import is honored.
+# than baked into the table above, so MALIANG_DESKTOP set after import is honored.
 _SOURCE_TAGGED_HOSTS = ("link-ai.tech",)
 
 
@@ -89,7 +89,7 @@ def _resolve_attribution_headers(url: str) -> Dict[str, str]:
                     apply_client_source(resolved)
                 except Exception:
                     resolved[_SOURCE_HEADER] = (
-                        "desktop" if os.environ.get("COW_DESKTOP") == "1" else "open-source"
+                        "desktop" if os.environ.get("MALIANG_DESKTOP") == "1" else "open-source"
                     )
             return resolved
     return {}

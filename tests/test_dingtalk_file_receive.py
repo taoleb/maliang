@@ -1,6 +1,6 @@
 """DingTalk inbound file receive: type mapping, download, single/group cache.
 
-Covers item 1 of https://github.com/zhayujie/CowAgent/issues/3156.
+Covers item 1 of /issues/3156.
 dingtalk_stream is stubbed so the suite does not need the optional SDK.
 """
 import os

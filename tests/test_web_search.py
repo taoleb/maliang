@@ -265,7 +265,7 @@ class TestAnySearchBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_anysearch("cowagent", 10)
+            result = self.tool._search_anysearch("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "anysearch")
@@ -724,7 +724,7 @@ class TestSerplyBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "get",
                              return_value=_fake_response(200, payload)) as mock_get:
-            result = self.tool._search_serply("cowagent", 10)
+            result = self.tool._search_serply("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "serply")
@@ -935,7 +935,7 @@ class TestKeenableBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value=""), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_keenable("cowagent", 10, "noLimit", False)
+            result = self.tool._search_keenable("maliang", 10, "noLimit", False)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "keenable")
@@ -949,10 +949,10 @@ class TestKeenableBackend(unittest.TestCase):
 
         self.assertEqual(mock_post.call_args[0][0], "https://api.keenable.ai/v1/search/public")
         headers = mock_post.call_args[1]["headers"]
-        self.assertEqual(headers.get("X-Keenable-Title"), "cowagent")
+        self.assertEqual(headers.get("X-Keenable-Title"), "maliang")
         self.assertNotIn("X-API-Key", headers)
         body = mock_post.call_args[1]["json"]
-        self.assertEqual(body["query"], "cowagent")
+        self.assertEqual(body["query"], "maliang")
         self.assertEqual(body["max_results"], 10)
         self.assertEqual(body["snippet_max_length"], 300)
         self.assertNotIn("published_after", body)
@@ -969,7 +969,7 @@ class TestKeenableBackend(unittest.TestCase):
         self.assertEqual(mock_post.call_args[0][0], "https://api.keenable.ai/v1/search")
         headers = mock_post.call_args[1]["headers"]
         self.assertEqual(headers.get("X-API-Key"), "test-key-123")
-        self.assertEqual(headers.get("X-Keenable-Title"), "cowagent")
+        self.assertEqual(headers.get("X-Keenable-Title"), "maliang")
         self.assertEqual(mock_post.call_args[1]["json"]["snippet_max_length"], 1000)
 
     def test_search_keenable_clamps_count(self):
@@ -1044,7 +1044,7 @@ class TestTavilyBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_tavily("cowagent", 10)
+            result = self.tool._search_tavily("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "tavily")
@@ -1056,7 +1056,7 @@ class TestTavilyBackend(unittest.TestCase):
         self.assertEqual(first["siteName"], "a.example")
         self.assertEqual(second["snippet"], "")
         body = mock_post.call_args[1]["json"]
-        self.assertEqual(body["query"], "cowagent")
+        self.assertEqual(body["query"], "maliang")
         self.assertEqual(body["api_key"], "test-key-123")
 
     def test_search_tavily_clamps_count(self):
@@ -1106,7 +1106,7 @@ class TestOutcrawlBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_outcrawl("cowagent", 10)
+            result = self.tool._search_outcrawl("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "outcrawl")
@@ -1119,7 +1119,7 @@ class TestOutcrawlBackend(unittest.TestCase):
         self.assertEqual(mock_post.call_args[0][0], "https://api.outcrawl.ai/v1/search")
         self.assertEqual(mock_post.call_args[1]["headers"]["Authorization"], "Bearer test-key-123")
         body = mock_post.call_args[1]["json"]
-        self.assertEqual(body, {"query": "cowagent", "limit": 10})
+        self.assertEqual(body, {"query": "maliang", "limit": 10})
 
     def test_search_outcrawl_clamps_count(self):
         """count is clamped into 1-20 and sent as limit; falsy -> 10."""
@@ -1171,7 +1171,7 @@ class TestFirecrawlBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_firecrawl("cowagent", 10)
+            result = self.tool._search_firecrawl("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "firecrawl")
@@ -1182,7 +1182,7 @@ class TestFirecrawlBackend(unittest.TestCase):
         self.assertEqual(mock_post.call_args[0][0], "https://api.firecrawl.dev/v2/search")
         self.assertEqual(mock_post.call_args[1]["headers"]["Authorization"], "Bearer test-key-123")
         body = mock_post.call_args[1]["json"]
-        self.assertEqual(body, {"query": "cowagent", "limit": 10, "origin": "cowagent"})
+        self.assertEqual(body, {"query": "maliang", "limit": 10, "origin": "maliang"})
 
     def test_search_firecrawl_clamps_count(self):
         """count is clamped into 1-20 and sent as limit; falsy -> 10."""
@@ -1247,7 +1247,7 @@ class TestSpecstreamBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "get",
                              return_value=_fake_response(200, payload)) as mock_get:
-            result = self.tool._search_specstream("cowagent", 10)
+            result = self.tool._search_specstream("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "specstream")
@@ -1261,7 +1261,7 @@ class TestSpecstreamBackend(unittest.TestCase):
         self.assertEqual(second["datePublished"], "")
         self.assertEqual(mock_get.call_args[0][0], "https://api.specstream.ai/v1/web-search")
         self.assertEqual(mock_get.call_args[1]["headers"]["Authorization"], "Bearer test-key-123")
-        self.assertEqual(mock_get.call_args[1]["params"], {"q": "cowagent"})
+        self.assertEqual(mock_get.call_args[1]["params"], {"q": "maliang"})
 
     def test_search_specstream_trims_to_count(self):
         """The API has no count parameter: count is clamped into 1-20 and the
@@ -1374,7 +1374,7 @@ class TestSearxngBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_searxng_url", return_value="https://searx.example/"), \
                 patch.object(web_search_module.requests, "get",
                              return_value=_fake_response(200, payload)) as mock_get:
-            result = self.tool._search_searxng("cowagent", 10)
+            result = self.tool._search_searxng("maliang", 10)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "searxng")
@@ -1474,7 +1474,7 @@ class TestDeepSeekBackend(unittest.TestCase):
         with patch.object(web_search_module, "_get_api_key", return_value="test-key-123"), \
                 patch.object(web_search_module.requests, "post",
                              return_value=_fake_response(200, payload)) as mock_post:
-            result = self.tool._search_deepseek("cowagent", 10, "noLimit", True)
+            result = self.tool._search_deepseek("maliang", 10, "noLimit", True)
 
         self.assertEqual(result.status, "success")
         self.assertEqual(result.result["backend"], "deepseek")
@@ -1492,7 +1492,7 @@ class TestDeepSeekBackend(unittest.TestCase):
         # Bearer auth against the documented endpoint.
         self.assertEqual(mock_post.call_args[0][0], "https://api.deepseek.com/v1/tools/search")
         self.assertEqual(mock_post.call_args[1]["headers"]["Authorization"], "Bearer test-key-123")
-        self.assertEqual(mock_post.call_args[1]["json"]["query"], "cowagent")
+        self.assertEqual(mock_post.call_args[1]["json"]["query"], "maliang")
         self.assertEqual(mock_post.call_args[1]["json"]["count"], 10)
 
     def test_search_deepseek_summary_flag_off(self):

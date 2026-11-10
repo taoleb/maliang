@@ -1,9 +1,9 @@
 ---
 title: チャット API
-description: OpenAI 互換の /v1/chat/completions エンドポイントから CowAgent を呼び出す
+description: OpenAI 互換の /v1/chat/completions エンドポイントから maliang を呼び出す
 ---
 
-> CowAgent は OpenAI Chat Completions プロトコル互換のチャットエンドポイントを、Web コンソールと同じポートで提供します。OpenAI プロトコルに対応したアプリ、SDK、ワークフローからそのまま接続できます。
+> maliang は OpenAI Chat Completions プロトコル互換のチャットエンドポイントを、Web コンソールと同じポートで提供します。OpenAI プロトコルに対応したアプリ、SDK、ワークフローからそのまま接続できます。
 
 モデルを直接呼び出すのとは異なり、エンドポイントの背後では完全な Agent が動作します。ツール、スキル、メモリ、ナレッジベースを使ってタスクを完了し、思考過程、ツール呼び出し、トークン使用量も回答と一緒に返します。
 
@@ -16,7 +16,7 @@ API は初期状態では無効です。有効にした後は、リクエスト�
 「設定 → 連携設定 → チャット API」でスイッチをオンにし、確認すると API キーが生成されます。エンドポイントのアドレスとコピーしてすぐ使える呼び出し例（cURL / Python / Node.js）も表示されます。
 
 <Frame caption="設定ページの「チャット API」カード">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-chat-api-config.png" alt="チャット API の設定" width="700" />
+  <img src="screenshots/en/web-console-chat-api-config.png" alt="チャット API の設定" width="700" />
 </Frame>
 
 - **再生成**：新しい API キーを発行します。古いキーはすぐに無効になります
@@ -100,10 +100,10 @@ Authorization: Bearer <API キー>
 | --- | --- | --- | --- |
 | `messages` | array | はい | 会話メッセージ。`system`、`developer`、`user`、`assistant` ロールに対応。`content` は文字列、または `type` が `text` のパーツ配列 |
 | `model` | string | いいえ | 回答に使うモデル。省略時は Agent のデフォルトモデル。[モデル一覧](#モデル一覧) を参照 |
-| `agent_id` | string | いいえ | CowAgent 拡張パラメータ。回答する Agent を指定します。省略時はデフォルト Agent。[Agent の指定](#agent-の指定) を参照 |
+| `agent_id` | string | いいえ | maliang 拡張パラメータ。回答する Agent を指定します。省略時はデフォルト Agent。[Agent の指定](#agent-の指定) を参照 |
 | `stream` | boolean | いいえ | ストリーミング出力するかどうか。デフォルトは `false` |
 | `stream_options` | object | いいえ | `{"include_usage": true}` を指定すると、ストリームの最後にトークン使用量を返します |
-| `conversation_id` | string | いいえ | CowAgent 拡張パラメータ。指定するとサーバーが会話履歴を保持します。[会話の管理](#会話の管理) を参照 |
+| `conversation_id` | string | いいえ | maliang 拡張パラメータ。指定するとサーバーが会話履歴を保持します。[会話の管理](#会話の管理) を参照 |
 
 Agent は自身のツールとシステムプロンプトを使うため、`temperature`、`max_tokens`、`tools` などのパラメータは無視されます。
 
@@ -144,8 +144,8 @@ curl http://localhost:9899/v1/chat/completions \
 
 API は 2 つの会話方式に対応しています：
 
-- **ステートレス（デフォルト）**：`conversation_id` を指定せず、通常のモデルと同じように毎回 `messages` 全体を送ります。最後の `user` メッセージが今回の入力、それ以前の `user` / `assistant` メッセージがコンテキストになります。CowAgent の会話履歴には書き込まれません。
-- **ステートフル**：`conversation_id` を指定すると、会話履歴を CowAgent が保持します。以降は新しいメッセージだけを送ればよく、`messages` 内の以前のメッセージは無視されます。同じ会話のリクエストは順番に 1 つずつ処理されます。
+- **ステートレス（デフォルト）**：`conversation_id` を指定せず、通常のモデルと同じように毎回 `messages` 全体を送ります。最後の `user` メッセージが今回の入力、それ以前の `user` / `assistant` メッセージがコンテキストになります。maliang の会話履歴には書き込まれません。
+- **ステートフル**：`conversation_id` を指定すると、会話履歴を maliang が保持します。以降は新しいメッセージだけを送ればよく、`messages` 内の以前のメッセージは無視されます。同じ会話のリクエストは順番に 1 つずつ処理されます。
 
 ```json
 {
@@ -206,7 +206,7 @@ API は 2 つの会話方式に対応しています：
 | `model` | 回答に使われたモデル |
 | `message.content` | 最終的な回答 |
 | `message.reasoning_content` | 思考過程。ディープシンキングが有効で、モデルが対応している場合に返されます |
-| `message.tool_trace` | CowAgent 拡張フィールド。ツール呼び出しの記録で、各呼び出しの引数、結果、ステータス、所要時間を含みます。他の Agent への委任や生成されたファイルもここに記録され、形式は下記の [プロセスイベント](#プロセスイベント) と同じです |
+| `message.tool_trace` | maliang 拡張フィールド。ツール呼び出しの記録で、各呼び出しの引数、結果、ステータス、所要時間を含みます。他の Agent への委任や生成されたファイルもここに記録され、形式は下記の [プロセスイベント](#プロセスイベント) と同じです |
 | `usage` | トークン使用量。Agent は 1 ターンでモデルを複数回呼び出すことがあり、ここはその合計です。`prompt_tokens_details.cached_tokens` はキャッシュから提供された入力トークン数です。モデルが使用量を返さない場合は含まれません |
 
 ### ストリーミング

@@ -25,19 +25,19 @@ def _gai(ip_str):
 class AllowlistGuardTest(unittest.TestCase):
     def test_allowlisted_host_does_not_resolve(self):
         with patch.object(url_safety.socket, "getaddrinfo") as gai:
-            with strict_url_guard(["cowagent.ai"]):
-                validate_url_safe("https://docs.cowagent.ai/zh/intro/index.md")
+            with strict_url_guard(["maliang.local"]):
+                validate_url_safe("./docs/zh/intro/index.md")
         gai.assert_not_called()
 
     def test_host_outside_the_allowlist_is_refused(self):
         with patch.object(url_safety.socket, "getaddrinfo") as gai:
-            with strict_url_guard(["cowagent.ai"]):
+            with strict_url_guard(["maliang.local"]):
                 with self.assertRaises(ValueError):
                     validate_url_safe("https://intranet.example.com/")
         gai.assert_not_called()
 
     def test_private_ip_literal_is_blocked_even_with_an_allowlist(self):
-        with strict_url_guard(["cowagent.ai"]):
+        with strict_url_guard(["maliang.local"]):
             with self.assertRaises(ValueError):
                 validate_url_safe("https://10.0.0.5/")
 

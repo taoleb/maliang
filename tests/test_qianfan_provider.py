@@ -74,49 +74,49 @@ class TestQianfanConstantsAndRouting(unittest.TestCase):
                 const.QIANFAN,
             )
 
-    def test_cow_cli_routes_ernie_models_to_qianfan(self):
+    def test_maliang_cli_routes_ernie_models_to_qianfan(self):
         from common import const
         import plugins
 
         old_plugin_path = plugins.instance.current_plugin_path
-        cow_cli_was_registered = "COW_CLI" in plugins.instance.plugins
-        old_cow_cli_plugin = plugins.instance.plugins.get("COW_CLI")
-        parent_had_cow_cli = hasattr(plugins, "cow_cli")
-        old_parent_cow_cli = getattr(plugins, "cow_cli", None)
-        module_names = ("plugins.cow_cli", "plugins.cow_cli.cow_cli")
+        maliang_cli_was_registered = "MALIANG_CLI" in plugins.instance.plugins
+        old_maliang_cli_plugin = plugins.instance.plugins.get("MALIANG_CLI")
+        parent_had_maliang_cli = hasattr(plugins, "maliang_cli")
+        old_parent_maliang_cli = getattr(plugins, "maliang_cli", None)
+        module_names = ("plugins.maliang_cli", "plugins.maliang_cli.maliang_cli")
         old_modules = {
             name: sys.modules[name]
             for name in module_names
             if name in sys.modules
         }
         plugins.instance.current_plugin_path = os.path.join(
-            os.path.dirname(__file__), "..", "plugins", "cow_cli"
+            os.path.dirname(__file__), "..", "plugins", "maliang_cli"
         )
         try:
-            import plugins.cow_cli.cow_cli
-            cow_cli_plugin = plugins.instance.plugins["COW_CLI"]
+            import plugins.maliang_cli.maliang_cli
+            maliang_cli_plugin = plugins.instance.plugins["MALIANG_CLI"]
         finally:
             plugins.instance.current_plugin_path = old_plugin_path
-            if cow_cli_was_registered:
-                plugins.instance.plugins["COW_CLI"] = old_cow_cli_plugin
+            if maliang_cli_was_registered:
+                plugins.instance.plugins["MALIANG_CLI"] = old_maliang_cli_plugin
             else:
-                plugins.instance.plugins.pop("COW_CLI", None)
+                plugins.instance.plugins.pop("MALIANG_CLI", None)
             for name in module_names:
                 if name in old_modules:
                     sys.modules[name] = old_modules[name]
                 else:
                     sys.modules.pop(name, None)
-            if parent_had_cow_cli:
-                plugins.cow_cli = old_parent_cow_cli
-            elif hasattr(plugins, "cow_cli"):
-                delattr(plugins, "cow_cli")
+            if parent_had_maliang_cli:
+                plugins.maliang_cli = old_parent_maliang_cli
+            elif hasattr(plugins, "maliang_cli"):
+                delattr(plugins, "maliang_cli")
 
         self.assertEqual(
-            cow_cli_plugin._resolve_bot_type_for_model("ernie-4.5-turbo-128k"),
+            maliang_cli_plugin._resolve_bot_type_for_model("ernie-4.5-turbo-128k"),
             const.QIANFAN,
         )
         self.assertEqual(
-            cow_cli_plugin._resolve_bot_type_for_model("qianfan"),
+            maliang_cli_plugin._resolve_bot_type_for_model("qianfan"),
             const.QIANFAN,
         )
 

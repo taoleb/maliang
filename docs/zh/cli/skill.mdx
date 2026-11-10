@@ -1,9 +1,9 @@
 ---
 title: 技能管理
-description: "技能管理命令参考：在对话中用 /skill、在终端中用 cow skill，列出、搜索、安装、卸载、启用和禁用技能，支持从 Cow 技能广场、GitHub、ClawHub 或任意 URL 一键安装。"
+description: "技能管理命令参考：在对话中用 /skill、在终端中用 maliang skill，列出、搜索、安装、卸载、启用和禁用技能，支持从 技能市场、GitHub、ClawHub 或任意 URL 一键安装。"
 ---
 
-技能管理命令用于安装、查询和管理 CowAgent 的技能。在对话中使用 `/skill <子命令>`，在终端中使用 `cow skill <子命令>`。
+技能管理命令用于安装、查询和管理 maliang 的技能。在对话中使用 `/skill <子命令>`，在终端中使用 `maliang skill <子命令>`。
 
 ## list
 
@@ -15,7 +15,7 @@ description: "技能管理命令参考：在对话中用 /skill、在终端中�
 ```
 
 ```bash 终端
-cow skill list
+maliang skill list
 ```
 </CodeGroup>
 
@@ -45,7 +45,7 @@ cow skill list
 ```
 
 ```bash 终端
-cow skill list --remote
+maliang skill list --remote
 ```
 </CodeGroup>
 
@@ -66,15 +66,15 @@ cow skill list --remote
 ```
 
 ```bash 终端
-cow skill search pptx
+maliang skill search pptx
 ```
 </CodeGroup>
 
 ## install
 
-安装技能。通过统一的 `install` 命令，可一键安装来自 **Cow 技能广场、GitHub、ClawHub** 以及任意 URL（zip 压缩包、SKILL.md 链接）上的技能，无需手动下载和配置。
+安装技能。通过统一的 `install` 命令，可一键安装来自 **技能市场、GitHub、ClawHub** 以及任意 URL（zip 压缩包、SKILL.md 链接）上的技能，无需手动下载和配置。
 
-**从 Cow 技能广场安装（推荐）：**
+**从 技能市场安装（推荐）：**
 
 <CodeGroup>
 ```text 对话
@@ -82,7 +82,7 @@ cow skill search pptx
 ```
 
 ```bash 终端
-cow skill install pptx
+maliang skill install pptx
 ```
 </CodeGroup>
 
@@ -102,13 +102,13 @@ cow skill install pptx
 
 ```bash 终端
 # 安装仓库中的所有技能（自动扫描包含 SKILL.md 的子目录）
-cow skill install larksuite/cli
+maliang skill install larksuite/cli
 
 # 指定子目录，只安装单个技能
-cow skill install https://github.com/larksuite/cli/tree/main/skills/lark-im
+maliang skill install https://github.com/larksuite/cli/tree/main/skills/lark-im
 
 # 使用 # 指定子目录
-cow skill install larksuite/cli#skills/lark-minutes
+maliang skill install larksuite/cli#skills/lark-minutes
 ```
 </CodeGroup>
 
@@ -122,7 +122,7 @@ cow skill install larksuite/cli#skills/lark-minutes
 ```
 
 ```bash 终端
-cow skill install clawhub:baidu-search
+maliang skill install clawhub:baidu-search
 ```
 </CodeGroup>
 
@@ -131,7 +131,7 @@ cow skill install clawhub:baidu-search
 <CodeGroup>
 ```text 对话
 # 从 zip 压缩包安装（支持单个或批量）
-/skill install https://cdn.link-ai.tech/skills/pptx.zip
+/skill install (upstream-cdn-removed)/skills/pptx.zip
 
 # 从 SKILL.md 链接安装
 /skill install https://example.com/path/to/SKILL.md
@@ -139,10 +139,10 @@ cow skill install clawhub:baidu-search
 
 ```bash 终端
 # 从 zip 压缩包安装（支持单个或批量）
-cow skill install https://cdn.link-ai.tech/skills/pptx.zip
+maliang skill install (upstream-cdn-removed)/skills/pptx.zip
 
 # 从 SKILL.md 链接安装
-cow skill install https://example.com/path/to/SKILL.md
+maliang skill install https://example.com/path/to/SKILL.md
 ```
 </CodeGroup>
 
@@ -166,7 +166,7 @@ cow skill install https://example.com/path/to/SKILL.md
 ```
 
 ```bash 终端
-cow skill uninstall pptx
+maliang skill uninstall pptx
 ```
 </CodeGroup>
 
@@ -185,8 +185,8 @@ cow skill uninstall pptx
 ```
 
 ```bash 终端
-cow skill enable pptx
-cow skill disable pptx
+maliang skill enable pptx
+maliang skill disable pptx
 ```
 </CodeGroup>
 
@@ -200,7 +200,7 @@ cow skill disable pptx
 ```
 
 ```bash 终端
-cow skill info pptx
+maliang skill info pptx
 ```
 </CodeGroup>
 
@@ -211,7 +211,7 @@ cow skill info pptx
 | 来源标识 | 说明 |
 | --- | --- |
 | `builtin` | 项目内置技能 |
-| `cowhub` | 从 CowAgent Skill Hub 安装 |
+| `cowhub` | 从 maliang Skill Hub 安装 |
 | `github` | 从 GitHub URL 直接安装 |
 | `clawhub` | 从 ClawHub 安装 |
 | `url` | 从 SKILL.md URL 安装 |

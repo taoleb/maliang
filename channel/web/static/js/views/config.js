@@ -750,7 +750,7 @@ function externalApiExample(lang, reveal) {
 function renderExternalApi() {
     const s = externalApiState;
     const docs = document.getElementById('cfg-api-docs');
-    if (docs) docs.href = (currentLang === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai') + '/extensions/chat-api';
+    if (docs) docs.href = (currentLang === 'zh' ? './docs/zh' : 'https://docs.maliang.local') + '/extensions/chat-api';
     document.getElementById('cfg-api-enabled').checked = !!s.enabled;
     document.getElementById('cfg-api-detail').classList.toggle('hidden', !s.enabled);
     if (!s.enabled) return;

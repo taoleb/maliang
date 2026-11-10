@@ -318,13 +318,13 @@ class TestDragSensitiveNested(unittest.TestCase):
             "telegram_token": "abc123",
             "web_password": "",
             "agent_max_context_tokens": 200000,
-            "weixin_credentials_path": "~/.weixin_cow_credentials.json",
+            "weixin_credentials_path": "~/.weixin_maliang_credentials.json",
             "model": "deepseek-flash",
         })
         self.assertEqual(result["telegram_token"], "********")
         self.assertEqual(result["web_password"], "")
         self.assertEqual(result["agent_max_context_tokens"], 200000)
-        self.assertEqual(result["weixin_credentials_path"], "~/.weixin_cow_credentials.json")
+        self.assertEqual(result["weixin_credentials_path"], "~/.weixin_maliang_credentials.json")
         self.assertEqual(result["model"], "deepseek-flash")
 
 

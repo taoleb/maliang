@@ -25,7 +25,7 @@ import threading
 
 import pytest
 
-ORIGINAL = {"agent_workspace": "/srv/cow", "web_password": "hunter2"}
+ORIGINAL = {"agent_workspace": "/srv/maliang", "web_password": "hunter2"}
 
 
 def _an_existing_config(tmp_path):
@@ -39,7 +39,7 @@ def _an_existing_config(tmp_path):
 def _a_disk_that_fills_up_mid_write(obj, fp, **kwargs):
     """Stand-in for ``json.dump`` that gets part of the document out and only
     then reports ENOSPC, the way a real full disk behaves."""
-    fp.write('{\n    "agent_workspace": "/srv/cow",\n    "web_password": "hun')
+    fp.write('{\n    "agent_workspace": "/srv/maliang",\n    "web_password": "hun')
     fp.flush()
     raise OSError(errno.ENOSPC, "No space left on device")
 

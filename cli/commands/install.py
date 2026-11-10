@@ -1,4 +1,4 @@
-"""cow install-browser - Install Playwright + Chromium for the browser tool."""
+"""maliang install-browser - Install Playwright + Chromium for the browser tool."""
 
 import os
 import sys
@@ -192,7 +192,7 @@ def run_install_browser(
     """
     Install Playwright Python package, optional Linux deps, and Chromium.
 
-    Reused by ``cow install-browser`` CLI and chat ``/install-browser``.
+    Reused by ``maliang install-browser`` CLI and chat ``/install-browser``.
 
     Args:
         stream: Optional callback ``(message, fg)`` for each line. ``fg`` is
@@ -206,8 +206,8 @@ def run_install_browser(
     from cli.utils import get_cli_language
 
     # Import `common` only after get_cli_language() runs ensure_sys_path(),
-    # so it works when `cow` is invoked from outside the project directory.
-    get_cli_language()  # resolve cow_lang so i18n.t reflects config
+    # so it works when `maliang` is invoked from outside the project directory.
+    get_cli_language()  # resolve maliang_lang so i18n.t reflects config
     from common import i18n
     _t = i18n.t
 
@@ -431,10 +431,10 @@ def run_install_browser(
         _phase(on_phase, _t("✅ 验证通过。", "✅ Verification passed."))
 
     stream("")
-    stream("Browser tool ready! Restart CowAgent to enable it.", "green")
+    stream("Browser tool ready! Restart maliang to enable it.", "green")
     _phase(on_phase, _t(
-        "🎉 全部步骤结束。请重启 CowAgent 后使用 browser 工具。",
-        "🎉 All steps finished. Restart CowAgent to use the browser tool.",
+        "🎉 全部步骤结束。请重启 maliang 后使用 browser 工具。",
+        "🎉 All steps finished. Restart maliang to use the browser tool.",
     ))
     return 0
 

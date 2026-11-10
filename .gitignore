@@ -32,7 +32,7 @@ plugins/banwords/lib/__pycache__
 !plugins/role
 !plugins/keyword
 !plugins/linkai
-!plugins/cow_cli
+!plugins/maliang_cli
 client_config.json
 # HMAC key for signing /preview URLs; generated per install.
 .preview_secret
@@ -46,14 +46,14 @@ node_modules
 dist/
 build/
 *.egg-info/
-.cow.pid
+.maliang.pid
 
 # Desktop backend packaging: keep the source files (spec/requirements/script)
 # tracked even though the generic build/ rule above ignores them, but never
 # track the build outputs or local venv.
 !desktop/build/
 desktop/build/*
-!desktop/build/cowagent-backend.spec
+!desktop/build/maliang-backend.spec
 !desktop/build/requirements-desktop.txt
 !desktop/build/build-backend.sh
 !desktop/build/stamp-backend-version.sh

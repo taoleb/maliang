@@ -1,11 +1,11 @@
 ---
 title: v2.1.9
-description: "CowAgent 2.1.9：2.1.8 のマルチ Agent 版をベースに、Agent 協調体験の最適化、モデルリストとモデルフォールバックの追加、チャネル連携・画像生成・音声など一連の問題を修正"
+description: "maliang 2.1.9：2.1.8 のマルチ Agent 版をベースに、Agent 協調体験の最適化、モデルリストとモデルフォールバックの追加、チャネル連携・画像生成・音声など一連の問題を修正"
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.1.9) | [中文](https://docs.cowagent.ai/zh/releases/v2.1.9)
+🌐 [English](./docs/releases/v2.1.9) | [中文](./docs/zh/releases/v2.1.9)
 
-> 本リリースは [2.1.8 マルチ Agent 版](https://docs.cowagent.ai/ja/releases/v2.1.8) の最適化リリースであり、同版をベースにマルチ Agent の協調体験・モデル機能・チャネル連携について一連の機能最適化と問題修正を行いました。
+> 本リリースは [2.1.8 マルチ Agent 版](./docs/ja/releases/v2.1.8) の最適化リリースであり、同版をベースにマルチ Agent の協調体験・モデル機能・チャネル連携について一連の機能最適化と問題修正を行いました。
 
 ## 🤝 マルチ Agent 体験の最適化
 
@@ -16,7 +16,7 @@ description: "CowAgent 2.1.9：2.1.8 のマルチ Agent 版をベースに、Age
 - **メンバー Agent の画像レンダリング**：デフォルト以外の Agent が生成した画像成果物が Web 側とデスクトップクライアントで表示されない問題を修正しました。
 - **グループチャットの入口**：デスクトップの「チーム」ページにグループチャットの入口を追加し、Agent チームからグループセッションを直接開始できるようにしました。
 
-<img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/agent-group-chat-picker.png" alt="マルチ Agent グループチャット" width="800" />
+<img src="screenshots/en/agent-group-chat-picker.png" alt="マルチ Agent グループチャット" width="800" />
 
 ## 📡 チャネル連携の修正
 
@@ -30,14 +30,14 @@ description: "CowAgent 2.1.9：2.1.8 のマルチ Agent 版をベースに、Age
 
 - **モデルリストの設定**：モデルプロバイダーがモデルリストを設定できるようになり、モデル名・モデルタイプ・コンテキストウィンドウ・最大出力などを指定できます。Thanks @alanyz106 (#3146)
 
-<img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/model-catalog-config.png" alt="モデルリストの設定" width="800" />
+<img src="screenshots/en/model-catalog-config.png" alt="モデルリストの設定" width="800" />
 
 - **複数のフォールバックモデルに対応**：メインモデルが失敗した場合、設定した順序付きのフォールバックチェーンを順に試行するようになり、従来の単一フォールバックモデルを置き換えました。Thanks @alanyz106 (#3125)
 
-<img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/model-fallback-chain.png" alt="複数のフォールバックモデル" width="800" />
+<img src="screenshots/en/model-fallback-chain.png" alt="複数のフォールバックモデル" width="800" />
 
 - **フォールバック時の認証情報の修正**：フォールバック時のカスタム認証情報の解決を修正し、グローバル設定ではなく実際にルーティングされたプロバイダーに基づいて認証情報を解決するようにしました。Thanks @alanyz106 (#3142)
-- **画像モデルの追加**：`gpt-image-2.5-flare` と `gpt-image-2.5-sunburst` を追加しました。Thanks @cowagent (#3140)
+- **画像モデルの追加**：`gpt-image-2.5-flare` と `gpt-image-2.5-sunburst` を追加しました。Thanks @contributor (#3140)
 
 ## 🛠 その他の最適化と修正
 
@@ -55,7 +55,7 @@ description: "CowAgent 2.1.9：2.1.8 のマルチ Agent 版をベースに、Age
 
 ## 📦 アップグレード方法
 
-- **ソースデプロイ**：`cow update` でワンクリック更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](https://docs.cowagent.ai/ja/guide/upgrade)を参照してください。
-- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ](https://cowagent.ai/download/)から最新版を入手できます。
+- **ソースデプロイ**：`maliang update` でワンクリック更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](./docs/ja/guide/upgrade)を参照してください。
+- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ]()から最新版を入手できます。
 
-**リリース日**：2026.09.14 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.1.8...2.1.9)
+**リリース日**：2026.09.14 | [Full Changelog](/compare/2.1.8...2.1.9)

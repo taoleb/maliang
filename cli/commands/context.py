@@ -1,4 +1,4 @@
-"""cow context - Context management commands."""
+"""maliang context - Context management commands."""
 
 import click
 

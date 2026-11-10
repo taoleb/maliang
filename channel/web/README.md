@@ -41,7 +41,7 @@ The code sits in two packages, mirroring the frontend's `core/` and `views/`:
 | `sessions.py` | `/api/sessions/*`, `/api/history`, per-session settings and context |
 | `artifacts.py` | `/api/artifacts`, `/api/artifacts/add`, `/api/artifacts/pin`, `/api/artifacts/rename`, `/api/artifacts/delete`: the cross-Agent index of files the conversations produced |
 | `menu.py` | `/api/menu`: the menu the user arranged, shared with the desktop client; its custom pages open at `/m/<id>` |
-| `themes.py` | `/api/themes`, `/api/themes/asset`, `/api/themes/import`: color themes in `<workspace>/system/themes` (`~/cow/system/themes` by default), the folder the desktop client reads too |
+| `themes.py` | `/api/themes`, `/api/themes/asset`, `/api/themes/import`: color themes in `<workspace>/system/themes` (`~/maliang/system/themes` by default), the folder the desktop client reads too |
 | `agents.py` | `/api/agents/*`, core files, avatars |
 | `config.py` | `/api/config`, `/api/external_api` (turn the chat API on or off, issue its key) |
 | `models.py` | `/api/models` |
@@ -251,7 +251,7 @@ collide with a view name either.
 **Asset references in the page must be absolute** (`/assets/js/...`). Path
 routing depends on it: a relative reference under `/settings/models` would
 resolve to `/settings/assets/...` and 404 the whole page. This gives up nothing
-for reverse-proxy subpath mounts (say `https://host/cow/`): the console could
+for reverse-proxy subpath mounts (say `https://host/maliang/`): the console could
 never be mounted that way, since every API call it makes is already an absolute
 `/api/...` path. Supporting a subpath would mean prefixing all of them, not
 making asset references relative again.
@@ -300,7 +300,7 @@ auth), see `tests/test_web_console_routing.py`.
 | `core/version.js` | Version label (filled from the backend's `/VERSION`) and the one-click update menu on the version row |
 | `core/i18n.js` | Translation table and `t()` / `applyI18n()` / `setLanguage()` |
 | `core/theme.js` | Light/dark theme switch |
-| `core/themes.js` | Color themes: built-in palettes and the ones in `<workspace>/system/themes` (`~/cow/system/themes` by default), mapped onto the `--cw-*` variables; wallpaper, new-chat logo, the theme list in the sidebar footer menu, custom theme dialog |
+| `core/themes.js` | Color themes: built-in palettes and the ones in `<workspace>/system/themes` (`~/maliang/system/themes` by default), mapped onto the `--cw-*` variables; wallpaper, new-chat logo, the theme list in the sidebar footer menu, custom theme dialog |
 | `core/utils.js` | `escapeHtml`, time formatting, scroll helpers, tool argument summaries |
 | `core/markdown.js` | markdown-it setup; image, video and code block rendering |
 | `core/confirm.js` | Scripted confirm dialog shared by the views |

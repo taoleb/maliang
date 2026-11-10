@@ -1,3 +1,9 @@
+# maliang Windows installer hooks.
+# Welcome / finish artwork is the NSIS MUI sidebar bitmap
+# (build/installerSidebar.bmp), a still of the mascot on a cream background.
+# Animated GIFs cannot be used as the installer sidebar or as the .ico;
+# the looping mascot is used in the app splash, empty chat, and About dialog.
+
 # Custom NSIS hooks, picked up automatically by electron-builder as
 # <buildResources>/installer.nsh. Included in both the installer and the
 # uninstaller script, so a macro only takes effect where it is inserted.
@@ -23,18 +29,18 @@
 !macro customRemoveFiles
   # Retry: a file can still be locked by an instance that is on its way out.
   StrCpy $R9 0
-  cowRemoveLoop:
+  maliangRemoveLoop:
     ClearErrors
     RMDir /r "$INSTDIR"
     ${IfNot} ${FileExists} "$INSTDIR\*.*"
-      Goto cowRemoveDone
+      Goto maliangRemoveDone
     ${EndIf}
     IntOp $R9 $R9 + 1
     ${If} $R9 < 10
       Sleep 300
-      Goto cowRemoveLoop
+      Goto maliangRemoveLoop
     ${EndIf}
-  cowRemoveDone:
+  maliangRemoveDone:
   ClearErrors
 !macroend
 
@@ -49,7 +55,7 @@
 # The missing staging folder is the only trace that path leaves, so extract
 # again a little later, once a passing lock has usually cleared. A normal
 # install keeps the folder and skips this entirely.
-!macro cowReextractIfForced
+!macro maliangReextractIfForced
   !ifndef APP_BUILD_DIR
   !ifndef APP_PACKAGE_URL
   !ifndef ZIP_COMPRESSION
@@ -59,12 +65,12 @@
       Push $R8
       SetOutPath $INSTDIR
       StrCpy $R8 0
-      cowReextractLoop:
+      maliangReextractLoop:
         IntOp $R8 $R8 + 1
         Sleep 2000
         Nsis7z::Extract "$PLUGINSDIR\app-$packageArch.7z"
         ${If} $R8 < 2
-          Goto cowReextractLoop
+          Goto maliangReextractLoop
         ${EndIf}
       Pop $R8
       Exch $0
@@ -98,7 +104,7 @@
 # interrupted first install never created would otherwise never appear. A stray
 # extra icon is a far smaller problem than no way into the app.
 !macro customInstall
-  !insertmacro cowReextractIfForced
+  !insertmacro maliangReextractIfForced
 
   !ifndef DO_NOT_CREATE_DESKTOP_SHORTCUT
     ${If} ${FileExists} "$newDesktopLink"

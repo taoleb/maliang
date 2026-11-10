@@ -1,14 +1,14 @@
 ---
 title: Upgrade
-description: "Upgrade CowAgent to the latest version: run cow update to pull code, update dependencies, reinstall the CLI and restart, or check for updates and upgrade in one click from the web console."
+description: "Upgrade maliang to the latest version: run maliang update to pull code, update dependencies, reinstall the CLI and restart, or check for updates and upgrade in one click from the web console."
 ---
 
 ## Recommended: One-line upgrade
 
-Use `cow update` to pull the latest code and restart the service in one step:
+Use `maliang update` to pull the latest code and restart the service in one step:
 
 ```bash
-cow update
+maliang update
 ```
 
 The command runs the following automatically:
@@ -30,14 +30,14 @@ Source installs can also upgrade from the Web console without opening a terminal
 
 1. Click the version string in the left sidebar footer to open the pop-up menu. Opening it does **not** contact GitHub.
 2. Click **Check for update** to fetch version info — the only network request. If a newer version exists, the same row turns into **Update now** with a small red dot.
-3. Click **Update now**. The console reuses the same path as `cow update` (`git pull`, dependency install, CLI reinstall) and then restarts the service. The **Release notes** entry opens the GitHub releases page for the full changelog.
+3. Click **Update now**. The console reuses the same path as `maliang update` (`git pull`, dependency install, CLI reinstall) and then restarts the service. The **Release notes** entry opens the GitHub releases page for the full changelog.
 
-The update only touches the git checkout. User data lives outside the repo (`agent_workspace`, default `~/cow`) and `config.json` is git-ignored, so `git pull` never overwrites them — no backup is taken. The updater records the current git commit; if the new code fails to import, it resets the checkout to that commit and leaves the running process untouched.
+The update only touches the git checkout. User data lives outside the repo (`agent_workspace`, default `~/maliang`) and `config.json` is git-ignored, so `git pull` never overwrites them — no backup is taken. The updater records the current git commit; if the new code fails to import, it resets the checkout to that commit and leaves the running process untouched.
 
 After a successful update the console reconnects on its own and shows the new version.
 
 <Note>
-  Docker images and the packaged desktop app cannot use this button. Docker stays on `docker compose pull`; the desktop client keeps its built-in updater. On Windows, run `cow update` in a terminal — the Web console cannot restart that process from inside itself.
+  Docker images and the packaged desktop app cannot use this button. Docker stays on `docker compose pull`; the desktop client keeps its built-in updater. On Windows, run `maliang update` in a terminal — the Web console cannot restart that process from inside itself.
 </Note>
 
 ### Rollback
@@ -45,9 +45,9 @@ After a successful update the console reconnects on its own and shows the new ve
 If a successful update misbehaves, reset to the previous commit:
 
 ```bash
-cow stop
+maliang stop
 git reset --hard <previous-commit>   # recorded in tmp/web-update-status.json
-cow start
+maliang start
 ```
 
 ## Manual upgrade
@@ -64,7 +64,7 @@ Then restart the service:
 
 ```bash
 # Using Cow CLI (recommended)
-cow restart
+maliang restart
 
 # Or using run.sh
 ./run.sh restart
@@ -84,11 +84,11 @@ sudo docker compose up -d
 ```
 
 <Tip>
-  Back up `config.json` before upgrading. Settings and channel logins live in the mounted `./cow-data` directory and the workspace in `./cow`, so recreating the container keeps them. Environment variables given a value in `docker-compose.yml` override the same settings from the console on every start.
+  Back up `config.json` before upgrading. Settings and channel logins live in the mounted `./maliang-data` directory and the workspace in `./maliang`, so recreating the container keeps them. Environment variables given a value in `docker-compose.yml` override the same settings from the console on every start.
 </Tip>
 
 ## Desktop client upgrade
 
 The [desktop client](/guide/desktop) has built-in auto-update: it checks for new versions automatically and prompts you, so you can download and restart to upgrade in one click.
 
-You can also grab the latest version anytime from the [download page](https://cowagent.ai/download/).
+You can also grab the latest version anytime from the [download page]().

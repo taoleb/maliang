@@ -1,9 +1,9 @@
 ---
 title: Coding Plan
-description: "在 CowAgent 中使用各厂商的 Coding Plan 编程包月套餐，适合高频使用 Agent。通过 OpenAI 兼容协议配置阿里云、MiniMax、智谱、火山引擎、Kimi 的专用 API 地址与 Key。"
+description: "在 maliang 中使用各厂商的 Coding Plan 编程包月套餐，适合高频使用 Agent。通过 OpenAI 兼容协议配置阿里云、MiniMax、智谱、火山引擎、Kimi 的专用 API 地址与 Key。"
 ---
 
-> Coding Plan 是各厂商推出的编程包月套餐，适合高频使用 Agent 的场景。CowAgent 支持通过 OpenAI 兼容方式接入各厂商的 Coding Plan 接口。
+> Coding Plan 是各厂商推出的编程包月套餐，适合高频使用 Agent 的场景。maliang 支持通过 OpenAI 兼容方式接入各厂商的 Coding Plan 接口。
 
 <Note>
   Coding Plan 的 API Base 和 API Key 通常与普通按量计费接口不通用，请在各厂商平台单独获取。
@@ -13,7 +13,7 @@ description: "在 CowAgent 中使用各厂商的 Coding Plan 编程包月套餐�
 
 所有厂商均可使用 OpenAI 兼容协议接入，可在web控制台快速配置。设置模型厂商为**OpenAI**，选择自定义模型并填入模型编码，最后填写对应厂商的API Base 和 API Key：
 
-<img src="https://cdn.link-ai.tech/doc/20260318113134.png" width="800"/>
+<img src="(upstream-cdn-removed)/doc/20260318113134.png" width="800"/>
 
 也可通过 `config.json` 配置文件直接修改：
 
@@ -139,4 +139,4 @@ description: "在 CowAgent 中使用各厂商的 Coding Plan 编程包月套餐�
 | `moonshot_base_url` | `https://api.kimi.com/coding/v1` |
 | `moonshot_api_key` | Coding Plan 专用 Key（与按量计费接口不通用） |
 
-官方文档：[Key 获取](https://www.kimi.com/code/docs/?aff=cowagent)
+官方文档：[Key 获取](https://www.kimi.com/code/docs/?aff=maliang)

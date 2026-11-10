@@ -1,5 +1,5 @@
 #!/bin/bash
-# No `set -e`: a failed Agent Mail install must never keep CowAgent from starting.
+# No `set -e`: a failed Agent Mail install must never keep maliang from starting.
 set -uo pipefail
 
 # Node itself lives in the persistent prefix, so npm's default global prefix is
@@ -61,9 +61,9 @@ install_agently_cli() {
 mkdir -p /home/agent/.agently-cli /home/agent/.local/share/agently-cli "$PREFIX"
 
 if ! has_node && ! install_node; then
-    log "Node.js install failed; starting CowAgent without Agent Mail"
+    log "Node.js install failed; starting maliang without Agent Mail"
 elif ! has_agently_cli && ! install_agently_cli; then
-    log "agently-cli install failed; starting CowAgent without Agent Mail"
+    log "agently-cli install failed; starting maliang without Agent Mail"
 fi
 
 chown -R agent:agent /home/agent/.agently-cli /home/agent/.local "$PREFIX"

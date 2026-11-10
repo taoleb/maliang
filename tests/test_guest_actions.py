@@ -27,7 +27,7 @@ ALL_TOOLS = ["read", "ls", "search_files", "write", "edit", "send", "web_search"
 def guest_env(tmp_path, monkeypatch):
     data = tmp_path / "data"
     data.mkdir()
-    monkeypatch.setenv("COW_DATA_DIR", str(data))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(data))
     # The instance's own /share pages stay off.
     monkeypatch.setitem(config.conf(), "guest_share", {"enabled": False})
     monkeypatch.setitem(config.conf(), "web_password", "")

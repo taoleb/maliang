@@ -12,7 +12,7 @@
 // "WeCom Bot" channel QR-login flow, so the rest of the console works
 // fully offline.
 const WECOM_BOT_SDK_URL = 'https://wwcdn.weixin.qq.com/node/wework/js/wecom-aibot-sdk@0.1.0.min.js';
-const WECOM_BOT_SOURCE = 'cowagent';
+const WECOM_BOT_SOURCE = 'maliang';
 let _wecomSdkLoaded = false;
 
 function ensureWecomSdkLoaded() {

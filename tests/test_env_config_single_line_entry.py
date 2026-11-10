@@ -1,6 +1,6 @@
 """``env_config`` must not write an entry that reads back as two.
 
-``~/.cow/.env`` is line-oriented, and that assumption is made independently in
+``~/.maliang/.env`` is line-oriented, and that assumption is made independently in
 three places: this tool's own ``_read_env_file``, and python-dotenv through
 ``bridge/agent_initializer.py`` (``load_dotenv``) and ``agent/tools/bash/bash.py``
 (``dotenv_values``, whose values are also what ``_redact_progress`` scrubs out of
@@ -23,7 +23,7 @@ from agent.tools.env_config.env_config import EnvConfig
 
 @pytest.fixture()
 def tool(tmp_path):
-    """An EnvConfig pinned to a temp dir; the developer's ~/.cow is never used."""
+    """An EnvConfig pinned to a temp dir; the developer's ~/.maliang is never used."""
     instance = EnvConfig(config={})
     instance.env_dir = str(tmp_path)
     instance.env_path = str(tmp_path / ".env")

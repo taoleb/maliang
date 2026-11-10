@@ -33,7 +33,7 @@ SKILL_FILE = "SKILL.md"
 _TREE_SKIP_DIRS = {"__pycache__", "node_modules", "venv"}
 
 # A skill's name is also its directory name, the word the CLI addresses it by
-# (``cow skill uninstall <name>``) and the identifier the model sees, so it is
+# (``maliang skill uninstall <name>``) and the identifier the model sees, so it is
 # held to the hyphen-case convention the skill-creator guide states.
 _SKILL_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9\-]{0,63}$")
 

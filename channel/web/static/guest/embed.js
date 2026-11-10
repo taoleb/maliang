@@ -8,7 +8,7 @@
  * system; defaults to light), data-open ("true" opens the window once the
  * page loads). The launcher shows the page's logo.
  *
- * The chat runs in an iframe on the CowAgent origin, so the host page never
+ * The chat runs in an iframe on the maliang origin, so the host page never
  * sees the visitor token. The host's origin must be listed in the profile's
  * access.allowed_origins, or the browser refuses to frame the page.
  */
@@ -30,43 +30,43 @@
   var inset = 'max(16px,4vw)';
 
   var css = [
-    '.cow-guest-btn{position:fixed;' + side + ':' + inset + ';bottom:24px;width:48px;height:48px;border-radius:50%;',
+    '.maliang-guest-btn{position:fixed;' + side + ':' + inset + ';bottom:24px;width:48px;height:48px;border-radius:50%;',
     'border:none;padding:0;cursor:pointer;z-index:2147483000;color:#fff;display:flex;align-items:center;',
     'justify-content:center;overflow:hidden;box-shadow:0 0 15px rgba(31,35,41,.15);',
     'transition:transform .2s ease,box-shadow .2s ease}',
-    '.cow-guest-btn:hover{transform:translateY(-2px);box-shadow:0 4px 18px rgba(31,35,41,.22)}',
-    '.cow-guest-btn img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}',
-    '.cow-guest-btn .cow-ico-fold{display:none}',
-    '.cow-guest-btn.cow-open img{display:none}',
-    '.cow-guest-btn.cow-open .cow-ico-fold{display:block}',
-    '.cow-guest-panel{position:fixed;' + side + ':' + inset + ';bottom:84px;width:400px;height:640px;',
+    '.maliang-guest-btn:hover{transform:translateY(-2px);box-shadow:0 4px 18px rgba(31,35,41,.22)}',
+    '.maliang-guest-btn img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}',
+    '.maliang-guest-btn .maliang-ico-fold{display:none}',
+    '.maliang-guest-btn.maliang-open img{display:none}',
+    '.maliang-guest-btn.maliang-open .maliang-ico-fold{display:block}',
+    '.maliang-guest-panel{position:fixed;' + side + ':' + inset + ';bottom:84px;width:400px;height:640px;',
     'max-height:calc(100vh - 108px);border-radius:16px;overflow:hidden;z-index:2147483000;background:#fff;',
     'border:1px solid rgba(15,23,42,.08);box-shadow:0 24px 60px -16px rgba(0,0,0,.35);',
     'opacity:0;transform:translateY(12px) scale(.98);transform-origin:bottom ' + side + ';pointer-events:none;',
     'visibility:hidden;transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}',
-    '.cow-guest-panel.cow-open{opacity:1;transform:none;pointer-events:auto;visibility:visible;',
+    '.maliang-guest-panel.maliang-open{opacity:1;transform:none;pointer-events:auto;visibility:visible;',
     'transition:opacity .2s ease,transform .2s ease}',
-    '.cow-guest-panel iframe{width:100%;height:100%;border:0;display:block}',
-    '@media (max-width:600px){.cow-guest-panel{' + side + ':0;bottom:0;width:100vw;height:100%;max-height:none;',
-    'border-radius:0;border:none}.cow-guest-btn.cow-open{display:none}}'
+    '.maliang-guest-panel iframe{width:100%;height:100%;border:0;display:block}',
+    '@media (max-width:600px){.maliang-guest-panel{' + side + ':0;bottom:0;width:100vw;height:100%;max-height:none;',
+    'border-radius:0;border:none}.maliang-guest-btn.maliang-open{display:none}}'
   ].join('');
   var style = document.createElement('style');
   style.textContent = css;
   document.head.appendChild(style);
 
   var panel = document.createElement('div');
-  panel.className = 'cow-guest-panel';
+  panel.className = 'maliang-guest-panel';
   var frame = null;
 
   var button = document.createElement('button');
-  button.className = 'cow-guest-btn';
+  button.className = 'maliang-guest-btn';
   button.type = 'button';
   button.style.background = color;
   button.setAttribute('aria-label', title);
   button.setAttribute('aria-expanded', 'false');
   button.title = title;
   button.innerHTML =
-    '<svg class="cow-ico-fold" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" ' +
+    '<svg class="maliang-ico-fold" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" ' +
     'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>';
   // The page's own logo, or the default launcher icon when it has none.
   var base = url.split('?')[0].replace(/\/+$/, '');
@@ -79,7 +79,7 @@
   var frameReady = false;
 
   function showPanel() {
-    panel.classList.toggle('cow-open', isOpen);
+    panel.classList.toggle('maliang-open', isOpen);
   }
 
   function setOpen(open) {
@@ -102,7 +102,7 @@
       panel.appendChild(frame);
     }
     if (frameReady) showPanel();
-    button.classList.toggle('cow-open', open);
+    button.classList.toggle('maliang-open', open);
     button.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
@@ -113,7 +113,7 @@
     if (e.key === 'Escape' && isOpen) setOpen(false);
   });
   window.addEventListener('message', function (e) {
-    if (frame && e.source === frame.contentWindow && e.data && e.data.type === 'cow-guest:close') setOpen(false);
+    if (frame && e.source === frame.contentWindow && e.data && e.data.type === 'maliang-guest:close') setOpen(false);
   });
 
   document.body.appendChild(panel);

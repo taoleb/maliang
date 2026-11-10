@@ -22,7 +22,7 @@ from channel.feishu.feishu_channel import FeiShuChanel
 from common.expired_dict import ExpiredDict
 from config import conf
 
-BOT = {"id": {"open_id": "ou_bot"}, "name": "CowAgent"}
+BOT = {"id": {"open_id": "ou_bot"}, "name": "maliang"}
 ZHANG = {"id": {"open_id": "ou_zhang"}, "name": "张三"}
 COLLEAGUES = [{"id": {"open_id": f"ou_{n}"}, "name": f"同事{n}"} for n in range(1, 11)]
 
@@ -131,7 +131,7 @@ def test_group_text_names_the_people_it_mentions(monkeypatch, text, mentions, ex
 
 
 def test_group_post_names_the_people_it_mentions(monkeypatch):
-    # "@CowAgent 把 **第三季度预算** 发给 @张三": the bold text makes it a post.
+    # "@maliang 把 **第三季度预算** 发给 @张三": the bold text makes it a post.
     post = {
         "title": "",
         "content": [
@@ -171,7 +171,7 @@ def _group_post_with_file(monkeypatch, tmp_path, *elements):
 
 
 def test_group_post_of_a_file_and_mentions_waits_for_the_question(monkeypatch, tmp_path):
-    # "@CowAgent @张三" with a file attached says nothing besides the mentions,
+    # "@maliang @张三" with a file attached says nothing besides the mentions,
     # so like a file sent on its own it is cached until the question comes.
     event, cache = _group_post_with_file(
         monkeypatch,
@@ -186,7 +186,7 @@ def test_group_post_of_a_file_and_mentions_waits_for_the_question(monkeypatch, t
 
 
 def test_group_post_of_a_file_and_a_question_names_the_people_it_mentions(monkeypatch, tmp_path):
-    # "@CowAgent 把这份报告发给 @张三" with a file attached is answered at once.
+    # "@maliang 把这份报告发给 @张三" with a file attached is answered at once.
     event, _ = _group_post_with_file(
         monkeypatch,
         tmp_path,
@@ -205,7 +205,7 @@ def test_group_post_of_a_file_and_a_question_names_the_people_it_mentions(monkey
 
 def test_bot_named_by_feishu_bot_name_is_left_out(monkeypatch):
     # Without the bot's open_id, the group gate matches the bot by feishu_bot_name.
-    monkeypatch.setitem(conf(), "feishu_bot_name", "CowAgent")
+    monkeypatch.setitem(conf(), "feishu_bot_name", "maliang")
     event = _event("text", {"text": "@_user_1 @_user_2 总结一下他刚才的发言"}, _mentions(ZHANG, BOT))
 
     assert _agent_input(monkeypatch, event, bot_open_id=None) == "@张三 总结一下他刚才的发言"

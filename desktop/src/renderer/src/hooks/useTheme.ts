@@ -233,7 +233,7 @@ export function useTheme() {
     readStoredPref() === 'system' ? getSystemTheme() : (readStoredPref() as ResolvedTheme)
   )
   // Display name; a bundled app config may override the default.
-  const [appName, setAppName] = useState<string>('CowAgent')
+  const [appName, setAppName] = useState<string>('maliang')
   // Snapshot before any effect persists a value, so we can tell a genuine
   // first run (no prior choice) from a user who explicitly picked a theme.
   const [firstRun] = useState(() => !hasStoredThemeId())

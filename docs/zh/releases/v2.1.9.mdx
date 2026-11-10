@@ -1,11 +1,11 @@
 ---
 title: v2.1.9
-description: CowAgent 2.1.9：在 2.1.8 多 Agent 版本基础上，优化 Agent 协作体验、增加模型列表与模型兜底能力，并修复端通道接入、图像生成、语音等一系列问题
+description: maliang 2.1.9：在 2.1.8 多 Agent 版本基础上，优化 Agent 协作体验、增加模型列表与模型兜底能力，并修复端通道接入、图像生成、语音等一系列问题
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.1.9) | [中文](https://docs.cowagent.ai/zh/releases/v2.1.9)
+🌐 [English](./docs/releases/v2.1.9) | [中文](./docs/zh/releases/v2.1.9)
 
-> 本次为 [2.1.8 多 Agent 版本](https://docs.cowagent.ai/zh/releases/v2.1.8) 的优化版本，在该版本基础上对多 Agent 协作体验、模型能力与通道接入做了一系列功能优化和问题修复。
+> 本次为 [2.1.8 多 Agent 版本](./docs/zh/releases/v2.1.8) 的优化版本，在该版本基础上对多 Agent 协作体验、模型能力与通道接入做了一系列功能优化和问题修复。
 
 ## 🤝 多 Agent 体验优化
 
@@ -16,7 +16,7 @@ description: CowAgent 2.1.9：在 2.1.8 多 Agent 版本基础上，优化 Agent
 - **成员 Agent 图片渲染**：修复非默认 Agent 生成的图片产物在 Web 端和桌面客户端无法渲染的问题。
 - **群聊会话入口**：桌面端「团队」页新增群聊入口，可直接从 Agent 团队发起群聊会话。
 
-<img src="https://cdn.link-ai.tech/doc/20260914122427.png" alt="模型列表配置" width="800" />
+<img src="(upstream-cdn-removed)/doc/20260914122427.png" alt="模型列表配置" width="800" />
 
 ## 📡 通道接入修复
 
@@ -30,14 +30,14 @@ description: CowAgent 2.1.9：在 2.1.8 多 Agent 版本基础上，优化 Agent
 
 - **模型列表配置**：模型厂商支持配置模型列表，可设置模型名、模型类型、上下文窗口、最大输出等信息。Thanks @alanyz106 (#3146)
 
-<img src="https://cdn.link-ai.tech/doc/20260914112944.png" alt="模型列表配置" width="800" />
+<img src="(upstream-cdn-removed)/doc/20260914112944.png" alt="模型列表配置" width="800" />
 
 - **支持多兜底模型**：主模型失败时按配置的兜底模型依次尝试，替代原先单一兜底模型。Thanks @alanyz106 (#3125)
 
-<img src="https://cdn.link-ai.tech/doc/20260914120209.png" alt="多兜底模型" width="800" />
+<img src="(upstream-cdn-removed)/doc/20260914120209.png" alt="多兜底模型" width="800" />
 
 - **回退凭据修复**：修复回退时自定义凭据的解析问题，改为按实际路由到的厂商解析凭据，而非全局配置。Thanks @alanyz106 (#3142)
-- **新增图像模型**：接入 `gpt-image-2.5-flare` 与 `gpt-image-2.5-sunburst`。Thanks @cowagent (#3140)
+- **新增图像模型**：接入 `gpt-image-2.5-flare` 与 `gpt-image-2.5-sunburst`。Thanks @contributor (#3140)
 
 ## 🛠 其他优化与修复
 
@@ -55,7 +55,7 @@ description: CowAgent 2.1.9：在 2.1.8 多 Agent 版本基础上，优化 Agent
 
 ## 📦 升级方式
 
-- **源码部署**：执行 `cow update` 一键升级，或手动拉取代码后重启。详见 [更新升级文档](https://docs.cowagent.ai/zh/guide/upgrade)。
-- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](https://cowagent.ai/zh/download/) 获取最新版本。
+- **源码部署**：执行 `maliang update` 一键升级，或手动拉取代码后重启。详见 [更新升级文档](./docs/zh/guide/upgrade)。
+- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](./zh/download/) 获取最新版本。
 
-**发布日期**：2026.09.14 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.1.8...2.1.9)
+**发布日期**：2026.09.14 | [Full Changelog](/compare/2.1.8...2.1.9)

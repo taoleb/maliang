@@ -82,7 +82,7 @@ class TestGatewaySessionHeaders(unittest.TestCase):
         session = headers["x-opencode-session"]
         self.assertTrue(session)
         self.assertNotIn("user-123", session)
-        self.assertTrue(headers["User-Agent"].startswith("CowAgent"))
+        self.assertTrue(headers["User-Agent"].startswith("maliang"))
 
     def test_session_id_stable_per_conversation(self):
         with use_identity(RuntimeIdentity(session_id="a")):

@@ -5,6 +5,7 @@ import NavRail from './layout/NavRail'
 import SessionList from './layout/SessionList'
 import WindowControls from './layout/WindowControls'
 import StatusScreen from './components/StatusScreen'
+import AboutDialog from './components/AboutDialog'
 import LoginGate from './components/LoginGate'
 import { useBackend } from './hooks/useBackend'
 import { usePlatform } from './hooks/usePlatform'
@@ -48,6 +49,7 @@ const App: React.FC = () => {
   const workspaceOpen = useWorkspaceStore((s) => s.open)
   const onboardingOpen = useOnboardingStore((s) => s.open)
   const maybeOpenOnboarding = useOnboardingStore((s) => s.maybeOpen)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [, forceUpdate] = useState(0)
   // Auth gate for web_password-protected backends. 'checking' until we know
   // whether login is needed; 'need_login' shows the password screen; 'ok' lets
@@ -205,6 +207,8 @@ const App: React.FC = () => {
         navigate('/settings')
       } else if (action === 'view-logs') {
         navigate('/logs')
+      } else if (action === 'open-about') {
+        setAboutOpen(true)
       }
     })
     return off
@@ -256,6 +260,7 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-base text-content">
       {onboardingOpen && <OnboardingWizard onDone={handleLangChange} />}
+            <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
       <Lightbox />
       <ConfirmDialog />
       <MenuEditor />

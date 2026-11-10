@@ -1128,7 +1128,7 @@ class FeishuRegisterHandler:
                 result = lark.register_app(
                     on_qr_code=_on_qr,
                     on_status_change=_on_status,
-                    source="cowagent",
+                    source="maliang",
                     cancel_event=cancel_event,
                 )
                 with cls._lock:

@@ -440,7 +440,7 @@ function renameProject(path, currentName) {
     });
 }
 
-// Delete a project record. Only the CowAgent record is removed; files stay and
+// Delete a project record. Only the maliang record is removed; files stay and
 // bound sessions revert to the default workspace.
 function deleteProject(path, name) {
     showConfirmModal(

@@ -13,8 +13,8 @@ description: "在 Docker 部署中启用 Agent Mail 叠加配置，让 Agent 通
 
 ```bash
 mkdir -p agent-mail
-curl -o docker-compose.agent-mail.yml https://raw.githubusercontent.com/zhayujie/CowAgent/master/docker/docker-compose.agent-mail.yml
-curl -o agent-mail/entrypoint.sh https://raw.githubusercontent.com/zhayujie/CowAgent/master/docker/agent-mail/entrypoint.sh
+curl -o docker-compose.agent-mail.yml https://raw.githubusercontent.com/DISABLED/maliang/master/docker/docker-compose.agent-mail.yml
+curl -o agent-mail/entrypoint.sh https://raw.githubusercontent.com/DISABLED/maliang/master/docker/agent-mail/entrypoint.sh
 echo "COMPOSE_FILE=docker-compose.yml:docker-compose.agent-mail.yml" >> .env
 ```
 
@@ -26,7 +26,7 @@ echo "COMPOSE_FILE=docker-compose.yml:docker-compose.agent-mail.yml" >> .env
 sudo docker compose up -d
 ```
 
-首次启动时会把 Node.js 和 `agently-cli` 下载到 `./agent-mail-data/`，之后重启、重建容器或升级镜像都不会重复下载。如果下载失败，CowAgent 仍会正常启动，只是暂时无法使用 Agent Mail；可在 `docker compose logs` 中查看 `[agent-mail]` 开头的日志，重启容器即可重试。
+首次启动时会把 Node.js 和 `agently-cli` 下载到 `./agent-mail-data/`，之后重启、重建容器或升级镜像都不会重复下载。如果下载失败，maliang 仍会正常启动，只是暂时无法使用 Agent Mail；可在 `docker compose logs` 中查看 `[agent-mail]` 开头的日志，重启容器即可重试。
 
 <Tip>
   国内网络下载较慢时，可将 `docker-compose.agent-mail.yml` 中的 `NODE_MIRROR` 和 `NPM_CONFIG_REGISTRY` 分别改为 `https://npmmirror.com/mirrors/node` 和 `https://registry.npmmirror.com`。
@@ -35,7 +35,7 @@ sudo docker compose up -d
 ## 3. 授权邮箱
 
 ```bash
-sudo docker compose exec -u agent chatgpt-on-wechat agently-cli auth login
+sudo docker compose exec -u agent maliang agently-cli auth login
 ```
 
 在浏览器中打开命令输出的链接完成授权，授权成功后命令会自动退出。
@@ -51,10 +51,10 @@ sudo docker compose exec -u agent chatgpt-on-wechat agently-cli auth login
 或在终端执行：
 
 ```bash
-sudo docker compose exec -u agent chatgpt-on-wechat cow skill install https://agent.qq.com/.well-known/skills/agently-mail/SKILL.md
+sudo docker compose exec -u agent maliang maliang skill install https://agent.qq.com/.well-known/skills/agently-mail/SKILL.md
 ```
 
-技能会安装到工作空间（`./cow/skills`）。安装完成后，直接让 Agent 发邮件或查看邮件即可。
+技能会安装到工作空间（`./maliang/skills`）。安装完成后，直接让 Agent 发邮件或查看邮件即可。
 
 ## 数据持久化
 

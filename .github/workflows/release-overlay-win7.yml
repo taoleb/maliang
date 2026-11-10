@@ -73,7 +73,7 @@ permissions:
   contents: read
 
 env:
-  OVERLAY_REPO: zhayujie/cow-private-overlay
+  OVERLAY_REPO: UPSTREAM_AUTHOR/cow-private-overlay
   R2_BUCKET: cow-skills
   # Dedicated update channel: isolates the Win7 feed (latest-win7.yml) from the
   # standard win feed (latest.yml). Both are the "latest" release channel but
@@ -153,7 +153,7 @@ jobs:
           pip install -r /tmp/requirements-win7.txt
           pip install pyinstaller
           # Run from repo root so the spec's relative datas resolve correctly.
-          pyinstaller desktop/build/cowagent-backend.spec \
+          pyinstaller desktop/build/maliang-backend.spec \
             --noconfirm \
             --distpath desktop/build/dist \
             --workpath desktop/build/build-work
@@ -242,12 +242,12 @@ jobs:
           # Trusted-client SMS secret (matches client.sms.secret on the server).
           CLIENT_SMS_SECRET: ${{ secrets.CLIENT_SMS_SECRET }}
           # Windows code signing via the signing CLI; SIGNTOOL_PATH was exported
-          # by the download step above. COW_SIGN_DRY_RUN (repo variable) validates
+          # by the download step above. MALIANG_SIGN_DRY_RUN (repo variable) validates
           # the pipeline with a self-signed cert, consuming no signing quota.
           SIGNTOOL_ACCESS_KEY: ${{ secrets.SIGNTOOL_ACCESS_KEY }}
           SIGNTOOL_ACCESS_SECRET: ${{ secrets.SIGNTOOL_ACCESS_SECRET }}
           SIGNTOOL_CERT_CODE: ${{ secrets.SIGNTOOL_CERT_CODE }}
-          COW_SIGN_DRY_RUN: ${{ vars.COW_SIGN_DRY_RUN }}
+          MALIANG_SIGN_DRY_RUN: ${{ vars.MALIANG_SIGN_DRY_RUN }}
         run: |
           node build-overlay.mjs --win --x64 --publish always \
             -c.publish.channel="$WIN7_CHANNEL" \

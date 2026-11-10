@@ -182,20 +182,20 @@ function _buildVideoHtml(url) {
 }
 
 function _openImageLightbox(src) {
-    let overlay = document.getElementById('cow-lightbox');
+    let overlay = document.getElementById('maliang-lightbox');
     if (!overlay) {
         overlay = document.createElement('div');
-        overlay.id = 'cow-lightbox';
+        overlay.id = 'maliang-lightbox';
         overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:zoom-out;opacity:0;transition:opacity .2s';
         overlay.onclick = () => { overlay.style.opacity = '0'; setTimeout(() => overlay.style.display = 'none', 200); };
         const img = document.createElement('img');
-        img.id = 'cow-lightbox-img';
+        img.id = 'maliang-lightbox-img';
         img.style.cssText = 'max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);object-fit:contain;';
         img.onclick = (e) => e.stopPropagation();
         overlay.appendChild(img);
         document.body.appendChild(overlay);
     }
-    overlay.querySelector('#cow-lightbox-img').src = src;
+    overlay.querySelector('#maliang-lightbox-img').src = src;
     overlay.style.display = 'flex';
     requestAnimationFrame(() => overlay.style.opacity = '1');
 }

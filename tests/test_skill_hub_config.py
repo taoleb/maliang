@@ -29,7 +29,7 @@ def data_dir(tmp_path):
         (data / "config.json").write_text(json.dumps(settings), encoding="utf-8")
 
     configure()
-    env = {"HOME": str(home), "USERPROFILE": str(home), "COW_DATA_DIR": str(data)}
+    env = {"HOME": str(home), "USERPROFILE": str(home), "MALIANG_DATA_DIR": str(data)}
     with patch.dict(os.environ, env, clear=True):
         yield configure
 

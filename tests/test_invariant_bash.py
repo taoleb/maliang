@@ -3,10 +3,10 @@ from agent.tools.bash.bash import Bash
 
 
 @pytest.mark.parametrize("command", [
-    "cat ~/.cow/.env",
-    "cat .cow/.env",
-    "less ~/.cow/.env",
-    "cat /home/user/.cow/.env",
+    "cat ~/.maliang/.env",
+    "cat .maliang/.env",
+    "less ~/.maliang/.env",
+    "cat /home/user/.maliang/.env",
 ])
 def test_credential_file_access_is_blocked(command):
     result = Bash().execute({"command": command})
@@ -15,8 +15,8 @@ def test_credential_file_access_is_blocked(command):
 
 
 @pytest.mark.parametrize("command", [
-    "ls ~/.cow/skills",
-    "ls ~/.cow/",
+    "ls ~/.maliang/skills",
+    "ls ~/.maliang/",
     "echo hello",
 ])
 def test_legitimate_cow_directory_access_is_not_blocked(command):

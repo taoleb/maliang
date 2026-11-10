@@ -19,13 +19,13 @@ import pytest
 import plugins
 
 _old_plugin_path = plugins.instance.current_plugin_path
-plugins.instance.current_plugin_path = os.path.join(os.getcwd(), "plugins", "cow_cli")
+plugins.instance.current_plugin_path = os.path.join(os.getcwd(), "plugins", "maliang_cli")
 try:
-    import plugins.cow_cli.cow_cli as cow_cli_module
+    import plugins.maliang_cli.maliang_cli as maliang_cli_module
 finally:
     plugins.instance.current_plugin_path = _old_plugin_path
 
-CowCliPlugin = plugins.instance.plugins["COW_CLI"]
+MaliangCliPlugin = plugins.instance.plugins["MALIANG_CLI"]
 
 
 @pytest.fixture(autouse=True)
@@ -36,8 +36,8 @@ def _drain_installs():
     yield
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
-        with cow_cli_module._installing_guard:
-            if not cow_cli_module._installing:
+        with maliang_cli_module._installing_guard:
+            if not maliang_cli_module._installing:
                 return
         time.sleep(0.01)
     raise AssertionError("an install worker never released its key")
@@ -62,13 +62,13 @@ def test_the_timeout_returns_without_waiting_for_the_worker(monkeypatch):
     calls = []
     release = threading.Event()
     started = _stalled_install(monkeypatch, calls, release)
-    monkeypatch.setattr(CowCliPlugin, "_INSTALL_TIMEOUT", 0.05)
+    monkeypatch.setattr(MaliangCliPlugin, "_INSTALL_TIMEOUT", 0.05)
 
     returned = threading.Event()
 
     def install():
         try:
-            CowCliPlugin()._cmd_skill("install slow", None)
+            MaliangCliPlugin()._cmd_skill("install slow", None)
         finally:
             returned.set()
 
@@ -88,15 +88,15 @@ def test_a_repeat_request_does_not_start_a_second_writer(monkeypatch):
     calls = []
     release = threading.Event()
     started = _stalled_install(monkeypatch, calls, release)
-    monkeypatch.setattr(CowCliPlugin, "_INSTALL_TIMEOUT", 0.05)
+    monkeypatch.setattr(MaliangCliPlugin, "_INSTALL_TIMEOUT", 0.05)
 
     first = threading.Thread(
-        target=lambda: CowCliPlugin()._cmd_skill("install slow", None), daemon=True
+        target=lambda: MaliangCliPlugin()._cmd_skill("install slow", None), daemon=True
     )
     first.start()
     try:
         assert started.wait(5)
-        reply = CowCliPlugin()._cmd_skill("install slow", None)
+        reply = MaliangCliPlugin()._cmd_skill("install slow", None)
         # Refused up front instead of queued behind the running install.
         assert len(calls) == 1, "the repeat request started a second install"
         assert "slow" in reply
@@ -117,9 +117,9 @@ def test_a_finished_install_still_reports_its_result(monkeypatch):
 
     monkeypatch.setattr("cli.commands.skill.install_skill", _install)
     monkeypatch.setattr(
-        CowCliPlugin, "_format_install_result", staticmethod(lambda result, agent_id=None: "formatted")
+        MaliangCliPlugin, "_format_install_result", staticmethod(lambda result, agent_id=None: "formatted")
     )
 
-    assert CowCliPlugin()._cmd_skill("install alpha", None) == "formatted"
+    assert MaliangCliPlugin()._cmd_skill("install alpha", None) == "formatted"
     assert calls == [("alpha", None)]
 

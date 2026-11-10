@@ -13,7 +13,7 @@ export interface ElectronAPI {
   getBackendStatus: () => Promise<string>
   /** The last backend failure, queryable so it can't be missed by timing. */
   getBackendError: () => Promise<BackendFailure | null>
-  /** Data dir holding config.json and run.log (~/.cow in packaged builds). */
+  /** Data dir holding config.json and run.log (~/.maliang in packaged builds). */
   getDataDir: () => Promise<string>
   /** Per-launch secret shared with the spawned backend (desktop-only requests). */
   getDesktopToken?: () => Promise<string>
@@ -316,7 +316,7 @@ export interface ProjectRef {
 
 /** Project picker state for a session (from /api/projects). */
 export interface ProjectState {
-  /** null when the session uses the default workspace (~/cow). */
+  /** null when the session uses the default workspace (~/maliang). */
   current: ProjectRef | null
   default_workspace: string
   projects_root?: string

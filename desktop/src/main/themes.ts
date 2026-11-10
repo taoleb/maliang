@@ -9,7 +9,7 @@ import zlib from 'zlib'
 //   1. Bundled themes — resources/themes/ shipped inside the app package
 //      (read-only). Present only in builds produced from a flavor; absent
 //      in the standard build.
-//   2. User themes — <workspace>/system/themes/ (~/cow by default), which
+//   2. User themes — <workspace>/system/themes/ (~/maliang by default), which
 //      users can add to by hand, via the in-app import, or through the
 //      agent. Each theme is its own folder:
 //
@@ -41,16 +41,16 @@ const LOGO_FILES = ['logo.png', 'logo.svg', 'logo.webp', 'logo.jpg', 'logo.jpeg'
 let getDataDir: () => string = () => ''
 
 // The Agent workspace, resolved like the backend does: config.json's
-// agent_workspace, else ~/cow.
+// agent_workspace, else ~/maliang.
 function workspaceDir(): string {
-  let workspace = '~/cow'
+  let workspace = '~/maliang'
   try {
-    const dataDir = getDataDir() || path.join(os.homedir(), '.cow')
+    const dataDir = getDataDir() || path.join(os.homedir(), '.maliang')
     const cfg = JSON.parse(fs.readFileSync(path.join(dataDir, 'config.json'), 'utf8'))
     const value = cfg && cfg.agent_workspace
     if (typeof value === 'string' && value.trim()) workspace = value.trim()
   } catch {
-    // No or unreadable config: the backend falls back to ~/cow as well.
+    // No or unreadable config: the backend falls back to ~/maliang as well.
   }
   if (workspace === '~' || /^~[\\/]/.test(workspace)) workspace = path.join(os.homedir(), workspace.slice(1))
   return path.resolve(workspace)
@@ -92,6 +92,7 @@ export interface AppConfig {
   runtimeIconTitle?: boolean
   // false: hide the skill hub entry points.
   skillHub?: boolean
+  skillHubUrl?: string
   // Help > Documentation target; an empty string hides the item.
   docsUrl?: string
   // Name of the built-in default agent (the backend's default_agent_name).

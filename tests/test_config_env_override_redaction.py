@@ -13,7 +13,7 @@ import config as config_module
 
 
 def _override_log_lines(monkeypatch, tmp_path, env_name, value):
-    monkeypatch.setenv("COW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(tmp_path))
     monkeypatch.setenv(env_name, value)
     # load_config rebinds the module-level singleton; restore the original after.
     monkeypatch.setattr(config_module, "config", config_module.config)

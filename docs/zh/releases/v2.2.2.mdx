@@ -1,9 +1,9 @@
 ---
 title: v2.2.2
-description: CowAgent 2.2.2：新增访客独立页面和窗口嵌入，支持自定义主题，主模型原生多模态输入，新模型接入，工具、通道与安全性完善
+description: maliang 2.2.2：新增访客独立页面和窗口嵌入，支持自定义主题，主模型原生多模态输入，新模型接入，工具、通道与安全性完善
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.2.2) | [中文](https://docs.cowagent.ai/zh/releases/v2.2.2)
+🌐 [English](./docs/releases/v2.2.2) | [中文](./docs/zh/releases/v2.2.2)
 
 ## 💬 访客页面
 
@@ -12,13 +12,13 @@ description: CowAgent 2.2.2：新增访客独立页面和窗口嵌入，支持�
 - **独立页面**：每个页面生成独立链接，访客保留历史会话，支持自定义名称、图标、主题色、欢迎语与引导问题。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/guest-share-page-dark-zh.png" alt="访客页面" width="800" />
+  <img src="(upstream-cdn-removed)/doc/guest-share-page-dark-zh.png" alt="访客页面" width="800" />
 </Frame>
 
-- **窗口嵌入**：复制一段代码即可嵌入网站，页面右下角显示对话入口，可限制允许嵌入的网站，配置时可直接预览嵌入效果。在线体验：[CowAgent 官网](https://cowagent.ai/zh/?chat=open)。
+- **窗口嵌入**：复制一段代码即可嵌入网站，页面右下角显示对话入口，可限制允许嵌入的网站，配置时可直接预览嵌入效果。在线体验：[maliang 官网](./zh/?chat=open)。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/guest-share-embed-zh.png" alt="嵌入网页" width="800" />
+  <img src="(upstream-cdn-removed)/doc/guest-share-embed-zh.png" alt="嵌入网页" width="800" />
 </Frame>
 
 - **数据隔离**：访客使用的 Agent 只能调用为该页面开放的工具、技能和参考资料，无法访问你的记忆、对话和工作空间，不提供命令执行，联网请求仅限公网地址；新建页面默认不开启文件写入、文件发送与联网搜索。
@@ -26,27 +26,27 @@ description: CowAgent 2.2.2：新增访客独立页面和窗口嵌入，支持�
 - **访问控制**：支持访问密码、每人每日提问次数与有效期；可按访客查看对话记录，随时重置链接、停用或删除页面。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/guest-share-editor-zh.png" alt="编辑访客页面" width="800" />
+  <img src="(upstream-cdn-removed)/doc/guest-share-editor-zh.png" alt="编辑访客页面" width="800" />
 </Frame>
 
 Thanks @LanydLi #3113
 
-相关文档：[访客页面](https://docs.cowagent.ai/zh/extensions/guest-share)
+相关文档：[访客页面](./docs/zh/extensions/guest-share)
 
 
 ## 🎨 自定义主题
 
 Web 控制台与桌面客户端支持主题切换，两端共用同一主题目录：
 
-- **导入主题**：将主题 zip 包或文件夹拖入即可导入，支持自定义配色、背景壁纸与新对话页图标，主题保存在 `~/cow/system/themes/`。
+- **导入主题**：将主题 zip 包或文件夹拖入即可导入，支持自定义配色、背景壁纸与新对话页图标，主题保存在 `~/maliang/system/themes/`。
 - **Agent 生成主题**：描述想要的风格或附上参考图，Agent 即可生成配色、壁纸与图标，生成后可直接切换使用。
 - **内置主题**：提供 Meadow、Ocean、Clay、Sakura、Lavender 五套配色，均适配浅色与深色模式。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/custom-theme-zh.png" alt="自定义主题" width="800" />
+  <img src="(upstream-cdn-removed)/doc/custom-theme-zh.png" alt="自定义主题" width="800" />
 </Frame>
 
-相关文档：[自定义主题](https://docs.cowagent.ai/zh/extensions/custom-theme)
+相关文档：[自定义主题](./docs/zh/extensions/custom-theme)
 
 ## 🖼 主模型图像理解优化
 
@@ -67,10 +67,10 @@ Web 控制台与桌面客户端支持主题切换，两端共用同一主题目�
 - **对话 API**：同一会话的并发请求按顺序处理（Thanks @rudycelekli #3751）。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/integrations-zh.png" alt="集成配置" width="800" />
+  <img src="(upstream-cdn-removed)/doc/integrations-zh.png" alt="集成配置" width="800" />
 </Frame>
 
-相关文档：[Web 控制台 - 访问地址](https://docs.cowagent.ai/zh/channels/web#访问地址)
+相关文档：[Web 控制台 - 访问地址](./docs/zh/channels/web#访问地址)
 
 ## 🤖 模型能力
 
@@ -137,7 +137,7 @@ Web 控制台与桌面客户端支持主题切换，两端共用同一主题目�
 
 ## 📦 升级方式
 
-- **源码部署**：执行 `cow update` 一键升级，或在 Web 控制台侧边栏版本菜单中一键更新，也可手动拉取代码后重启。详见 [更新升级文档](https://docs.cowagent.ai/zh/guide/upgrade)。
-- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](https://cowagent.ai/zh/download/) 获取最新版本。
+- **源码部署**：执行 `maliang update` 一键升级，或在 Web 控制台侧边栏版本菜单中一键更新，也可手动拉取代码后重启。详见 [更新升级文档](./docs/zh/guide/upgrade)。
+- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](./zh/download/) 获取最新版本。
 
-**发布日期**：2026.10.30 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.2.1...2.2.2)
+**发布日期**：2026.10.30 | [Full Changelog](/compare/2.2.1...2.2.2)

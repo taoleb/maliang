@@ -13,7 +13,7 @@ Web 控制台和桌面客户端都支持主题（皮肤）切换，两端共用�
 点击即可切换。主题与浅色 / 深色模式相互独立，每个主题都同时适配两种模式。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/custom-theme-zh.png" alt="主题列表" width="800" />
+  <img src="(upstream-cdn-removed)/doc/custom-theme-zh.png" alt="主题列表" width="800" />
 </Frame>
 
 内置以下纯配色主题：
@@ -35,7 +35,7 @@ Web 控制台和桌面客户端都支持主题（皮肤）切换，两端共用�
 - 单个文件不超过 16MB，整个主题不超过 64MB
 - 与已有主题 ID 相同时会询问是否替换；与内置主题 ID 相同时会自动重命名
 
-所有导入的主题都保存在 `~/cow/system/themes/` 目录下（若修改过 Agent 工作空间路径，则在工作空间下的 `system/themes/`），每个主题一个文件夹，自定义主题窗口底部会显示该目录。删除文件夹即可移除主题，也可以把主题文件夹直接复制进来，重新打开主题列表即可看到；桌面客户端可点击「打开主题文件夹」直接管理。将 CowAgent 部署在服务器上时，该目录位于运行 CowAgent 的机器上。
+所有导入的主题都保存在 `~/maliang/system/themes/` 目录下（若修改过 Agent 工作空间路径，则在工作空间下的 `system/themes/`），每个主题一个文件夹，自定义主题窗口底部会显示该目录。删除文件夹即可移除主题，也可以把主题文件夹直接复制进来，重新打开主题列表即可看到；桌面客户端可点击「打开主题文件夹」直接管理。将 maliang 部署在服务器上时，该目录位于运行 maliang 的机器上。
 
 <Note>
 Web 控制台暂不支持 `shape`（圆角、字体），配色、壁纸和图标均可使用。
@@ -137,7 +137,7 @@ my-theme/
 
 ## 让 Agent 生成主题
 
-Agent 可以直接帮你制作主题：它会把主题写入 `~/cow/system/themes/`。如果已配置图片生成能力，它还能顺便生成背景壁纸和图标。
+Agent 可以直接帮你制作主题：它会把主题写入 `~/maliang/system/themes/`。如果已配置图片生成能力，它还能顺便生成背景壁纸和图标。
 
 - **一键开始**：在自定义主题窗口中点击「让 Agent 帮你制作」旁的「开始制作」，会新建一个对话并填好提示词，只需在末尾补充想要的风格后发送。
 - **参考图生成**：发送时可以附上参考图，如喜欢的角色、插画或照片。Agent 会以参考图为基础生成壁纸和图标，角色、画风与参考图保持一致，主题配色也从参考图中提取。
@@ -149,7 +149,7 @@ Agent 可以直接帮你制作主题：它会把主题写入 `~/cow/system/theme
 帮我制作一个界面主题。
 
 要求：
-1. 在 ~/cow/system/themes/<主题id>/ 下创建 theme.json，id 用小写英文和连字符，结构为 {"specVersion": 1, "id", "name", "light": {"colors": {...}}, "dark": {"colors": {...}}}。
+1. 在 ~/maliang/system/themes/<主题id>/ 下创建 theme.json，id 用小写英文和连字符，结构为 {"specVersion": 1, "id", "name", "light": {"colors": {...}}, "dark": {"colors": {...}}}。
 2. light 和 dark 的 colors 都填这些键：accent、accentHover、accentActive、accentSoft、accentContrast、bubbleUserBg、bubbleUserText、bgBase、bgSurface、bgSurface2、bgElevated、bgInset、bgInset2、textPrimary、textSecondary、textTertiary、textDisabled、borderDefault、borderStrong、borderSubtle。背景低饱和，文字清晰易读，主题色上的白字也要看得清。
 3. 能生成图片的话，用图片生成技能在同一目录生成两张不带文字的图：
    - wallpaper.jpg：16:9 壁纸，主体偏右，亮度适中、不要太暗；在 theme.json 最外层加上 "wallpaper": {"image": "wallpaper.jpg", "overlayOpacity": 0.25, "glass": true}，深浅模式共用。如果我要求深浅模式用不同壁纸，就生成 wallpaper-light.jpg 和 wallpaper-dark.jpg 两张，不写最外层的 wallpaper，改为在 light 和 dark 里各加一个 wallpaper，分别指向这两张图

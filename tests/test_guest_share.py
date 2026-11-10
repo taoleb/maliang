@@ -30,7 +30,7 @@ from agent.guest.profile import guests_root, write_profile
 def guest_env(tmp_path, monkeypatch):
     data = tmp_path / "data"
     data.mkdir()
-    monkeypatch.setenv("COW_DATA_DIR", str(data))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(data))
     monkeypatch.setitem(config.conf(), "guest_share", {"enabled": True})
     monkeypatch.setitem(config.conf(), "web_password", "owner-secret-pass")
     from agent.guest import runtime
@@ -433,7 +433,7 @@ def test_branding_is_normalized_and_the_footer_can_be_changed_or_removed():
     from agent.guest.profile import normalize_config
 
     cfg, notices = normalize_config({})
-    assert cfg["branding"] == {"color": "", "footer_text": "Powered by CowAgent", "footer_url": "https://cowagent.ai"}
+    assert cfg["branding"] == {"color": "", "footer_text": "Powered by maliang", "footer_url": "https://maliang.local"}
     cfg, notices = normalize_config({"branding": {"color": "#3B82F6", "footer_text": "Example Inc.",
                                                   "footer_url": "https://www.example.com"}})
     assert cfg["branding"] == {"color": "#3b82f6", "footer_text": "Example Inc.", "footer_url": "https://www.example.com"}
@@ -487,7 +487,7 @@ def test_the_page_renders_with_its_own_logo_color_and_footer(guest_env):
     page = app.request(f"/share/{share['share_token']}").data.decode()
     brand = json.loads(page.split("window.__GUEST_BRAND__ = ", 1)[1].split(";\n", 1)[0])
     assert brand["palette"]["400"] == "#3b82f6"
-    assert brand["footer_text"] == "Powered by CowAgent" and brand["footer_url"] == "https://cowagent.ai"
+    assert brand["footer_text"] == "Powered by maliang" and brand["footer_url"] == "https://maliang.local"
     assert brand["logo"].startswith(f"/share/{share['share_token']}/api/logo?v=")
     assert f'src="{brand["logo"]}"' in page
     assert "{{" not in page
@@ -614,7 +614,7 @@ def test_saving_the_listen_address_moves_the_server(guest_env, monkeypatch):
     monkeypatch.setattr(core_channel, "WebChannel", FakeChannel)
     monkeypatch.setitem(config.conf(), "web_host", "")
     monkeypatch.setitem(config.conf(), "web_port", 9876)
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
     monkeypatch.setattr(integrations_api, "_lan_ips", lambda: ["192.168.1.20"])
     monkeypatch.setattr(integrations_api, "_listen", {"host": "127.0.0.1", "port": 9876, "scheme": "http"})
     app = _app()
@@ -651,9 +651,9 @@ def test_saving_the_listen_address_moves_the_server(guest_env, monkeypatch):
         taken.listen()
         assert put({"web_port": taken.getsockname()[1]})["reason"] == "port_in_use"
     assert put({"web_port": 70000})["reason"] == "invalid_port"
-    monkeypatch.setenv("COW_DESKTOP", "1")
+    monkeypatch.setenv("MALIANG_DESKTOP", "1")
     assert put({"web_port": 9876})["reason"] == "port_fixed"
-    monkeypatch.delenv("COW_DESKTOP")
+    monkeypatch.delenv("MALIANG_DESKTOP")
 
     assert put({"web_host": "example.com"})["reason"] == "invalid_host"
     assert put({"web_host": "203.0.113.9"})["reason"] == "unavailable_host"
@@ -692,12 +692,12 @@ def test_the_console_stays_reachable_when_an_address_cannot_be_bound(monkeypatch
     assert server.bind_addr == ("0.0.0.0", 9899)
     assert attempts.count(("10.9.9.9", 9900)) == 1
 
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
     monkeypatch.setattr(integrations_api, "can_bind", lambda host, port: host != "10.9.9.9")
     assert channel._can_fall_back("10.9.9.9") is True
     assert channel._can_fall_back("0.0.0.0") is False
     assert channel._can_fall_back("127.0.0.1") is False
-    monkeypatch.setenv("COW_DESKTOP", "1")
+    monkeypatch.setenv("MALIANG_DESKTOP", "1")
     assert channel._can_fall_back("0.0.0.0") is True
 
 

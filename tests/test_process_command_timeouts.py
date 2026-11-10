@@ -1,6 +1,6 @@
 """Every subprocess the service lifecycle commands run has to be bounded.
 
-``cow start/stop/status`` all go through ``cli.commands.process``, whose win32
+``maliang start/stop/status`` all go through ``cli.commands.process``, whose win32
 branches shell out to ``tasklist`` and ``taskkill``. A hung tasklist is a known
 Windows failure under a corrupted process table or extreme load (the browser
 tool's identical probe was already given a timeout in chrome_launcher), and
@@ -101,7 +101,7 @@ def test_relay_logs_and_aborts_when_the_self_check_times_out(monkeypatch, tmp_pa
     monkeypatch.setattr("os.kill", lambda pid, sig: signalled.append((pid, sig)))
     monkeypatch.setattr("sys.argv", [
         "-c", str(tmp_path), "python", str(tmp_path / "app.py"),
-        str(tmp_path / "cow.pid"), str(log_file), "4321",
+        str(tmp_path / "maliang.pid"), str(log_file), "4321",
     ])
 
     try:

@@ -10,8 +10,8 @@ export const SHARE_DEFAULT_COLOR = '#4abe6e'
 export const SHARE_COLORS = ['#14b8a6', '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899', '#f97316', '#475569']
 export const SHARE_LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 export const SHARE_LOGO_MAX = 2 * 1024 * 1024
-export const SHARE_FOOTER_TEXT = 'Powered by CowAgent'
-export const SHARE_FOOTER_URL = 'https://cowagent.ai'
+export const SHARE_FOOTER_TEXT = 'Powered by maliang'
+export const SHARE_FOOTER_URL = 'https://maliang.local'
 /** '' follows the visitor's browser. */
 export const SHARE_LANGUAGES = ['', 'zh', 'zh-Hant', 'en']
 export const SHARE_LANGUAGE_NAMES: Record<string, string> = { zh: '简体中文', 'zh-Hant': '繁體中文', en: 'English' }

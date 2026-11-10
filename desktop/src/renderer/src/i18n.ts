@@ -356,7 +356,7 @@ const translations: Record<string, Record<string, string>> = {
     menu_skill_hub: '技能广场',
     menu_feedback: '反馈',
     // onboarding
-    onboarding_welcome_title: '欢迎使用 CowAgent',
+    onboarding_welcome_title: '欢迎使用 maliang',
     onboarding_welcome_desc: '你的私人超级 AI 助手。几步设置，即可开始对话。',
     onboarding_lang_label: '界面语言',
     onboarding_model_title: '配置对话模型',
@@ -670,7 +670,7 @@ const translations: Record<string, Record<string, string>> = {
     shares_ref_note_ph: '说明（可选），如：产品文档，回答功能和价格问题时查阅',
     shares_field_rules: '访客规则',
     shares_field_rules_tip: '会写入 Agent 的系统提示词。建议写清：你是谁、为谁服务，能回答哪些问题、超出范围时如何回复，以及回复的语气和格式。留空则只遵循平台默认规则',
-    shares_field_rules_ph: '例如：\n你是 CowAgent 的智能助手，帮助开发者解答安装、配置和使用中遇到的问题，回答简洁友好。',
+    shares_field_rules_ph: '例如：\n你是 maliang 的智能助手，帮助开发者解答安装、配置和使用中遇到的问题，回答简洁友好。',
     shares_tool_read: '读取文件',
     shares_tool_ls: '浏览目录',
     shares_tool_search_files: '搜索文件',
@@ -1573,7 +1573,7 @@ const translations: Record<string, Record<string, string>> = {
     menu_skill_hub: 'Skill Hub',
     menu_feedback: 'Feedback',
     // onboarding
-    onboarding_welcome_title: 'Welcome to CowAgent',
+    onboarding_welcome_title: 'Welcome to maliang',
     onboarding_welcome_desc: 'Your personal super AI assistant. A few quick steps and you are ready to chat.',
     onboarding_lang_label: 'Language',
     onboarding_model_title: 'Set up your chat model',
@@ -1884,7 +1884,7 @@ const translations: Record<string, Record<string, string>> = {
     shares_ref_note_ph: 'Note (optional), e.g. product docs, for feature and pricing questions',
     shares_field_rules: 'Guest rules',
     shares_field_rules_tip: 'Written into the Agent\'s system prompt. Say who it is and who it serves, what it may answer and how to reply when a question is out of scope, and the tone and format of replies. Leave empty to follow only the platform defaults',
-    shares_field_rules_ph: 'For example:\nYou are the CowAgent assistant and help developers with installation, configuration and usage, with short and friendly replies.',
+    shares_field_rules_ph: 'For example:\nYou are the maliang assistant and help developers with installation, configuration and usage, with short and friendly replies.',
     shares_tool_read: 'Read files',
     shares_tool_ls: 'List folders',
     shares_tool_search_files: 'Search files',
@@ -2443,13 +2443,13 @@ export type Lang = 'zh' | 'en'
 
 // First-run default: follow the OS language so zh-* systems start in Chinese
 // and everyone else in English. Once the user picks a language it's persisted
-// in cow_lang and always wins. Falls back to 'en' when the locale is unknown.
+// in maliang_lang and always wins. Falls back to 'en' when the locale is unknown.
 function detectDefaultLang(): Lang {
   const locale = (window.electronAPI?.systemLocale || navigator.language || '').toLowerCase()
   return locale.startsWith('zh') ? 'zh' : 'en'
 }
 
-const savedLang = localStorage.getItem('cow_lang') as Lang | null
+const savedLang = localStorage.getItem('maliang_lang') as Lang | null
 let currentLang: Lang = savedLang === 'zh' || savedLang === 'en' ? savedLang : detectDefaultLang()
 
 export function t(key: string): string {
@@ -2469,7 +2469,7 @@ export function getLang(): Lang {
 
 export function setLang(lang: Lang) {
   currentLang = lang
-  localStorage.setItem('cow_lang', lang)
+  localStorage.setItem('maliang_lang', lang)
 }
 
 /** Resolve a possibly-localized label ({zh,en} or plain string) for the current language. */

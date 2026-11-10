@@ -70,8 +70,8 @@ _DOMAIN_RE = re.compile(r"^[a-z0-9]([a-z0-9\-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]*
 MAX_SUGGESTED = 6
 MAX_REFERENCES = 20
 
-DEFAULT_FOOTER_TEXT = "Powered by CowAgent"
-DEFAULT_FOOTER_URL = "https://cowagent.ai"
+DEFAULT_FOOTER_TEXT = "Powered by maliang"
+DEFAULT_FOOTER_URL = "https://maliang.local"
 # The page's language; empty follows the visitor's browser.
 LANGUAGES = ("", "zh", "zh-Hant", "en")
 _FOOTER_URL_RE = re.compile(r"^https?://[^\s<>\"']+$", re.IGNORECASE)

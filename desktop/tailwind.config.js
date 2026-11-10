@@ -1,9 +1,9 @@
 const path = require('path')
 
-// When '@product' points outside this project (COW_PRODUCT_DIR), scan that
+// When '@product' points outside this project (MALIANG_PRODUCT_DIR), scan that
 // directory too so classes used only there still get generated.
-const productContent = process.env.COW_PRODUCT_DIR
-  ? [path.join(process.env.COW_PRODUCT_DIR, '**/*.{tsx,ts}')]
+const productContent = process.env.MALIANG_PRODUCT_DIR
+  ? [path.join(process.env.MALIANG_PRODUCT_DIR, '**/*.{tsx,ts}')]
   : []
 
 /** @type {import('tailwindcss').Config} */

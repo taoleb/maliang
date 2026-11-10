@@ -71,7 +71,7 @@ function agentAvatarHTML(agent, size) {
         return `<img class="${cls}" src="/api/agents/${encodeURIComponent(agent.id)}/avatar?v=${encodeURIComponent(v)}" alt="">`;
     }
     // The default (first) Agent falls back to the product logo when it has no
-    // uploaded picture, so the instance's own Agent wears the CowAgent face.
+    // uploaded picture, so the instance's own Agent wears the maliang face.
     // Added Agents keep the initial-disc fallback so a team stays distinguishable.
     if (agent && agent.id && agent.id === defaultAgentId) {
         return `<img class="${cls}" src="/assets/logo.jpg" alt="">`;

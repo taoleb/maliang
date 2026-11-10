@@ -1,23 +1,23 @@
 ---
 title: v2.2.0
-description: "CowAgent 2.2.0：機能センターの追加、マルチ Agent 協調の最適化、Web コンソールの再構築、モデルキャッシュヒット率の向上、安定性とセキュリティの全面強化"
+description: "maliang 2.2.0：機能センターの追加、マルチ Agent 協調の最適化、Web コンソールの再構築、モデルキャッシュヒット率の向上、安定性とセキュリティの全面強化"
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.2.0) | [中文](https://docs.cowagent.ai/zh/releases/v2.2.0)
+🌐 [English](./docs/releases/v2.2.0) | [中文](./docs/zh/releases/v2.2.0)
 
 ## 🧩 機能センター
 
 従来の「スキル」メニューを「機能」にアップグレードし、Web コンソールとデスクトップクライアントで組み込みツール・MCP ツール・スキルを一元管理できるようにしました：
 
-- **スキルのインストール**：Cow Skill Hub、GitHub、ClawHub からのインストール、またはアーカイブ・`SKILL.md`・フォルダのアップロードに対応しました。スキルはまず内容をプレビューし、確認後に正式にインストールされます。
+- **スキルのインストール**：Skill Hub、GitHub、ClawHub からのインストール、またはアーカイブ・`SKILL.md`・フォルダのアップロードに対応しました。スキルはまず内容をプレビューし、確認後に正式にインストールされます。
 - **MCP の設定**：画面上で MCP サーバーの追加・編集・削除ができ、stdio、SSE、Streamable HTTP の 3 種類のトランスポートに対応します。フォームと JSON の 2 つの編集モードを備え、1 つまたは複数の `mcpServers` 設定をそのまま貼り付けられます。保存時に接続を自動確認してツール一覧を表示し、変更は再起動なしで次のメッセージから反映されます。Thanks @tsumon (#3155)
 - **ツール検索の診断**：会話中に MCP ツール検索のランキング結果とフォールバックの理由を確認でき、ツールが選ばれなかった原因を調べやすくなりました。Thanks @zhongjunqi7657 (#3165)
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/capabilities-overview.png" alt="機能センター" width="800" />
+  <img src="screenshots/en/capabilities-overview.png" alt="機能センター" width="800" />
 </Frame>
 
-関連ドキュメント：[MCP ツール](https://docs.cowagent.ai/ja/tools/mcp)、[スキルのインストール](https://docs.cowagent.ai/ja/skills/install)
+関連ドキュメント：[MCP ツール](./docs/ja/tools/mcp)、[スキルのインストール](./docs/ja/skills/install)
 
 ## 🤝 マルチ Agent 協調の最適化
 
@@ -31,7 +31,7 @@ description: "CowAgent 2.2.0：機能センターの追加、マルチ Agent 協
   - 一部のエンドポイントで、パラメータがリクエストボディのみにある場合に Agent を正しく特定できない問題を修正しました（Thanks @c020627 #3177）。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/agent-task-handoff.png" alt="タスク協調の個別表示" width="800" />
+  <img src="screenshots/en/agent-task-handoff.png" alt="タスク協調の個別表示" width="800" />
 </Frame>
 
 ## 🖥 コンソールのアップグレード
@@ -51,7 +51,7 @@ description: "CowAgent 2.2.0：機能センターの追加、マルチ Agent 協
 - **ドキュメントの分割**：長い Markdown ドキュメントで最初の見出しより前の内容がインデックスされない問題、見出しレベルが飛んだ際に内容が重複してインデックスされる問題を修正しました。`/memory status` でインデックスの再構築を案内します（Thanks @Bdysj #3309）。
 - **セッションの読み込み**：セッションを開いてもメモリのスキャンとインデックスの再構築が発生しなくなり、新しいセッションの最初の応答が速くなりました。
 
-関連ドキュメント：[メモリ](https://docs.cowagent.ai/ja/memory/index)
+関連ドキュメント：[メモリ](./docs/ja/memory/index)
 
 ## 📐 コンテキストとトークンコスト
 
@@ -109,10 +109,10 @@ description: "CowAgent 2.2.0：機能センターの追加、マルチ Agent 協
 - **バックアップ**：別のファイルシステムへのバックアップ出力に対応しました（Thanks @zyc2022 #3200、@chen1070109514 #3246）。マルチ Agent のバックアップを復元する際は、このマシンの既存の Agent ワークスペースパスを引き継ぎます（Thanks @Lesereingrape #3319）。
 - **プラグイン**：設定が空または不完全でもプラグインが正常に起動します（Thanks @c020627 #3224）。Midjourney で画像番号の入力が誤っている場合に通知します（Thanks @Lesereingrape #3291）。ロールプラグインでカスタムロールに説明がない場合はヘルプを返します（Thanks @Lesereingrape #3296）。管理者コマンドでプラグインの優先度設定やモデル切り替えの引数が誤っている場合に通知します（Thanks @Lesereingrape #3303, #3305）。`plugins.json` の個別のプラグイン設定が欠けていたり形式が誤っていたりする場合はデフォルト値で補完し、すべてのプラグインの読み込みが失敗することはなくなりました（Thanks @Lesereingrape #3314）。要約プラグインのファイル命名とハンドルが閉じられない問題を修正しました（Thanks @c020627 #3215）。
 - **Agent の管理**：Agent を削除するとそのプロジェクトデータも同時に削除します（Thanks @c020627 #3216）。
-- **Agent Mail**：Docker Compose にオプションの Agent Mail 設定を追加しました。有効にすると Agent がメールの送受信・検索・管理を行えます。詳しくは [Agent Mail](https://docs.cowagent.ai/ja/extensions/agent-mail) を参照してください（Thanks @tsumon #3236）。
+- **Agent Mail**：Docker Compose にオプションの Agent Mail 設定を追加しました。有効にすると Agent がメールの送受信・検索・管理を行えます。詳しくは [Agent Mail](./docs/ja/extensions/agent-mail) を参照してください（Thanks @tsumon #3236）。
 - **メッセージ処理**：メッセージのコンテキストパラメータが異なるセッション間で共有される問題を修正しました（Thanks @c020627 #3222）。ファイルキャッシュの有効期限を最新のファイルを基準に計算します（Thanks @c020627 #3218）。レートリミッターがプロセスの終了を妨げる問題と、レートが 0 の場合の例外を修正しました（Thanks @aniruddhaadak80 #3285）。未対応の返信タイプではエラーメッセージに元のタイプを表示し、プラグインが返信を破棄した後に音声セッションでエラーが出なくなりました（Thanks @Bdysj #3306, #3307）。デフォルト以外の Agent で `#reset`、Feishu のメッセージ取り消し、セッション削除によって待機中のメッセージをクリアできない問題を修正しました（Thanks @Lesereingrape #3316）。
 - **ブラウザツール**：ブラウザドライバーの接続が切れても自動で復旧し、エラーが出続けることはなくなりました。
-- **デスクトップクライアント**：macOS でマイクの権限リクエストが表示されない問題を修正しました（Thanks @cowagent #3181）。Windows のショートカットが原因で起動時にクラッシュする問題と、バックエンドのログが重複して書き込まれる問題を修正しました。
+- **デスクトップクライアント**：macOS でマイクの権限リクエストが表示されない問題を修正しました（Thanks @contributor #3181）。Windows のショートカットが原因で起動時にクラッシュする問題と、バックエンドのログが重複して書き込まれる問題を修正しました。
 - **エンジニアリング品質**：完全なテストフローとコードチェックのゲートを追加しました（Thanks @fuxicodex #3166, #3203）。テストの分離を改善しました（Thanks @c020627 #3169, #3201、@rudycelekli #3261）。
 - **ドキュメント**：
   - 静的 Bearer 認証を使う MCP 設定の説明を追加しました（Thanks @ct-jaryn #3227）。
@@ -120,7 +120,7 @@ description: "CowAgent 2.2.0：機能センターの追加、マルチ Agent 協
 
 ## 📦 アップグレード方法
 
-- **ソースデプロイ**：`cow update` でワンクリック更新するか、Web コンソールのサイドバーのバージョンメニューから更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](https://docs.cowagent.ai/ja/guide/upgrade)を参照してください。
-- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ](https://cowagent.ai/download/)から最新版を入手できます。
+- **ソースデプロイ**：`maliang update` でワンクリック更新するか、Web コンソールのサイドバーのバージョンメニューから更新するか、最新コードを取得して再起動します。詳しくは[アップグレードガイド](./docs/ja/guide/upgrade)を参照してください。
+- **デスクトップクライアント**：クライアント内で更新を確認してワンクリックで更新するか、[ダウンロードページ]()から最新版を入手できます。
 
-**リリース日**：2026.09.30 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.1.9...2.2.0)
+**リリース日**：2026.09.30 | [Full Changelog](/compare/2.1.9...2.2.0)

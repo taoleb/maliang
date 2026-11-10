@@ -54,7 +54,7 @@
     <link rel="stylesheet" href="/assets/css/artifacts.css">
     <link rel="stylesheet" href="/assets/guest/guest.css">
     <script>
-    window.__cowNormalizeLang__ = function(raw) {
+    window.__maliangNormalizeLang__ = function(raw) {
         if (!raw) return '';
         var v = String(raw).trim().toLowerCase().replace('_', '-');
         if (v === 'auto') return '';
@@ -65,15 +65,15 @@
     };
     // The page's own language, if it has one; otherwise the visitor's browser
     // speaks first and the instance default is the fallback.
-    window.__cowResolveLang__ = function() {
-        return window.__cowNormalizeLang__(window.__GUEST_LANG__)
-            || window.__cowNormalizeLang__(localStorage.getItem('cow_lang'))
-            || window.__cowNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
-            || window.__cowNormalizeLang__(window.__COW_DEFAULT_LANG__)
+    window.__maliangResolveLang__ = function() {
+        return window.__maliangNormalizeLang__(window.__GUEST_LANG__)
+            || window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang'))
+            || window.__maliangNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
+            || window.__maliangNormalizeLang__(window.__MALIANG_DEFAULT_LANG__)
             || 'zh';
     };
     (function() {
-        window.__COW_DEFAULT_LANG__ = '{{COW_DEFAULT_LANG}}';
+        window.__MALIANG_DEFAULT_LANG__ = '{{MALIANG_DEFAULT_LANG}}';
         window.__GUEST_LANG__ = '{{GUEST_LANG}}';
         // Light unless the embedding site asks otherwise (?theme=dark|auto);
         // a visitor's own toggle still wins.
@@ -81,11 +81,11 @@
         if (wanted === 'auto') {
             wanted = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-        window.__COW_DEFAULT_THEME__ = wanted === 'dark' ? 'dark' : 'light';
-        var theme = localStorage.getItem('cow_theme') || window.__COW_DEFAULT_THEME__;
+        window.__MALIANG_DEFAULT_THEME__ = wanted === 'dark' ? 'dark' : 'light';
+        var theme = localStorage.getItem('cow_theme') || window.__MALIANG_DEFAULT_THEME__;
         var root = document.documentElement;
         if (theme === 'dark') root.classList.add('dark');
-        root.setAttribute('lang', window.__cowResolveLang__());
+        root.setAttribute('lang', window.__maliangResolveLang__());
         // The console's sheets hard-code its green; guest.css swaps it for
         // these where a page has its own color.
         var brand = window.__GUEST_BRAND__;

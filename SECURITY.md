@@ -4,7 +4,7 @@
 
 Please **do not** report security vulnerabilities through public issues, pull requests or discussions.
 
-Report them privately through GitHub instead: open the [Security tab](https://github.com/zhayujie/CowAgent/security) and click **Report a vulnerability**, or go directly to [this form](https://github.com/zhayujie/CowAgent/security/advisories/new).
+Report them privately through GitHub instead: open the [Security tab](/security) and click **Report a vulnerability**, or go directly to [this form](/security/advisories/new).
 
 A useful report includes:
 
@@ -21,7 +21,7 @@ Security fixes land on `master` and ship in the next release. Only the latest re
 
 ## Scope
 
-CowAgent runs an AI agent that can execute shell commands, write files and call external services on the host it runs on. The permission modes (`read-only`, `workspace-write`, `full-access`) are argument-level checks, not an OS sandbox. Reports are in scope when they show a way around a protection CowAgent claims to provide, for example:
+maliang runs an AI agent that can execute shell commands, write files and call external services on the host it runs on. The permission modes (`read-only`, `workspace-write`, `full-access`) are argument-level checks, not an OS sandbox. Reports are in scope when they show a way around a protection maliang claims to provide, for example:
 
 - running tools beyond the permission mode in force for a conversation;
 - reaching the web console or its APIs without the configured password;

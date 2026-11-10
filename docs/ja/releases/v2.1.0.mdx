@@ -1,9 +1,9 @@
 ---
 title: v2.1.0
-description: "CowAgent 2.1.0：多言語対応、Telegram・Discord・Slack・WeChat Customer Service チャネルの追加、CLI の操作性向上、MCP の強化と新モデル。"
+description: "maliang 2.1.0：多言語対応、Telegram・Discord・Slack・WeChat Customer Service チャネルの追加、CLI の操作性向上、MCP の強化と新モデル。"
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.1.0) | [中文](https://docs.cowagent.ai/zh/releases/v2.1.0)
+🌐 [English](./docs/releases/v2.1.0) | [中文](./docs/zh/releases/v2.1.0)
 
 ## 📱 接続チャネルの追加
 
@@ -14,14 +14,14 @@ description: "CowAgent 2.1.0：多言語対応、Telegram・Discord・Slack・We
 - **Slack Bot**：Slack ボットに接続、チームのワークフローに統合
 - **WeChat カスタマーサービス**：WeChat カスタマーサービスチャネルを新設。画像・ファイルの受信に対応し、自動で次のターンに統合。マルチメディアのコンテキスト体験が他チャネルと同等に。Thanks [@6vision](https://github.com/6vision) (#2840)
 
-ドキュメント：[チャネル概要](https://docs.cowagent.ai/ja/channels)
+ドキュメント：[チャネル概要](./docs/ja/channels)
 
 ## 🌍 国際化対応
 
-CowAgent は全世界の開発者に向けたエンドツーエンドの国際化フレームワークを導入。システム言語に応じて自動で適応します：
+maliang は全世界の開発者に向けたエンドツーエンドの国際化フレームワークを導入。システム言語に応じて自動で適応します：
 
 - **エンドツーエンドのローカライズ**：インストールガイド、CLI、ログとエラー、Agent システムプロンプトなどがローカライズに対応
-- **言語の自動判定**：デフォルトの `auto` モードはシステムロケールから判定。`config.json` の `cow_lang` で明示的に指定も可能。まずは英語と中国語に対応し、今後さらに多くの言語を拡充予定
+- **言語の自動判定**：デフォルトの `auto` モードはシステムロケールから判定。`config.json` の `maliang_lang` で明示的に指定も可能。まずは英語と中国語に対応し、今後さらに多くの言語を拡充予定
 - **コンソールでワンクリック切り替え**：Web コンソールでシステム言語をオンライン切り替え可能、リアルタイムで反映
 
 ## ⌨️ CLI インタラクション強化
@@ -31,20 +31,20 @@ CowAgent は全世界の開発者に向けたエンドツーエンドの国際�
 - **コマンドのあいまいマッチング**：コマンドの省略形や近似タイポの自動サジェストに対応。よく使うショートカットを内蔵し、設定ファイルでカスタムエイリアスも定義可能。Thanks [@lyteen](https://github.com/lyteen) (#2850)
 - **タスクのキャンセル対応**：実行中の Agent タスクを能動的に中断可能。Web 端に中止ボタンを追加、その他のチャネルでは `/cancel` を送信して中止
 
-ドキュメント：[CLI ガイド](https://docs.cowagent.ai/ja/cli/general)
+ドキュメント：[CLI ガイド](./docs/ja/cli/general)
 
 ## 🧩 MCP プロトコル強化
 
 MCP ツールが **Streamable HTTP** 伝送に新対応。既存の `stdio`・`sse` に加え、より多くの MCP サービスに互換となり、ストリーミング HTTP プロトコルを用いるリモートツールへ直接接続できます。
 
-ドキュメント：[MCP ツール](https://docs.cowagent.ai/ja/tools/mcp)
+ドキュメント：[MCP ツール](./docs/ja/tools/mcp)
 
 ## 🤖 モデル追加と最適化
 
 - **モデル新規追加**：`claude-opus-4-8`、Xiaomi `MiMo`
 - **モデル最適化**：一部モデルが返すツール呼び出し引数の JSON 解析に失敗する問題を修正 (#2823)
 
-ドキュメント：[モデル概要](https://docs.cowagent.ai/ja/models)
+ドキュメント：[モデル概要](./docs/ja/models)
 
 ## 🧠 記憶と検索の最適化
 
@@ -64,6 +64,6 @@ Thanks [@yangluxin613](https://github.com/yangluxin613) (#2832)
 
 ## 📦 アップグレード方法
 
-ソースコードデプロイは `cow update` でワンクリックアップグレード、または最新コードを手動で pull して再起動してください。詳細は [アップグレードガイド](https://docs.cowagent.ai/ja/guide/upgrade) を参照。
+ソースコードデプロイは `maliang update` でワンクリックアップグレード、または最新コードを手動で pull して再起動してください。詳細は [アップグレードガイド](./docs/ja/guide/upgrade) を参照。
 
-**リリース日**：2026.06.01 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.0.9...2.1.0)
+**リリース日**：2026.06.01 | [Full Changelog](/compare/2.0.9...2.1.0)

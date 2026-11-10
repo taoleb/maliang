@@ -1,15 +1,15 @@
 ---
 title: 项目架构
-description: "CowAgent 的系统架构与核心设计：通道、Agent 核心、模型、工具、技能、记忆与知识库等模块如何协作，以及 Agent 模式下从接收消息、理解意图、规划任务、调用工具到更新记忆并返回结果的完整工作流。"
+description: "maliang 的系统架构与核心设计：通道、Agent 核心、模型、工具、技能、记忆与知识库等模块如何协作，以及 Agent 模式下从接收消息、理解意图、规划任务、调用工具到更新记忆并返回结果的完整工作流。"
 ---
 
-CowAgent 是一个开箱即用的超级 AI 助理，也是一个完整的 Agent harness 框架，具备复杂任务规划、长期记忆、技能扩展、自主进化和多智能体协作等能力。
+maliang 是一个开箱即用的超级 AI 助理，也是一个完整的 Agent harness 框架，具备复杂任务规划、长期记忆、技能扩展、自主进化和多智能体协作等能力。
 
 ## 系统架构
 
-CowAgent 的整体架构由以下核心模块组成：
+maliang 的整体架构由以下核心模块组成：
 
-<img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/architecture/zh/architecture.jpg" alt="CowAgent Architecture" />
+<img src="architecture/zh/architecture.jpg" alt="maliang Architecture" />
 
 | 模块 | 说明 |
 | --- | --- |
@@ -22,11 +22,11 @@ CowAgent 的整体架构由以下核心模块组成：
 | **Skills** | 加载和管理 Skills，支持从 Skill Hub、GitHub 等一键安装，或通过对话创建自定义技能 |
 | **Models** | 模型层，统一接入 OpenAI、Claude、Gemini、DeepSeek、MiniMax、GLM、Qwen 等国内外主流大语言模型 |
 | **Channels** | 消息通道层，负责接收和发送消息，支持 Web 控制台、微信、飞书、钉钉、企微、公众号等，统一消息协议 |
-| **CLI** | 命令行系统，提供终端命令（`cow`）和对话命令（`/`），支持进程管理、技能安装、配置修改、知识库管理等操作 |
+| **CLI** | 命令行系统，提供终端命令（`maliang`）和对话命令（`/`），支持进程管理、技能安装、配置修改、知识库管理等操作 |
 
 ## Agent 模式
 
-启用 Agent 模式后，CowAgent 会以自主智能体的方式运行，核心工作流如下：
+启用 Agent 模式后，maliang 会以自主智能体的方式运行，核心工作流如下：
 
 1. **接收消息** — 通过通道接收用户输入
 2. **理解意图** — 分析任务需求和上下文
@@ -39,10 +39,10 @@ CowAgent 的整体架构由以下核心模块组成：
 
 ### 系统工作空间 {#system-workspace}
 
-Agent 的系统工作空间默认位于 `~/cow` 目录，用于存储系统提示词、记忆文件、技能文件等：
+Agent 的系统工作空间默认位于 `~/maliang` 目录，用于存储系统提示词、记忆文件、技能文件等：
 
 ```
-~/cow/
+~/maliang/
 ├── SYSTEM.md          # Agent system prompt
 ├── USER.md            # User profile
 ├── MEMORY.md          # Core memory
@@ -59,10 +59,10 @@ Agent 的系统工作空间默认位于 `~/cow` 目录，用于存储系统提�
     └── <agent-id>/    # Non-default agent's own workspace
 ```
 
-秘钥文件单独存储在 `~/.cow` 目录（出于安全考虑）：
+秘钥文件单独存储在 `~/.maliang` 目录（出于安全考虑）：
 
 ```
-~/.cow/
+~/.maliang/
 └── .env               # Secret keys for skills
 ```
 
@@ -72,9 +72,9 @@ Agent 的系统工作空间默认位于 `~/cow` 目录，用于存储系统提�
 
 ### 多智能体工作空间 {#multi-agent-workspace}
 
-组建 [Agent 团队](/zh/multi-agent/team) 后，每个 Agent 都拥有一套完整的工作空间。默认 Agent 沿用实例根目录 `~/cow`，其他成员则各自落在 `~/cow/agents/<agent-id>/` 下，从而在存储上区分「系统共享」「按成员隔离」「可选共享」三类：
+组建 [Agent 团队](/zh/multi-agent/team) 后，每个 Agent 都拥有一套完整的工作空间。默认 Agent 沿用实例根目录 `~/maliang`，其他成员则各自落在 `~/maliang/agents/<agent-id>/` 下，从而在存储上区分「系统共享」「按成员隔离」「可选共享」三类：
 
-- **系统共享**：秘钥文件（`~/.cow/.env`）和团队配置（`~/cow/agents/team.json`）由整个实例共用。
+- **系统共享**：秘钥文件（`~/.maliang/.env`）和团队配置（`~/maliang/agents/team.json`）由整个实例共用。
 - **按成员隔离**：每个 Agent 的核心文件（`SYSTEM.md`、`USER.md`、`AGENT.md`、`RULE.md`）、记忆（`MEMORY.md`、`memory/`）和产出文件都在各自工作空间内，成员之间互不可见。
 - **可选共享**：技能与知识库既可与团队共用同一套，也可为某个成员配置专属的，两种模式随时切换。
 
@@ -94,20 +94,20 @@ Agent 的系统工作空间默认位于 `~/cow` 目录，用于存储系统提�
 ```json
 {
   "agent": true,
-  "agent_workspace": "~/cow",
+  "agent_workspace": "~/maliang",
   "agent_max_context_tokens": 200000,
   "agent_max_context_turns": 30,
   "agent_max_steps": 100,
   "agent_permission_mode": "workspace-write",
   "enable_thinking": false,
-  "cow_lang": "auto"
+  "maliang_lang": "auto"
 }
 ```
 
 | 参数 | 说明 | 默认值 |
 | --- | --- | --- |
 | `agent` | 是否启用 Agent 模式 | `true` |
-| `agent_workspace` | 系统工作空间路径 | `~/cow` |
+| `agent_workspace` | 系统工作空间路径 | `~/maliang` |
 | `agent_max_context_tokens` | 最大上下文 token 数 | `200000` |
 | `agent_max_context_turns` | 最大上下文记忆轮次 | `30` |
 | `agent_max_steps` | 单次任务最大决策步数 | `100` |
@@ -115,4 +115,4 @@ Agent 的系统工作空间默认位于 `~/cow` 目录，用于存储系统提�
 | `enable_thinking` | 是否启用深度思考模式 | `false` |
 | `knowledge` | 是否启用个人知识库 | `true` |
 | `self_evolution_enabled` | 是否启用自主进化 | `false` |
-| `cow_lang` | 界面、命令文案、系统提示词等的语言，`auto` 自动检测，可设为 `zh` / `en` | `auto` |
+| `maliang_lang` | 界面、命令文案、系统提示词等的语言，`auto` 自动检测，可设为 `zh` / `en` | `auto` |

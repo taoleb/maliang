@@ -1,14 +1,14 @@
 version: '2.0'
 services:
-  chatgpt-on-wechat:
-    image: zhayujie/chatgpt-on-wechat
-    container_name: chatgpt-on-wechat
+  maliang:
+    image: DISABLED/maliang
+    container_name: maliang
     security_opt:
       - seccomp:unconfined
     ports:
       - "9899:9899"
     environment:
-      COW_LANG: 'auto'
+      MALIANG_LANG: 'auto'
       # Empty: web console only. Multiple: 'web, weixin, feishu'
       CHANNEL_TYPE: ''
       # Empty: deepseek-flash
@@ -52,9 +52,9 @@ services:
       SELF_EVOLUTION_ENABLED: 'True'
       # Writable data root (config.json, run.log, credentials) — kept separate
       # from the workspace so it survives image upgrades / container recreation.
-      COW_DATA_DIR: '/home/agent/.cow'
+      MALIANG_DATA_DIR: '/home/agent/.maliang'
     volumes:
       # Workspace: skills, memory, knowledge, mcp.json, conversation artifacts
-      - ./cow:/home/agent/cow
+      - ./maliang:/home/agent/maliang
       # Data root: config.json, run.log, credentials
-      - ./cow-data:/home/agent/.cow
+      - ./maliang-data:/home/agent/.maliang

@@ -6,13 +6,13 @@ and the mention is plain text in the message: the "receive message" docs show
 for the text of a mixed one. The message carries no mention list and no bot
 name, so the "@name" that opens the text is taken as the bot's or, when none
 does, one that ends it, as when a member types a command before the mention
-(``/cancel @CowAgent``).
+(``/cancel @maliang``).
 
 WecomBotMessage used to delete every "@" in a group message together with the
 non-space characters after it. The agent got e-mail addresses cut down to the
 part before the "@", links holding an "@" cut short, other members' mentions
 dropped and decorators or scoped npm packages deleted, with nothing logged. A
-team member named after the bot ("@CowAgent @Ops ...") was deleted as well, so
+team member named after the bot ("@maliang @Ops ...") was deleted as well, so
 it never took the turn as docs/multi-agent/team.mdx describes.
 """
 import json
@@ -29,19 +29,19 @@ from channel.wecom_bot.wecom_bot_message import WecomBotMessage
 from plugins import Event, EventContext
 
 _old_plugin_path = plugins.instance.current_plugin_path
-plugins.instance.current_plugin_path = os.path.join(os.getcwd(), "plugins", "cow_cli")
+plugins.instance.current_plugin_path = os.path.join(os.getcwd(), "plugins", "maliang_cli")
 try:
-    import plugins.cow_cli.cow_cli  # noqa: F401
+    import plugins.maliang_cli.maliang_cli  # noqa: F401
 finally:
     plugins.instance.current_plugin_path = _old_plugin_path
 
-CowCliPlugin = plugins.instance.plugins["COW_CLI"]
+MaliangCliPlugin = plugins.instance.plugins["MALIANG_CLI"]
 
-# What a member typed before or after "@CowAgent"; each one has an "@" of its own.
+# What a member typed before or after "@maliang"; each one has an "@" of its own.
 TEXTS = [
     pytest.param("把周报发到 zhang.san@example.com", id="email"),
     pytest.param("总结一下 https://medium.com/@karpathy/software-2-0-a64152b37c35", id="link"),
-    pytest.param("克隆 git@github.com:zhayujie/CowAgent.git 看看", id="git-url"),
+    pytest.param("克隆 git@github.com:DISABLED/maliang.git 看看", id="git-url"),
     pytest.param("提醒 @李四 明天交周报", id="member-mention"),
     pytest.param("Python 里 @staticmethod 和 @classmethod 有什么区别", id="decorators"),
     pytest.param("npm install @types/node 报错了", id="scoped-package"),
@@ -72,14 +72,14 @@ def _text_item(content):
 
 @pytest.mark.parametrize("text", TEXTS)
 def test_a_group_text_keeps_everything_after_the_bot_mention(text):
-    msg = WecomBotMessage(_body("@CowAgent " + text), is_group=True)
+    msg = WecomBotMessage(_body("@maliang " + text), is_group=True)
 
     assert msg.content == text
 
 
 @pytest.mark.parametrize("text", TEXTS)
 def test_a_group_text_keeps_everything_before_a_closing_bot_mention(text):
-    msg = WecomBotMessage(_body(text + " @CowAgent"), is_group=True)
+    msg = WecomBotMessage(_body(text + " @maliang"), is_group=True)
 
     assert msg.content == text
 
@@ -90,20 +90,20 @@ def test_a_group_text_keeps_everything_before_a_closing_bot_mention(text):
 ])
 def test_a_bot_mention_that_ends_the_message_is_removed(text):
     """A member can type the request first and the mention after it."""
-    msg = WecomBotMessage(_body(text + " @CowAgent"), is_group=True)
+    msg = WecomBotMessage(_body(text + " @maliang"), is_group=True)
 
     assert msg.content == text
 
 
 def test_a_closing_mention_stays_when_the_bot_mention_opens_the_message():
-    msg = WecomBotMessage(_body("@CowAgent 提醒一下 @李四"), is_group=True)
+    msg = WecomBotMessage(_body("@maliang 提醒一下 @李四"), is_group=True)
 
     assert msg.content == "提醒一下 @李四"
 
 
 @pytest.mark.parametrize("text", [
-    pytest.param("@CowAgent" + chr(0x2005) + "hello", id="opening"),
-    pytest.param("hello" + chr(0x2005) + "@CowAgent", id="closing"),
+    pytest.param("@maliang" + chr(0x2005) + "hello", id="opening"),
+    pytest.param("hello" + chr(0x2005) + "@maliang", id="closing"),
 ])
 def test_a_mention_next_to_a_four_per_em_space_is_removed_too(text):
     msg = WecomBotMessage(_body(text), is_group=True)
@@ -127,7 +127,7 @@ def media_dir(monkeypatch, tmp_path):
 
 
 def test_a_mixed_group_message_keeps_the_text_after_the_bot_mention(media_dir):
-    items = [_text_item("@CowAgent 把这张图发给 li.si@example.com"), IMAGE]
+    items = [_text_item("@maliang 把这张图发给 li.si@example.com"), IMAGE]
     msg = WecomBotMessage(_body(items, msgtype="mixed"), is_group=True)
 
     assert msg.content.split("\n") == [
@@ -137,7 +137,7 @@ def test_a_mixed_group_message_keeps_the_text_after_the_bot_mention(media_dir):
 
 
 def test_a_mixed_group_message_can_end_with_the_bot_mention(media_dir):
-    items = [_text_item("把这张图发给 li.si@example.com"), IMAGE, _text_item("@CowAgent")]
+    items = [_text_item("把这张图发给 li.si@example.com"), IMAGE, _text_item("@maliang")]
     msg = WecomBotMessage(_body(items, msgtype="mixed"), is_group=True)
 
     assert msg.content.split("\n") == [
@@ -147,7 +147,7 @@ def test_a_mixed_group_message_can_end_with_the_bot_mention(media_dir):
 
 
 def test_only_the_first_text_of_a_mixed_message_opens_with_the_bot_mention(media_dir):
-    items = [_text_item("@CowAgent"), IMAGE, _text_item("@李四 你看这张图")]
+    items = [_text_item("@maliang"), IMAGE, _text_item("@李四 你看这张图")]
     msg = WecomBotMessage(_body(items, msgtype="mixed"), is_group=True)
 
     assert msg.content.split("\n")[0] == "@李四 你看这张图"
@@ -183,7 +183,7 @@ def _receive(channel, text):
 
 @pytest.mark.parametrize("mode", ["websocket", "webhook"])
 def test_the_agent_gets_the_whole_request(wecom_channel, mode):
-    body = _body("@CowAgent 把周报发到 zhang.san@example.com")
+    body = _body("@maliang 把周报发到 zhang.san@example.com")
     if mode == "websocket":
         wecom_channel._handle_msg_callback({"headers": {"req_id": ""}, "body": body})
     else:
@@ -195,7 +195,7 @@ def test_the_agent_gets_the_whole_request(wecom_channel, mode):
 @pytest.fixture
 def config_json(monkeypatch, tmp_path):
     """The config.json that /config writes, in a data dir of its own."""
-    monkeypatch.setenv("COW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(tmp_path))
     # /config reloads the config after writing it; keep the suite's own.
     monkeypatch.setattr(config, "load_config", lambda: None)
     path = tmp_path / "config.json"
@@ -210,13 +210,13 @@ def config_json(monkeypatch, tmp_path):
 def test_a_config_command_typed_before_the_bot_mention_saves_the_value(
     wecom_channel, config_json, command, key, value
 ):
-    _receive(wecom_channel, command + " @CowAgent")
+    _receive(wecom_channel, command + " @maliang")
     [context] = wecom_channel.produced
     event = EventContext(
         Event.ON_HANDLE_CONTEXT, {"context": context, "reply": None, "channel": wecom_channel}
     )
 
-    CowCliPlugin().on_handle_context(event)
+    MaliangCliPlugin().on_handle_context(event)
 
     assert json.loads(config_json.read_text(encoding="utf-8"))[key] == value
 
@@ -234,7 +234,7 @@ def test_a_cancel_command_typed_before_the_bot_mention_skips_the_queue(wecom_cha
     cancelled = []
     wecom_channel._handle_cancel_command = lambda context, session_id: cancelled.append(context.content)
 
-    _receive(wecom_channel, "/cancel @CowAgent")
+    _receive(wecom_channel, "/cancel @maliang")
 
     assert cancelled == ["/cancel"]
     assert wecom_channel.sessions == {}, "/cancel must not be queued"
@@ -242,12 +242,12 @@ def test_a_cancel_command_typed_before_the_bot_mention_skips_the_queue(wecom_cha
 
 @pytest.fixture
 def team_channel(wecom_channel, tmp_path):
-    """The channel instance is bound to the CowAgent Agent, with Ops on its team."""
+    """The channel instance is bound to the maliang Agent, with Ops on its team."""
     from agent.registry import AgentProfile, AgentRegistry, set_agent_registry
 
     set_agent_registry(AgentRegistry(
         [
-            AgentProfile(id="agent-abc", name="CowAgent", workspace=str(tmp_path / "cow")),
+            AgentProfile(id="agent-abc", name="maliang", workspace=str(tmp_path / "maliang")),
             AgentProfile(id="ops", name="Ops", workspace=str(tmp_path / "ops")),
         ],
         "agent-abc",
@@ -259,7 +259,7 @@ def team_channel(wecom_channel, tmp_path):
 
 
 def test_a_teammate_named_after_the_bot_mention_takes_the_turn(team_channel):
-    _receive(team_channel, "@CowAgent @Ops 查一下日志")
+    _receive(team_channel, "@maliang @Ops 查一下日志")
 
     [context] = team_channel.produced
     assert context.content == "@Ops 查一下日志"

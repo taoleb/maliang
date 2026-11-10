@@ -26,10 +26,10 @@ def test_slack_uploads_a_local_video():
         chat_postMessage=lambda **kw: posts.append(kw),
     )
 
-    ch._do_send(Reply(ReplyType.VIDEO, "file:///srv/cow/tmp/clip.mp4"), "C1", "1.0")
+    ch._do_send(Reply(ReplyType.VIDEO, "file:///srv/maliang/tmp/clip.mp4"), "C1", "1.0")
 
     assert posts == []
-    assert uploads[0]["file"] == "/srv/cow/tmp/clip.mp4"
+    assert uploads[0]["file"] == "/srv/maliang/tmp/clip.mp4"
 
 
 def test_telegram_sends_a_local_video_as_video(monkeypatch, tmp_path):
@@ -103,9 +103,9 @@ def test_feishu_uploads_a_local_video_as_media(monkeypatch):
     ch._upload_video_url = upload
 
     # No known video suffix: the reply type is what says this is a video.
-    ch.send(Reply(ReplyType.VIDEO, "file:///srv/cow/tmp/clip"), _feishu_context())
+    ch.send(Reply(ReplyType.VIDEO, "file:///srv/maliang/tmp/clip"), _feishu_context())
 
-    assert uploads == [("file:///srv/cow/tmp/clip", "token")]
+    assert uploads == [("file:///srv/maliang/tmp/clip", "token")]
     assert len(posts) == 1, posts
     body = posts[0]["json"]
     assert body["msg_type"] == "media", body
@@ -119,7 +119,7 @@ def test_feishu_still_sends_a_plain_file(monkeypatch):
     ch._upload_video_url = lambda *a: uploads.append(a)
     ch._upload_file_url = lambda url, token, file_name="": "fk-2"
 
-    ch.send(Reply(ReplyType.FILE, "file:///srv/cow/notes.txt"), _feishu_context())
+    ch.send(Reply(ReplyType.FILE, "file:///srv/maliang/notes.txt"), _feishu_context())
 
     assert uploads == []
     assert len(posts) == 1, posts
@@ -161,18 +161,18 @@ def _dingtalk_channel():
 def test_dingtalk_uploads_a_local_video_as_video():
     ch, context, uploads, sent = _dingtalk_channel()
 
-    ch.send(Reply(ReplyType.VIDEO, "file:///srv/cow/tmp/clip.mp4"), context)
+    ch.send(Reply(ReplyType.VIDEO, "file:///srv/maliang/tmp/clip.mp4"), context)
 
-    assert uploads == [("file:///srv/cow/tmp/clip.mp4", "video")], uploads
+    assert uploads == [("file:///srv/maliang/tmp/clip.mp4", "video")], uploads
     assert [key for key, _ in sent] == ["sampleVideo"], sent
 
 
 def test_dingtalk_still_sends_a_plain_file():
     ch, context, uploads, sent = _dingtalk_channel()
 
-    ch.send(Reply(ReplyType.FILE, "file:///srv/cow/notes.txt"), context)
+    ch.send(Reply(ReplyType.FILE, "file:///srv/maliang/notes.txt"), context)
 
-    assert uploads == [("file:///srv/cow/notes.txt", "file")], uploads
+    assert uploads == [("file:///srv/maliang/notes.txt", "file")], uploads
     assert [key for key, _ in sent] == ["sampleFile"], sent
 
 

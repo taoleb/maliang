@@ -1,5 +1,5 @@
 """LinkAI voice: Whisper ASR + multi-vendor TTS (OpenAI / Doubao / Baidu)
-proxied via https://docs.link-ai.tech/platform/api/voice-speech."""
+proxied via (upstream-docs-removed)/platform/api/voice-speech."""
 import datetime
 import os
 import random

@@ -1,4 +1,4 @@
-"""cow start/stop/restart/status/logs - Process management commands."""
+"""maliang start/stop/restart/status/logs - Process management commands."""
 
 import os
 import sys
@@ -35,7 +35,7 @@ def _is_terminal_only() -> bool:
 
 
 def _get_pid_file():
-    return os.path.join(get_project_root(), ".cow.pid")
+    return os.path.join(get_project_root(), ".maliang.pid")
 
 
 def _get_log_file():
@@ -117,10 +117,10 @@ def _remove_pid():
 @click.option("--foreground", "-f", is_flag=True, help="Run in foreground (don't daemonize)")
 @click.option("--no-logs", is_flag=True, help="Don't tail logs after starting")
 def start(foreground, no_logs):
-    """Start CowAgent."""
+    """Start maliang."""
     pid = _read_pid()
     if pid:
-        click.echo(f"CowAgent is already running (PID: {pid}).")
+        click.echo(f"maliang is already running (PID: {pid}).")
         return
 
     root = get_project_root()
@@ -138,7 +138,7 @@ def start(foreground, no_logs):
         click.echo("Detected terminal-only channel, starting in foreground...")
 
     if foreground:
-        click.echo("Starting CowAgent in foreground...")
+        click.echo("Starting maliang in foreground...")
         if _IS_WIN:
             sys.exit(subprocess.call([python, app_py], cwd=root))
         else:
@@ -146,7 +146,7 @@ def start(foreground, no_logs):
             os.execv(python, [python, app_py])
     else:
         log_file = _get_log_file()
-        click.echo("Starting CowAgent...")
+        click.echo("Starting maliang...")
 
         popen_kwargs = dict(cwd=root)
         if _IS_WIN:
@@ -167,7 +167,7 @@ def start(foreground, no_logs):
                 **popen_kwargs,
             )
         _write_pid(proc.pid)
-        click.echo(click.style(f"✓ CowAgent started (PID: {proc.pid})", fg="green"))
+        click.echo(click.style(f"✓ maliang started (PID: {proc.pid})", fg="green"))
         click.echo(f"  Logs: {log_file}")
 
         if not no_logs:
@@ -177,13 +177,13 @@ def start(foreground, no_logs):
 
 @click.command()
 def stop():
-    """Stop CowAgent."""
+    """Stop maliang."""
     pid = _read_pid()
     if not pid:
-        click.echo("CowAgent is not running.")
+        click.echo("maliang is not running.")
         return
 
-    click.echo(f"Stopping CowAgent (PID: {pid})...")
+    click.echo(f"Stopping maliang (PID: {pid})...")
     try:
         _kill_pid(pid)
         for _ in range(30):
@@ -202,14 +202,14 @@ def stop():
         pass
 
     _remove_pid()
-    click.echo(click.style("✓ CowAgent stopped.", fg="green"))
+    click.echo(click.style("✓ maliang stopped.", fg="green"))
 
 
 @click.command()
 @click.option("--no-logs", is_flag=True, help="Don't tail logs after restarting")
 @click.pass_context
 def restart(ctx, no_logs):
-    """Restart CowAgent."""
+    """Restart maliang."""
     ctx.invoke(stop)
     time.sleep(1)
     ctx.invoke(start, no_logs=no_logs)
@@ -303,13 +303,13 @@ def self_restart():
     """Restart from inside the running agent (detached; survives parent death).
 
     Intended to be invoked by the agent itself (e.g. via bash after editing its
-    own code), not by users — so it is hidden from `cow help`. Unlike `restart`,
+    own code), not by users — so it is hidden from `maliang help`. Unlike `restart`,
     the actual stop+start runs in a detached relay process that outlives the
     agent's bash child, which would otherwise die together with the main app it
     kills.
     """
     if _IS_WIN:
-        click.echo("self-restart is not supported on Windows; use `cow restart`.", err=True)
+        click.echo("self-restart is not supported on Windows; use `maliang restart`.", err=True)
         sys.exit(1)
 
     root = get_project_root()
@@ -340,7 +340,7 @@ def self_restart():
 @click.command()
 @click.pass_context
 def update(ctx):
-    """Update CowAgent and restart."""
+    """Update maliang and restart."""
     root = get_project_root()
 
     # 1. Stop service first so git pull won't conflict with running code
@@ -364,23 +364,23 @@ def update(ctx):
     req_file = os.path.join(root, "requirements.txt")
 
     if _IS_WIN:
-        # On Windows, `cow.exe` (this process) locks the exe file, so
+        # On Windows, `maliang.exe` (this process) locks the exe file, so
         # `pip install -e .` fails with WinError 5.  Write a small .bat
-        # helper that waits for cow.exe to exit, then installs & starts.
+        # helper that waits for maliang.exe to exit, then installs & starts.
         bat = os.path.join(root, "_cow_update.bat")
         lines = [
             "@echo off",
             "chcp 65001 >nul",
-            "echo Waiting for cow.exe to exit...",
+            "echo Waiting for maliang.exe to exit...",
             "timeout /t 3 /nobreak >nul",
         ]
         if os.path.exists(req_file):
             lines.append('echo Installing dependencies...')
             lines.append(f'"{python}" -m pip install -r requirements.txt -q')
         lines += [
-            "echo Reinstalling cow CLI...",
+            "echo Reinstalling maliang CLI...",
             f'"{python}" -m pip install -e . -q',
-            "echo Starting CowAgent...",
+            "echo Starting maliang...",
             f'"{python}" -m cli.cli start --no-logs',
             "echo.",
             "echo Update complete. You can close this window.",
@@ -391,7 +391,7 @@ def update(ctx):
             f.write("\n".join(lines) + "\n")
 
         subprocess.Popen(
-            ["cmd.exe", "/c", "start", "CowAgent Update", "/wait", bat],
+            ["cmd.exe", "/c", "start", "maliang Update", "/wait", bat],
             cwd=root,
         )
         click.echo(click.style(
@@ -405,7 +405,7 @@ def update(ctx):
                 [python, "-m", "pip", "install", "-r", "requirements.txt", "-q"],
                 cwd=root,
             )
-        click.echo("Reinstalling cow CLI...")
+        click.echo("Reinstalling maliang CLI...")
         subprocess.call(
             [python, "-m", "pip", "install", "-e", ".", "-q"],
             cwd=root,
@@ -419,26 +419,26 @@ def update(ctx):
 
 @click.command()
 def status():
-    """Show CowAgent running status."""
+    """Show maliang running status."""
     from cli import __version__
     from cli.utils import load_config_json, get_cli_language, get_project_root
 
     # get_cli_language() calls ensure_sys_path(), which adds the project root
     # to sys.path. Import `common` only AFTER that, otherwise it fails with
-    # ModuleNotFoundError when `cow` runs from outside the project dir.
-    get_cli_language()  # resolve cow_lang so i18n.t reflects config
+    # ModuleNotFoundError when `maliang` runs from outside the project dir.
+    get_cli_language()  # resolve maliang_lang so i18n.t reflects config
     from common import i18n
     _t = i18n.t
 
     pid = _read_pid()
     if pid:
-        click.echo(click.style(f"● CowAgent is running (PID: {pid})", fg="green"))
+        click.echo(click.style(f"● maliang is running (PID: {pid})", fg="green"))
     else:
-        click.echo(click.style("● CowAgent is not running", fg="red"))
+        click.echo(click.style("● maliang is not running", fg="red"))
 
     click.echo(_t(f"  版本: v{__version__}", f"  Version: v{__version__}"))
 
-    # Project path bound to this `cow` CLI — disambiguates which checkout the
+    # Project path bound to this `maliang` CLI — disambiguates which checkout the
     # command actually controls when the user has multiple clones.
     project_root = get_project_root()
     click.echo(_t(f"  路径: {project_root}", f"  Path: {project_root}"))
@@ -460,7 +460,7 @@ def status():
 @click.option("--follow", "-f", is_flag=True, help="Follow log output")
 @click.option("--lines", "-n", default=50, help="Number of lines to show")
 def logs(follow, lines):
-    """View CowAgent logs."""
+    """View maliang logs."""
     log_file = _get_log_file()
     if not os.path.exists(log_file):
         click.echo("No log file found.")

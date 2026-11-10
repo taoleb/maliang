@@ -16,11 +16,11 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  DOCKERHUB_IMAGE: zhayujie/chatgpt-on-wechat
+  DOCKERHUB_IMAGE: DISABLED/maliang
 
 jobs:
   build-and-push-image:
-    if: github.repository == 'zhayujie/CowAgent'
+    if: github.repository == 'DISABLED/maliang'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,10 +51,10 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            zhayujie/chatgpt-on-wechat
-            zhayujie/cowagent
-            ${{ env.REGISTRY }}/zhayujie/chatgpt-on-wechat
-            ${{ env.REGISTRY }}/zhayujie/cowagent
+            DISABLED/maliang
+            UPSTREAM_AUTHOR/maliang
+            ${{ env.REGISTRY }}/DISABLED/maliang
+            ${{ env.REGISTRY }}/UPSTREAM_AUTHOR/maliang
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
@@ -73,7 +73,7 @@ jobs:
 
       - uses: actions/delete-package-versions@v4
         with:
-          package-name: 'chatgpt-on-wechat'
+          package-name: 'maliang'
           package-type: 'container'
           min-versions-to-keep: 10
           delete-only-untagged-versions: 'true'

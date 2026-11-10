@@ -45,7 +45,7 @@ if "linkai" not in sys.modules:
 cloud_client = importlib.import_module("common.cloud_client")
 feishu_channel = importlib.import_module("channel.feishu.feishu_channel")
 
-ORIGINAL = {"agent_workspace": "/srv/cow", "web_password": "hunter2"}
+ORIGINAL = {"agent_workspace": "/srv/maliang", "web_password": "hunter2"}
 
 
 def _an_existing_config(tmp_path):
@@ -63,7 +63,7 @@ def _leftovers(tmp_path):
 def _a_disk_that_fills_up_mid_write(obj, fp, **kwargs):
     """Stand-in for ``json.dump`` that gets part of the document out and only
     then reports ENOSPC, the way a real full disk behaves."""
-    fp.write('{\n    "agent_workspace": "/srv/cow",\n    "web_password": "hun')
+    fp.write('{\n    "agent_workspace": "/srv/maliang",\n    "web_password": "hun')
     fp.flush()
     raise OSError(errno.ENOSPC, "No space left on device")
 
@@ -118,8 +118,8 @@ def test_a_cloud_save_that_succeeds_replaces_the_file(tmp_path, monkeypatch):
 
 
 def test_a_cloud_save_lands_in_the_data_root(tmp_path, monkeypatch):
-    """The desktop build sets COW_DATA_DIR=~/.cow and the docker image points it
-    at /home/agent/.cow, and ``load_config`` reads the data root -- so a
+    """The desktop build sets MALIANG_DATA_DIR=~/.maliang and the docker image points it
+    at /home/agent/.maliang, and ``load_config`` reads the data root -- so a
     cloud-pushed config must be written where it will be read back. The save
     used to go to ``get_root()`` (the bundle), which on those deployments is a
     directory nobody reads: it either holds no config.json at all -- the push
@@ -130,9 +130,9 @@ def test_a_cloud_save_lands_in_the_data_root(tmp_path, monkeypatch):
     data_config = data_root / "config.json"
     data_config.write_text(json.dumps(ORIGINAL, indent=4, ensure_ascii=False), encoding="utf-8")
 
-    # Drive the real resolver: whatever it answers for COW_DATA_DIR is where a
+    # Drive the real resolver: whatever it answers for MALIANG_DATA_DIR is where a
     # save has to land, exactly as on a desktop or docker deployment.
-    monkeypatch.setenv("COW_DATA_DIR", str(data_root))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(data_root))
     client = cloud_client.CloudClient.__new__(cloud_client.CloudClient)
 
     client._save_config_to_file({"model": "gpt-4o"})

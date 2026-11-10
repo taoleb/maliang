@@ -16,8 +16,8 @@ from unittest.mock import patch
 
 from agent.tools.browser.chrome_launcher import ChromeLauncher
 
-PROFILE = r"C:\Users\someone/.cow/browser_profile"
-SPACED_PROFILE = r"C:\Users\some one/.cow/browser_profile"
+PROFILE = r"C:\Users\someone/.maliang/browser_profile"
+SPACED_PROFILE = r"C:\Users\some one/.maliang/browser_profile"
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
 

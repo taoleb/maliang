@@ -737,7 +737,7 @@ function startSSE(requestId, loadingEl, timestamp, replayItems, resume) {
                 scrollChatToBottom();
 
             } else if (item.type === 'phase') {
-                // Coarse progress (e.g. cow install-browser); must not close SSE (unlike "done")
+                // Coarse progress (e.g. maliang install-browser); must not close SSE (unlike "done")
                 ensureBotEl();
                 const wrap = document.createElement('div');
                 wrap.className = 'text-xs sm:text-sm text-slate-600 dark:text-slate-400 border-l-2 border-primary-400 pl-2 py-1 my-0.5';
@@ -1082,7 +1082,7 @@ function startPolling() {
                     // only notify for an ordinary missed reply.
                     if (!isSchedulerRequest(rid)) {
                     showTaskNotification(
-                        sessionTitleOf(sessionId) || 'CowAgent',
+                        sessionTitleOf(sessionId) || 'maliang',
                         firstLineSnippet(data.content),
                             sessionId,
                             activeAgentId

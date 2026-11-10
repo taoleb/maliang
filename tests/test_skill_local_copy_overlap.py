@@ -31,7 +31,7 @@ def _invoke(tmp_path, source, workspace):
         "PATH": os.environ.get("PATH", ""),
         "HOME": str(home),
         "USERPROFILE": str(home),
-        "COW_DATA_DIR": str(data),
+        "MALIANG_DATA_DIR": str(data),
         "PYTHONPATH": os.pathsep.join([str(REPO), *sys.path]),
         "PYTHONDONTWRITEBYTECODE": "1",
     }

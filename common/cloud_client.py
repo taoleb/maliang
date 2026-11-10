@@ -1495,18 +1495,18 @@ class CloudClient(LinkAIClient):
             return
 
         with _acting_user(user_id), self._chat_identity(agent_id, user_id, session_id):
-            # Intercept cow/slash commands before the agent runs
+            # Intercept maliang/slash commands before the agent runs
             try:
                 from plugins import PluginManager
                 mgr = PluginManager()
-                instance = mgr.instances.get("COW_CLI")
+                instance = mgr.instances.get("MALIANG_CLI")
                 if instance and hasattr(instance, "execute"):
                     result = instance.execute(query, session_id=session_id)
                     if result is not None:
                         send_chunk_fn({"chunk_type": "content", "delta": result, "segment_id": 0})
                         return
             except Exception as e:
-                logger.warning(f"[CloudClient] cow_cli intercept failed: {e}")
+                logger.warning(f"[CloudClient] maliang_cli intercept failed: {e}")
 
             svc = self.chat_service
             if svc is None:
@@ -1935,7 +1935,7 @@ def get_website_base_url(workspace_dir: str = "") -> str:
 
 
 # Subdir under websites/ used by the send tool
-COW_SEND_WEB_SUBDIR = "cow-send"
+MALIANG_SEND_WEB_SUBDIR = "maliang-send"
 
 
 def _file_digest(path: str) -> str:
@@ -1949,7 +1949,7 @@ def _file_digest(path: str) -> str:
 
 
 def copy_send_file(src_path: str, workspace_root: str) -> str:
-    """Return a public URL for *src_path*, copying it into ``websites/cow-send/``.
+    """Return a public URL for *src_path*, copying it into ``websites/maliang-send/``.
 
     A file already under the published dir is linked in place. Copies are
     named by content hash, so sending the same file again reuses the copy,
@@ -1975,7 +1975,7 @@ def copy_send_file(src_path: str, workspace_root: str) -> str:
     except ValueError:
         pass
 
-    send_dir = os.path.join(publish_dir, COW_SEND_WEB_SUBDIR)
+    send_dir = os.path.join(publish_dir, MALIANG_SEND_WEB_SUBDIR)
     ext = os.path.splitext(src_path)[1].lower()
     if len(ext) > 12 or not ext.replace(".", "").isalnum():
         ext = ""
@@ -2000,7 +2000,7 @@ def copy_send_file(src_path: str, workspace_root: str) -> str:
                 os.remove(tmp_path)
             except OSError:
                 pass
-    return f"{base}/{COW_SEND_WEB_SUBDIR}/{dest_name}"
+    return f"{base}/{MALIANG_SEND_WEB_SUBDIR}/{dest_name}"
 
 
 def _display_path(path: str) -> str:
@@ -2067,7 +2067,7 @@ def _claim_connection(deployment_id: str) -> bool:
     import re
     import tempfile
     safe_id = re.sub(r"[^A-Za-z0-9_.-]", "_", str(deployment_id))
-    path = os.path.join(tempfile.gettempdir(), f"cow-console-{safe_id}.lock")
+    path = os.path.join(tempfile.gettempdir(), f"maliang-console-{safe_id}.lock")
     try:
         handle = open(path, "a+")
     except OSError as e:

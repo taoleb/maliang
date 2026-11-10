@@ -334,7 +334,7 @@ export function setHiddenThemes(ids: string[] | undefined): void {
   hiddenBuiltins = (ids ?? []).filter((id) => id !== DEFAULT_THEME_ID)
 }
 
-// Runtime registry: built-ins first, then whatever was loaded from ~/.cow.
+// Runtime registry: built-ins first, then whatever was loaded from ~/.maliang.
 let runtimeThemes: Theme[] = BUILTIN_THEMES
 
 // ---- Normalizing loaded themes -----------------------------

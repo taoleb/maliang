@@ -1,6 +1,6 @@
 ---
 title: Kimi
-description: "Configure Kimi (Moonshot) in CowAgent: chat with native image understanding; once moonshot_api_key is set the vision tool uses Kimi automatically. Set up from the web console."
+description: "Configure Kimi (Moonshot) in maliang: chat with native image understanding; once moonshot_api_key is set the vision tool uses Kimi automatically. Set up from the web console."
 ---
 
 Kimi is provided by Moonshot and supports both text chat and image understanding. The `kimi-k3.1-pro`, `kimi-k3` and `kimi-k2.x` series natively support vision.
@@ -21,7 +21,7 @@ Kimi is provided by Moonshot and supports both text chat and image understanding
 | Parameter | Description |
 | --- | --- |
 | `model` | Can be `kimi-k3.1-pro`, `kimi-k3.1-pro-highspeed`, `kimi-k3`, `kimi-k2.7-code`, `kimi-k2.7-code-highspeed`, `kimi-k2.6`, `kimi-k2.5`, `kimi-k2`, `moonshot-v1-8k`, `moonshot-v1-32k`, `moonshot-v1-128k` |
-| `moonshot_api_key` | Create one in the [Moonshot Console](https://platform.kimi.com?aff=cowagent) |
+| `moonshot_api_key` | Create one in the [Moonshot Console](https://platform.kimi.com?aff=maliang) |
 | `moonshot_base_url` | Optional, defaults to `https://api.moonshot.cn/v1` |
 
 `kimi-k3.1-pro` is the default recommendation with a 1M-token context window; `kimi-k3.1-pro-highspeed` offers the same intelligence at roughly 2-3x the output speed. The K3 / K3.1 series always think; tune the depth with `reasoning_effort`: `low` / `high` / `max` (default `max`).

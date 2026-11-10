@@ -24,9 +24,9 @@ import threading
 from common.channel_registry import get_channel_manager, set_channel_manager  # noqa: F401 - re-exported for `from app import get_channel_manager`
 
 # Desktop mode: a lighter runtime for the packaged Electron client. Plugins are
-# loaded in a background thread (so command plugins like cow_cli/godcmd work
+# loaded in a background thread (so command plugins like maliang_cli/godcmd work
 # without slowing startup), while MCP warmup is still skipped to keep it fast.
-DESKTOP_MODE = os.environ.get("COW_DESKTOP") == "1"
+DESKTOP_MODE = os.environ.get("MALIANG_DESKTOP") == "1"
 
 
 def _parse_channel_type(raw) -> list:
@@ -244,7 +244,7 @@ class ChannelManager:
             if first_start:
                 if DESKTOP_MODE:
                     # Load plugins in the background so command plugins
-                    # (cow_cli / godcmd, e.g. /status, #help) work in the
+                    # (maliang_cli / godcmd, e.g. /status, #help) work in the
                     # desktop client, without blocking web-service readiness.
                     threading.Thread(
                         target=PluginManager().load_plugins, daemon=True
@@ -497,10 +497,10 @@ def sigterm_handler_wrap(_signo):
 
 
 def _register_pid_file():
-    """Record this process in the pid file the ``cow`` CLI reads.
+    """Record this process in the pid file the ``maliang`` CLI reads.
 
     An instance started directly (``python app.py``, e.g. as a container entry
-    point) otherwise looks stopped to ``cow start`` / ``restart`` /
+    point) otherwise looks stopped to ``maliang start`` / ``restart`` /
     ``self-restart``, which then launch a second instance beside it instead of
     replacing it. Only an absent or stale file is claimed, so a pid written by
     the CLI or by another live instance is left alone, and on exit the file is
@@ -671,7 +671,7 @@ def _migrate_conversations():
 
 def _warn_if_legacy_workspace_data_exists():
     """
-    Warn if the hardcoded ~/cow default holds data that agent_workspace
+    Warn if the hardcoded ~/maliang default holds data that agent_workspace
     doesn't - e.g. after changing agent_workspace without moving the old
     directory's contents over. The new workspace would otherwise look
     empty even though old data still exists, with no indication why.
@@ -680,7 +680,7 @@ def _warn_if_legacy_workspace_data_exists():
         from common.state_dir import state_root_str
         from common.utils import expand_path
         workspace_root = state_root_str()
-        legacy_root = expand_path("~/cow")
+        legacy_root = expand_path("~/maliang")
         # samefile checks filesystem identity, so case-insensitive filesystems
         # (default on Windows and macOS) are handled correctly - normcase
         # alone isn't enough, since it only folds case on Windows. Falls back

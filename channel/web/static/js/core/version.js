@@ -3,7 +3,7 @@
    scope; see channel/web/README.md before changing the load order. */
 
 /* =====================================================================
-   CowAgent Console - Main Application Script
+   maliang Console - Main Application Script
    ===================================================================== */
 
 // =====================================================================
@@ -14,7 +14,7 @@ let APP_VERSION = '';
 // =====================================================================
 // One-click update — driven from the sidebar version menu
 // =====================================================================
-const GITHUB_RELEASES_URL = 'https://github.com/zhayujie/CowAgent/releases';
+const GITHUB_RELEASES_URL = '/releases';
 let UPDATE_META = { version: '', install_kind: 'unknown', update_supported: false, unsupported_reason: '' };
 let UPDATE_CHECK = null;
 let _updateChecking = false;
@@ -157,7 +157,7 @@ function checkForConsoleUpdate() {
         .finally(() => { _updateChecking = false; });
 }
 
-// "立即更新": reuse the cow-update path (git pull + pip + restart) via the
+// "立即更新": reuse the maliang-update path (git pull + pip + restart) via the
 // detached worker, then poll progress and auto-reconnect when it comes back.
 function startConsoleUpdate() {
     if (_updateRunning) return;

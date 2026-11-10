@@ -13,7 +13,7 @@ The Web console and the desktop app both support themes (skins). They share one 
 Click a theme to apply it. Themes are independent of light / dark mode, and every theme covers both.
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-custom-theme.png" alt="Theme list" width="800" />
+  <img src="screenshots/en/web-console-custom-theme.png" alt="Theme list" width="800" />
 </Frame>
 
 Built-in color themes:
@@ -28,14 +28,14 @@ Built-in color themes:
 
 Click "Custom theme…" at the bottom of the theme list to open the custom theme dialog, then drag a theme `.zip` or theme folder onto it. You can also click it to browse instead (in the Windows app, pick the `theme.json` inside a folder to import that folder). The imported theme is applied right away.
 
-On import CowAgent checks that:
+On import maliang checks that:
 
 - `theme.json` sits at the root of the package, or inside its single top-level folder
 - Only `theme.json` and images (`jpg` / `png` / `webp` / `gif` / `svg`) are copied; other files are ignored
 - Each file is at most 16MB and the whole theme at most 64MB
 - An existing theme with the same ID is only replaced after you confirm; an ID taken by a built-in theme is renamed automatically
 
-Imported themes live in `~/cow/system/themes/` (`system/themes/` under your Agent workspace if you moved it), one folder per theme; the custom theme dialog shows the path at the bottom. Delete a folder to remove a theme, or copy a theme folder in directly; it shows up the next time you open the theme list. In the desktop app, "Open themes folder" in that dialog opens it for you. When CowAgent runs on a server, the folder is on the machine running CowAgent.
+Imported themes live in `~/maliang/system/themes/` (`system/themes/` under your Agent workspace if you moved it), one folder per theme; the custom theme dialog shows the path at the bottom. Delete a folder to remove a theme, or copy a theme folder in directly; it shows up the next time you open the theme list. In the desktop app, "Open themes folder" in that dialog opens it for you. When maliang runs on a server, the folder is on the machine running maliang.
 
 <Note>
 The Web console does not support `shape` (corner radius, fonts) yet; colors, wallpapers and logos all work.
@@ -137,7 +137,7 @@ For different wallpapers per appearance, drop the top-level `wallpaper` and set 
 
 ## Let the Agent Create a Theme
 
-The Agent can build a theme for you. It writes the theme to `~/cow/system/themes/`, and if image generation is configured it can generate the wallpaper and logo too.
+The Agent can build a theme for you. It writes the theme to `~/maliang/system/themes/`, and if image generation is configured it can generate the wallpaper and logo too.
 
 - **Start in one click**: click "Start" next to "Let the Agent create one" in the custom theme dialog. It opens a new chat with the prompt filled in, so you only add the style you want at the end and send it.
 - **Generate from reference images**: attach reference images when you send, such as a character, illustration or photo you like. The Agent builds the wallpaper and logo on them, keeping the character and art style consistent, and takes the theme colors from them as well.
@@ -149,7 +149,7 @@ You can also send the prompt below in any chat, with the style you want on the l
 Create a theme for this app.
 
 Requirements:
-1. Create theme.json in ~/cow/system/themes/<theme-id>/ with a lowercase, hyphenated id, shaped like {"specVersion": 1, "id", "name", "light": {"colors": {...}}, "dark": {"colors": {...}}}.
+1. Create theme.json in ~/maliang/system/themes/<theme-id>/ with a lowercase, hyphenated id, shaped like {"specVersion": 1, "id", "name", "light": {"colors": {...}}, "dark": {"colors": {...}}}.
 2. Fill these keys in both light and dark colors: accent, accentHover, accentActive, accentSoft, accentContrast, bubbleUserBg, bubbleUserText, bgBase, bgSurface, bgSurface2, bgElevated, bgInset, bgInset2, textPrimary, textSecondary, textTertiary, textDisabled, borderDefault, borderStrong, borderSubtle. Keep backgrounds low-saturation, text easy to read, and white text on the accent legible.
 3. If you can generate images, use an image generation skill to make two images without text in the same folder:
    - wallpaper.jpg: a 16:9 wallpaper with the subject toward the right, moderately bright rather than dark; add "wallpaper": {"image": "wallpaper.jpg", "overlayOpacity": 0.25, "glass": true} at the top level of theme.json, shared by both appearances. If I ask for different wallpapers per appearance, generate wallpaper-light.jpg and wallpaper-dark.jpg instead, skip the top-level wallpaper, and add a wallpaper to light and to dark pointing to each image

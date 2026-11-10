@@ -3,18 +3,18 @@ title: Install Skills
 description: "Install skills with one command from the Skill Hub, GitHub, ClawHub or any URL (zip or SKILL.md), or add them from the market or by local upload with a preview in the web console and desktop app."
 ---
 
-CowAgent supports installing skills from [Cow Skill Hub](https://skills.cowagent.ai/), GitHub, ClawHub, LinkAI, and any URL via a unified `install` command. Use `/skill install` in chat or `cow skill install` in the terminal.
+maliang supports installing skills from [Skill Hub](https://EXAMPLE-DISABLED-NO-SKILL-HUB/), GitHub, ClawHub, LinkAI, and any URL via a unified `install` command. Use `/skill install` in chat or `maliang skill install` in the terminal.
 
 You can also add skills from the Capabilities page in the web console and desktop app. Click **Add skill**, then either:
 
-- **From a market**: pick Cow Skill Hub or ClawHub and enter the skill name, or pick GitHub and enter a repository or folder URL.
+- **From a market**: pick Skill Hub or ClawHub and enter the skill name, or pick GitHub and enter a repository or folder URL.
 - **Upload**: drop in a `.zip` / `.tar.gz` archive, a `SKILL.md`, or a whole skill folder.
 
 The skill is fetched first and shown for review (its `SKILL.md`, file list, and whether it would replace an installed skill). Nothing is installed until you confirm.
 
 ## From the Skill Hub
 
-Browse all available skills at [skills.cowagent.ai](https://skills.cowagent.ai/) and install by name:
+Browse all available skills at [skills.maliang.local](https://EXAMPLE-DISABLED-NO-SKILL-HUB/) and install by name:
 
 ```text
 /skill list --remote
@@ -47,20 +47,20 @@ ClawHub skill names are only unique per publisher. When several publishers share
 
 ## From LinkAI
 
-All public resources on [LinkAI](https://link-ai.tech/console?utm_source=cowagent&utm_medium=docs&utm_campaign=skills-install) (10k+ apps / workflows / plugins), as well as your own resources (apps, workflows, knowledge bases, databases, plugins), can be installed via:
+All public resources on [LinkAI](https://link-ai.tech/console?utm_source=maliang&utm_medium=docs&utm_campaign=skills-install) (10k+ apps / workflows / plugins), as well as your own resources (apps, workflows, knowledge bases, databases, plugins), can be installed via:
 
 ```text
 /skill install linkai:<code>
 ```
 
-> Every resource created on the LinkAI platform has a unique `code`. Find it on each resource's page in the [console](https://link-ai.tech/console?utm_source=cowagent&utm_medium=docs&utm_campaign=skills-install).
+> Every resource created on the LinkAI platform has a unique `code`. Find it on each resource's page in the [console](https://link-ai.tech/console?utm_source=maliang&utm_medium=docs&utm_campaign=skills-install).
 
 ## From URL
 
 Supports zip archives and SKILL.md file links:
 
 ```text
-/skill install https://cdn.link-ai.tech/skills/pptx.zip
+/skill install (upstream-cdn-removed)/skills/pptx.zip
 /skill install https://example.com/path/to/SKILL.md
 ```
 
@@ -75,5 +75,5 @@ Supports zip archives and SKILL.md file links:
 ```
 
 <Tip>
-  All commands above work in the terminal by replacing `/skill` with `cow skill`. See [Skill Management Commands](/cli/skill) for full documentation.
+  All commands above work in the terminal by replacing `/skill` with `maliang skill`. See [Skill Management Commands](/cli/skill) for full documentation.
 </Tip>

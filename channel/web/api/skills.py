@@ -120,7 +120,7 @@ class _SkillStaging:
     """Skills fetched for preview, held until confirmed, discarded, or stale."""
 
     TTL_SECONDS = 30 * 60
-    DIR_PREFIX = "cow-skill-preview-"
+    DIR_PREFIX = "maliang-skill-preview-"
 
     def __init__(self):
         self._lock = threading.Lock()

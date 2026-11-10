@@ -1,4 +1,4 @@
-"""`cow skill list` accepts -r as well as --remote, like the in-chat /skill list."""
+"""`maliang skill list` accepts -r as well as --remote, like the in-chat /skill list."""
 
 from unittest.mock import patch
 

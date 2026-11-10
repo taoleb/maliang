@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import apiClient from '../api/client'
 import { t, tf } from '../i18n'
+import Mascot from './Mascot'
 
 interface LoginGateProps {
   // Called once the password is accepted (auth cookie set), so the app can
@@ -40,9 +41,9 @@ const LoginGate: React.FC<LoginGateProps> = ({ onAuthenticated }) => {
   }
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-50 dark:bg-[#111111]">
+    <div className="h-screen w-screen flex items-center justify-center" style={{ backgroundColor: '#FDF9F2' }}>
       <form onSubmit={submit} className="text-center space-y-6 max-w-md px-8 w-full">
-        <img src="./logo.jpg" alt="CowAgent" className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-primary-500/20" />
+        <Mascot className="h-40 w-auto" />
         <div className="space-y-2">
           <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('login_title')}</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">{t('login_desc')}</p>

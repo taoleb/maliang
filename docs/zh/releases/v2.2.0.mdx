@@ -1,23 +1,23 @@
 ---
 title: v2.2.0
-description: CowAgent 2.2.0：新增能力中心，优化多 Agent 协作，Web 控制台重构，模型缓存命中率提升，全面加强稳定性与安全
+description: maliang 2.2.0：新增能力中心，优化多 Agent 协作，Web 控制台重构，模型缓存命中率提升，全面加强稳定性与安全
 ---
 
-🌐 [English](https://docs.cowagent.ai/releases/v2.2.0) | [中文](https://docs.cowagent.ai/zh/releases/v2.2.0)
+🌐 [English](./docs/releases/v2.2.0) | [中文](./docs/zh/releases/v2.2.0)
 
 ## 🧩 能力中心
 
 原「技能」菜单升级为「能力」，在 Web 控制台和桌面客户端中统一管理内置工具、MCP 工具与技能：
 
-- **技能安装**：支持从 Cow Skill Hub、GitHub、ClawHub 安装，或上传压缩包、`SKILL.md`、文件夹；技能会先预览内容，确认后才正式安装。
+- **技能安装**：支持从 Skill Hub、GitHub、ClawHub 安装，或上传压缩包、`SKILL.md`、文件夹；技能会先预览内容，确认后才正式安装。
 - **MCP 配置**：支持在界面中新增、编辑、删除 MCP 服务，覆盖 stdio、SSE、Streamable HTTP 三种传输方式。提供表单与 JSON 两种编辑模式，可直接粘贴一个或多个 `mcpServers` 配置；保存时自动检测连接并展示工具列表，修改在下一条消息生效，无需重启。Thanks @tsumon (#3155)
 - **工具检索诊断**：对话中可查看 MCP 工具检索的排序结果与回退原因，便于排查工具未被选中的问题。Thanks @zhongjunqi7657 (#3165)
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/5b73e7d71fbe31e3a88c8d130f4e605b.png" alt="能力中心" width="800" />
+  <img src="(upstream-cdn-removed)/doc/5b73e7d71fbe31e3a88c8d130f4e605b.png" alt="能力中心" width="800" />
 </Frame>
 
-相关文档：[MCP 工具](https://docs.cowagent.ai/zh/tools/mcp)、[安装技能](https://docs.cowagent.ai/zh/skills/install)
+相关文档：[MCP 工具](./docs/zh/tools/mcp)、[安装技能](./docs/zh/skills/install)
 
 ## 🤝 多 Agent 协作优化
 
@@ -31,7 +31,7 @@ description: CowAgent 2.2.0：新增能力中心，优化多 Agent 协作，Web 
   - 修复部分接口仅从请求体读取参数时未正确定位 Agent 的问题（Thanks @c020627 #3177）。
 
 <Frame>
-  <img src="https://cdn.link-ai.tech/doc/b97b586ca9cd008286f321526b48476f.png" alt="任务协同独立展示" width="800" />
+  <img src="(upstream-cdn-removed)/doc/b97b586ca9cd008286f321526b48476f.png" alt="任务协同独立展示" width="800" />
 </Frame>
 
 ## 🖥 控制台升级
@@ -51,7 +51,7 @@ description: CowAgent 2.2.0：新增能力中心，优化多 Agent 协作，Web 
 - **文档分块**：修复较长 Markdown 文档中首个标题之前的内容未被索引、标题跳级时内容被重复索引的问题，`/memory status` 会提示重建索引（Thanks @Bdysj #3309）。
 - **会话加载**：打开会话时不再触发记忆库扫描和索引重建，新会话的首次对话响应更快。
 
-相关文档：[记忆](https://docs.cowagent.ai/zh/memory/index)
+相关文档：[记忆](./docs/zh/memory/index)
 
 ## 📐 上下文与 Token 成本
 
@@ -109,10 +109,10 @@ description: CowAgent 2.2.0：新增能力中心，优化多 Agent 协作，Web 
 - **备份**：支持将备份输出到不同的文件系统（Thanks @zyc2022 #3200、@chen1070109514 #3246）；恢复多 Agent 备份时沿用本机现有的 Agent 工作区路径（Thanks @Lesereingrape #3319）。
 - **插件**：配置为空或不完整时插件仍可正常启动（Thanks @c020627 #3224）；Midjourney 图片序号输入有误时给出提示（Thanks @Lesereingrape #3291）；角色插件自定义角色未填写描述时返回帮助信息（Thanks @Lesereingrape #3296）；管理员命令设置插件优先级、切换模型时参数有误会给出提示（Thanks @Lesereingrape #3303, #3305）；`plugins.json` 中单个插件配置项缺失或格式错误时自动补全默认值，不再导致全部插件加载失败（Thanks @Lesereingrape #3314）；修复总结插件的文件命名与句柄关闭问题（Thanks @c020627 #3215）。
 - **Agent 管理**：删除 Agent 时同步清理其项目数据（Thanks @c020627 #3216）。
-- **Agent Mail**：Docker Compose 新增可选的 Agent Mail 配置，启用后 Agent 可收发、搜索和管理邮件，详见 [Agent Mail](https://docs.cowagent.ai/zh/extensions/agent-mail)（Thanks @tsumon #3236）。
+- **Agent Mail**：Docker Compose 新增可选的 Agent Mail 配置，启用后 Agent 可收发、搜索和管理邮件，详见 [Agent Mail](./docs/zh/extensions/agent-mail)（Thanks @tsumon #3236）。
 - **消息处理**：修复消息上下文参数在不同会话间共享的问题（Thanks @c020627 #3222）；文件缓存有效期按最近一个文件计算（Thanks @c020627 #3218）；修复限流器阻塞程序退出、速率为 0 时异常的问题（Thanks @aniruddhaadak80 #3285）；不支持的回复类型会在错误提示中显示原始类型，插件丢弃回复后语音会话不再报错（Thanks @Bdysj #3306, #3307）；修复非默认 Agent 下 `#reset`、飞书消息撤回和删除会话无法清除排队消息的问题（Thanks @Lesereingrape #3316）。
 - **浏览器工具**：浏览器驱动连接断开后可自动恢复，不再持续报错。
-- **桌面客户端**：修复 macOS 无法弹出麦克风权限请求的问题（Thanks @cowagent #3181）；修复 Windows 快捷方式导致启动崩溃、后端日志重复写入的问题。
+- **桌面客户端**：修复 macOS 无法弹出麦克风权限请求的问题（Thanks @contributor #3181）；修复 Windows 快捷方式导致启动崩溃、后端日志重复写入的问题。
 - **工程质量**：新增完整测试流程与代码检查门禁（Thanks @fuxicodex #3166, #3203）；完善测试隔离（Thanks @c020627 #3169, #3201、@rudycelekli #3261）。
 - **文档**：
   - 补充静态 Bearer 认证的 MCP 配置说明（Thanks @ct-jaryn #3227）
@@ -120,7 +120,7 @@ description: CowAgent 2.2.0：新增能力中心，优化多 Agent 协作，Web 
 
 ## 📦 升级方式
 
-- **源码部署**：执行 `cow update` 一键升级，或在 Web 控制台侧边栏版本菜单中一键更新，也可手动拉取代码后重启。详见 [更新升级文档](https://docs.cowagent.ai/zh/guide/upgrade)。
-- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](https://cowagent.ai/zh/download/) 获取最新版本。
+- **源码部署**：执行 `maliang update` 一键升级，或在 Web 控制台侧边栏版本菜单中一键更新，也可手动拉取代码后重启。详见 [更新升级文档](./docs/zh/guide/upgrade)。
+- **桌面客户端**：可在客户端内自动检查并一键更新，或前往 [下载页](./zh/download/) 获取最新版本。
 
-**发布日期**：2026.09.30 | [Full Changelog](https://github.com/zhayujie/CowAgent/compare/2.1.9...2.2.0)
+**发布日期**：2026.09.30 | [Full Changelog](/compare/2.1.9...2.2.0)

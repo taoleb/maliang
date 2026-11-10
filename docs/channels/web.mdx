@@ -1,9 +1,9 @@
 ---
 title: Web Console
-description: "The web console is CowAgent's default channel: chat in your browser, manage models, skills, memory and channels online, protect it with a password, and enable an OpenAI-compatible chat API."
+description: "The web console is maliang's default channel: chat in your browser, manage models, skills, memory and channels online, protect it with a password, and enable an OpenAI-compatible chat API."
 ---
 
-The Web Console is CowAgent's default channel. It runs automatically once started, letting you chat with the Agent in a browser and manage models, skills, memory, channels, and other configuration online.
+The Web Console is maliang's default channel. It runs automatically once started, letting you chat with the Agent in a browser and manage models, skills, memory, channels, and other configuration online.
 
 ## Configuration
 
@@ -51,7 +51,7 @@ Under **Config → Integrations → Addresses** in the console you can change:
 - **Listen address**: the IP and port the service listens on. `127.0.0.1` is reachable from this machine only; `0.0.0.0` lets other devices on the local network or the internet connect and requires an access password first. After saving, the service switches to the new address without a restart, and goes back to the old one if the new one cannot be used. While other devices can connect, this machine's local network addresses are shown below.
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-integrations.png" alt="Integrations" width="800" />
+  <img src="screenshots/en/web-console-integrations.png" alt="Integrations" width="800" />
 </Frame>
 
 ## HTTPS and Domain Access
@@ -63,10 +63,10 @@ To serve the console on a domain with HTTPS, use one of the two setups below.
 ```nginx
 server {
     listen 443 ssl;
-    server_name cow.example.com;
+    server_name maliang.example.com;
 
-    ssl_certificate     /etc/letsencrypt/live/cow.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/cow.example.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/maliang.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/maliang.example.com/privkey.pem;
 
     location / {
         proxy_pass http://127.0.0.1:9899;
@@ -88,8 +88,8 @@ server {
 ```json
 {
   "web_https_enabled": true,
-  "web_ssl_certfile": "/etc/letsencrypt/live/cow.example.com/fullchain.pem",
-  "web_ssl_keyfile": "/etc/letsencrypt/live/cow.example.com/privkey.pem"
+  "web_ssl_certfile": "/etc/letsencrypt/live/maliang.example.com/fullchain.pem",
+  "web_ssl_keyfile": "/etc/letsencrypt/live/maliang.example.com/privkey.pem"
 }
 ```
 
@@ -102,7 +102,7 @@ server {
 A missing or unreadable certificate stops startup with an error instead of falling back to HTTP.
 
 <Note>
-  The console must be served at the root path; use a dedicated subdomain rather than a sub-path such as `/cow/`. If you use MCP servers with OAuth, also set `"mcp_oauth_redirect_base": "https://cow.example.com"`.
+  The console must be served at the root path; use a dedicated subdomain rather than a sub-path such as `/maliang/`. If you use MCP servers with OAuth, also set `"mcp_oauth_redirect_base": "https://maliang.example.com"`.
 </Note>
 
 ## Chat API
@@ -115,7 +115,7 @@ The Web Console's port also serves an OpenAI-compatible chat API, `/v1/chat/comp
 
 Supports streaming output with real-time display of the Agent's reasoning process and tool calls, providing intuitive observation of the Agent's decision-making. Deep thinking can be toggled via configuration or the "Agent Configuration" switch in the console.
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227180120.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227180120.png" />
 
 #### Multi-Session Management
 
@@ -129,7 +129,7 @@ The chat interface supports multi-session management. All session records are pe
 - **Workspace / Model / Permission**: Set a workspace, model, and permission mode for the current session below the input box. When you work across several projects, past sessions are grouped by project automatically. See [Architecture - Project Workspace](/intro/architecture#project-workspace)
 
 <Frame caption="Sessions grouped by workspace, with a per-session workspace and model">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-workspace-project-demo.png" style={{ maxWidth: "800px" }} />
+  <img src="screenshots/en/web-console-workspace-project-demo.png" style={{ maxWidth: "800px" }} />
 </Frame>
 
 #### Permission Modes
@@ -137,47 +137,47 @@ The chat interface supports multi-session management. All session records are pe
 Each session can run under its own permission mode, controlling how far the Agent can reach into files and commands: read-only, workspace-write, or full-access. When a tool call is blocked, the hint is clickable so you can adjust the permission on the spot.
 
 <Frame caption="Per-session permission modes: read-only, workspace-write, full-access">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-access-mode.png" style={{ maxWidth: "600px" }} />
+  <img src="screenshots/en/web-console-access-mode.png" style={{ maxWidth: "600px" }} />
 </Frame>
 
 ### Artifacts
 
 Collects the pages, documents, images and videos your agents create on one timeline, with preview, pinning, and a jump back to the original conversation. The page is hidden by default; show it from the [Custom Menu](/extensions/custom-menu) editor:
 
-<img width="850" src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-artifacts.png" />
+<img width="850" src="screenshots/en/web-console-artifacts.png" />
 
 ### Model Management
 
 Manage text, image, voice, and embedding model configurations for different providers online — no need to edit config files manually:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260521212949.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260521212949.png" />
 
 ### Skill Management
 
 View and manage Agent skills (Skills) online:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173403.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173403.png" />
 
 ### Memory Management
 
 View and manage Agent memory online:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173349.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173349.png" />
 
 ### Channel Management
 
 Manage connected channels online with real-time connect/disconnect operations:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173331.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173331.png" />
 
 ### Scheduled Tasks
 
 View and manage scheduled tasks online, including one-time tasks, fixed intervals, and Cron expressions:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173704.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173704.png" />
 
 ### Logs
 
 View Agent runtime logs in real time for monitoring and troubleshooting:
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173514.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173514.png" />

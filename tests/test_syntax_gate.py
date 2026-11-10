@@ -154,7 +154,7 @@ class TestJsonWithComments(_Base):
         self.assertIn("not valid JSON", str(result.result))
 
     def test_comment_is_still_refused_in_strict_json(self):
-        # npm, like CowAgent loading its own config.json, rejects a comment.
+        # npm, like maliang loading its own config.json, rejects a comment.
         path = self._seed("package.json", '{\n  "name": "app"\n}\n')
         result = self.edit.execute(
             {"path": path, "oldText": '"name": "app"', "newText": '"name": "app" // renamed later'}

@@ -52,7 +52,7 @@ def _channel(uploads, tmp_path, monkeypatch):
 def test_remote_file_reply_is_downloaded_and_uploaded(server, tmp_path, monkeypatch):
     uploads = []
     ch = _channel(uploads, tmp_path, monkeypatch)
-    reply = Reply(ReplyType.FILE, f"{server}/cow-send/3f9a1c.pdf")
+    reply = Reply(ReplyType.FILE, f"{server}/maliang-send/3f9a1c.pdf")
     reply.file_name = "report.pdf"
 
     ch.send(reply, {"slack_channel": "C1"})

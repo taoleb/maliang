@@ -11,7 +11,7 @@ import { prefillChatInput } from '../store/draftStore'
 import { startNewChat } from '../lib/newChat'
 
 const themesDocsUrl = () =>
-  `${getLang() === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai'}/extensions/custom-theme`
+  `${getLang() === 'zh' ? './docs/zh' : 'https://docs.maliang.local'}/extensions/custom-theme`
 
 // "Custom theme" dialog: import a package (drop a .zip / folder, or pick one) or
 // hand off to the Agent with a ready-made prompt to design a new theme.
@@ -81,7 +81,7 @@ const ThemeAddModal: React.FC<{
   const askAgent = async () => {
     if (!(await guardDocEditors())) return
     if (!(await useWorkspaceStore.getState().guardUnsavedEdit())) return
-    const dir = (await window.electronAPI?.getThemesDir?.()) || '~/cow/system/themes'
+    const dir = (await window.electronAPI?.getThemesDir?.()) || '~/maliang/system/themes'
     onClose()
     startNewChat()
     prefillChatInput(tf('theme_agent_prompt', { dir }))

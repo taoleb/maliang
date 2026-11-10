@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "CowAgent",
-  "description": "CowAgent - AI Super Assistant powered by LLMs, with autonomous task planning, long-term memory, skills system, and multi-channel deployment.",
+  "name": "maliang",
+  "description": "maliang - AI Super Assistant powered by LLMs, with autonomous task planning, long-term memory, skills system, and multi-channel deployment.",
   "theme": "mint",
   "appearance": {
     "default": "light"
@@ -20,25 +20,25 @@
     "links": [
       {
         "label": "官网",
-        "href": "https://cowagent.ai/"
+        "href": "./"
       },
       {
         "label": "下载",
-        "href": "https://cowagent.ai/download/"
+        "href": ""
       },
       {
         "label": "博客",
-        "href": "https://cowagent.ai/zh/blog/"
+        "href": "./zh/blog/"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/zhayujie/CowAgent"
+        "href": ""
       }
     ]
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/zhayujie/CowAgent"
+      "github": ""
     }
   },
   "redirects": [
@@ -72,19 +72,19 @@
           "links": [
             {
               "label": "Website",
-              "href": "https://cowagent.ai/"
+              "href": "./"
             },
             {
               "label": "Download",
-              "href": "https://cowagent.ai/download/"
+              "href": ""
             },
             {
               "label": "Blog",
-              "href": "https://cowagent.ai/blog/"
+              "href": "./blog/"
             },
             {
               "label": "GitHub",
-              "href": "https://github.com/zhayujie/CowAgent"
+              "href": ""
             }
           ]
         },
@@ -354,19 +354,19 @@
           "links": [
             {
               "label": "官网",
-              "href": "https://cowagent.ai/?lang=zh"
+              "href": "./?lang=zh"
             },
             {
               "label": "下载",
-              "href": "https://cowagent.ai/zh/download/"
+              "href": "./zh/download/"
             },
             {
               "label": "博客",
-              "href": "https://cowagent.ai/zh/blog/"
+              "href": "./zh/blog/"
             },
             {
               "label": "GitHub",
-              "href": "https://github.com/zhayujie/CowAgent"
+              "href": ""
             }
           ]
         },
@@ -636,19 +636,19 @@
           "links": [
             {
               "label": "ウェブサイト",
-              "href": "https://cowagent.ai/"
+              "href": "./"
             },
             {
               "label": "ダウンロード",
-              "href": "https://cowagent.ai/download/"
+              "href": ""
             },
             {
               "label": "ブログ",
-              "href": "https://cowagent.ai/blog/"
+              "href": "./blog/"
             },
             {
               "label": "GitHub",
-              "href": "https://github.com/zhayujie/CowAgent"
+              "href": ""
             }
           ]
         },

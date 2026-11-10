@@ -1,6 +1,6 @@
 ---
 title: DeepSeek
-description: "CowAgent で DeepSeek を設定します。Agent モードで推奨されるコストパフォーマンスの高いベンダーで、テキスト対話とタスク計画に対応し、V4 シリーズでは思考モードも使えます。"
+description: "maliang で DeepSeek を設定します。Agent モードで推奨されるコストパフォーマンスの高いベンダーで、テキスト対話とタスク計画に対応し、V4 シリーズでは思考モードも使えます。"
 ---
 
 DeepSeek は現在 Agent モードでデフォルト推奨されているベンダーの 1 つで、コストパフォーマンスの高いテキスト対話とタスクプランニング能力を主力としています。
@@ -65,8 +65,8 @@ DeepSeek は現在 Agent モードでデフォルト推奨されているベン�
 
 ### 動作の補足
 
-- **サンプリングパラメータ**：思考モードでは `temperature`、`top_p`、`presence_penalty`、`frequency_penalty` がサーバ側で無視されます（エラーにはなりません）。CowAgent は自動的にこれらの送信をスキップします。
-- **マルチターンのツール呼び出し**：履歴にツール呼び出しが含まれる場合、DeepSeek はすべての assistant メッセージで `reasoning_content` を返却することを要求します。CowAgent は返却ロジックを自動的に処理しており、ターンをまたいで思考スイッチを切り替えてもエラーにはなりません。
+- **サンプリングパラメータ**：思考モードでは `temperature`、`top_p`、`presence_penalty`、`frequency_penalty` がサーバ側で無視されます（エラーにはなりません）。maliang は自動的にこれらの送信をスキップします。
+- **マルチターンのツール呼び出し**：履歴にツール呼び出しが含まれる場合、DeepSeek はすべての assistant メッセージで `reasoning_content` を返却することを要求します。maliang は返却ロジックを自動的に処理しており、ターンをまたいで思考スイッチを切り替えてもエラーにはなりません。
 
 <Tip>
   デフォルトでは `deepseek-flash`（V4.1 Flash、ネイティブマルチモーダル）を使用します。複雑なタスクには `deepseek-v4-pro` を使用でき、深い推論が必要な場合は `enable_thinking` をオンにできます。

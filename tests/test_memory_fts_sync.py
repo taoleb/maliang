@@ -152,7 +152,7 @@ def test_public_mutations_and_legacy_upgrade_preserve_fts(tmp_path, language, ac
     (data / 'config.json').write_text('{}', encoding='utf-8')
     env = {
         'PATH': os.environ.get('PATH', ''),
-        'HOME': str(home), 'USERPROFILE': str(home), 'COW_DATA_DIR': str(data),
+        'HOME': str(home), 'USERPROFILE': str(home), 'MALIANG_DATA_DIR': str(data),
         'PYTHONPATH': os.pathsep.join([str(REPO), *sys.path]),
         'PYTHONNOUSERSITE': '1', 'PYTHONDONTWRITEBYTECODE': '1',
     }

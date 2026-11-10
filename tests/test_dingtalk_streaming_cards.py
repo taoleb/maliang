@@ -1,6 +1,6 @@
 """DingTalk streaming AI cards and markdown subset.
 
-Covers item 2 of https://github.com/zhayujie/CowAgent/issues/3156.
+Covers item 2 of /issues/3156.
 dingtalk_stream is stubbed so the suite does not need the optional SDK.
 """
 import sys

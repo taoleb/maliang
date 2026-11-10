@@ -201,7 +201,7 @@ class GuestPageHandler:
         brand = _page_brand(state)
         language = ((state.effective or {}).get("language") or "") if state is not None else ""
         html = template.render("templates/guest/page.html")
-        return (html.replace("{{COW_DEFAULT_LANG}}", i18n.get_language())
+        return (html.replace("{{MALIANG_DEFAULT_LANG}}", i18n.get_language())
                 .replace("{{GUEST_LANG}}", language)
                 .replace("{{GUEST_BRAND}}", json.dumps(brand).replace("<", "\\u003c"))
                 .replace("{{GUEST_LOGO}}", brand["logo"] or "/assets/logo.jpg")

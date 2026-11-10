@@ -64,12 +64,12 @@ class TaskStore:
         Initialize task store
         
         Args:
-            store_path: Path to tasks.json file. Defaults to ~/cow/scheduler/tasks.json
+            store_path: Path to tasks.json file. Defaults to ~/maliang/scheduler/tasks.json
         """
         if store_path is None:
-            # Default to ~/cow/scheduler/tasks.json
+            # Default to ~/maliang/scheduler/tasks.json
             home = expand_path("~")
-            store_path = os.path.join(home, "cow", "scheduler", "tasks.json")
+            store_path = os.path.join(home, "maliang", "scheduler", "tasks.json")
         
         self.store_path = store_path
         self.lock = _lock_for_path(store_path)

@@ -19,7 +19,7 @@ Go to **Config → Integrations → Guest pages** and turn on the switch.
 Click **New guest page**, fill it in and save. The link is created right away.
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-editor.png" alt="Edit guest page" width="800" />
+  <img src="screenshots/en/guest-share-editor.png" alt="Edit guest page" width="800" />
 </Frame>
 
 ### Basics
@@ -50,13 +50,13 @@ Icon and theme color, used on the page and on the embedded chat button.
 Copy the link from the page list to share it. Links look like `https://<public address>/share/<token>`.
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-page-dark.png" alt="Guest page" width="800" />
+  <img src="screenshots/en/guest-share-page-dark.png" alt="Guest page" width="800" />
 </Frame>
 
-To embed the page in your site, click **Embed** on the page. Add your site (e.g. `https://example.com`) under **Sites allowed to embed**, then put the code in your page's `<body>`. A chat button appears in the bottom-right corner, and the dialog shows a live preview. Try it live on the [CowAgent website](https://cowagent.ai/?chat=open).
+To embed the page in your site, click **Embed** on the page. Add your site (e.g. `https://example.com`) under **Sites allowed to embed**, then put the code in your page's `<body>`. A chat button appears in the bottom-right corner, and the dialog shows a live preview. Try it live on the [maliang website](./?chat=open).
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-embed.png" alt="Embed in a page" width="800" />
+  <img src="screenshots/en/guest-share-embed.png" alt="Embed in a page" width="800" />
 </Frame>
 
 ```html
@@ -79,4 +79,4 @@ Add `data-color` to change the button color, `data-position="left"` to move it t
 
 - The guest Agent can only reach the current conversation's scratch folder and the references and skills you picked. It never sees real paths and cannot step outside these folders.
 - It cannot run commands. Network tools only reach the public internet; local and private network addresses are blocked.
-- Page settings live in `~/cow/guests/<page id>/`, so you can also ask your own Agent to change them. Changes that widen access, such as adding tools or references, turning on the network or removing the password, only take effect after you click **Confirm** in the console.
+- Page settings live in `~/maliang/guests/<page id>/`, so you can also ask your own Agent to change them. Changes that widen access, such as adding tools or references, turning on the network or removing the password, only take effect after you click **Confirm** in the console.

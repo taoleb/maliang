@@ -465,7 +465,7 @@ def _build_memory_section(
     if not memory_manager:
         return []
 
-    # In project mode, memory files must be addressed absolutely under ~/cow.
+    # In project mode, memory files must be addressed absolutely under ~/maliang.
     p = _state_path_prefix(workspace_dir, project_dir)
     mem_md = f"{p}MEMORY.md"
     mem_dir = f"{p}memory"
@@ -618,7 +618,7 @@ def _build_knowledge_section(
     except Exception:
         return []
 
-    # Anchor knowledge paths to ~/cow when a project cwd is active, and to the
+    # Anchor knowledge paths to ~/maliang when a project cwd is active, and to the
     # shared root when this Agent reads the shared copy.
     kb = _knowledge_base_path(workspace_dir, project_dir)
 
@@ -766,12 +766,12 @@ def _build_workspace_section(
             f"   - ❌ Wrong: using a relative path for files in other directories (if not inside `{workspace_dir}`)",
             "",
             "2. **Accessing other directories**: to reach directories outside the workspace (project code, system files), **you must use absolute paths**",
-            "   - ✅ Correct: e.g. `~/chatgpt-on-wechat`, `/usr/local/`",
+            "   - ✅ Correct: e.g. `~/maliang`, `/usr/local/`",
             "   - ❌ Wrong: assuming a relative path points to another directory",
             "",
             "3. **Path resolution examples**:",
             f"   - relative `memory/` → actual `{workspace_dir}/memory/`",
-            "   - absolute `~/chatgpt-on-wechat/docs/` → actual `~/chatgpt-on-wechat/docs/`",
+            "   - absolute `~/maliang/docs/` → actual `~/maliang/docs/`",
             "",
             "4. **When unsure**: run `bash pwd` to confirm the current directory, or `ls .` to see where you are",
             "",
@@ -809,12 +809,12 @@ def _build_workspace_section(
             f"   - ❌ 错误: 用相对路径访问其他目录的文件 (如果它不在 `{workspace_dir}` 内)",
             "",
             "2. **访问其他目录**: 如果要访问工作空间之外的目录（如项目代码、系统文件），**必须使用绝对路径**",
-            "   - ✅ 正确: 例如 `~/chatgpt-on-wechat`、`/usr/local/`",
+            "   - ✅ 正确: 例如 `~/maliang`、`/usr/local/`",
             "   - ❌ 错误: 假设相对路径会指向其他目录",
             "",
             "3. **路径解析示例**:",
             f"   - 相对路径 `memory/` → 实际路径 `{workspace_dir}/memory/`",
-            "   - 绝对路径 `~/chatgpt-on-wechat/docs/` → 实际路径 `~/chatgpt-on-wechat/docs/`",
+            "   - 绝对路径 `~/maliang/docs/` → 实际路径 `~/maliang/docs/`",
             "",
             "4. **不确定时**: 先用 `bash pwd` 确认当前目录，或用 `ls .` 查看当前位置",
             "",
@@ -856,7 +856,7 @@ def _build_project_workspace_section(
     Two directories are in play and the model must not confuse them:
     - Project directory (the current working dir): relative paths and work
       products (documents, code, generated files, etc.) live here.
-    - System directory (``workspace_dir``, e.g. ``~/cow``): memory and skills
+    - System directory (``workspace_dir``, e.g. ``~/maliang``): memory and skills
       live here and are reached with absolute paths, never relative ones.
     """
     if language == "en":

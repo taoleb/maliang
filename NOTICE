@@ -1,0 +1,17 @@
+NOTICE
+======
+
+maliang is a desktop agent assistant maintained by 长安前瞻院 (Changan
+forward-looking research institute).
+
+This software is derived from the open-source project CowAgent
+(https://github.com/zhayujie/CowAgent), originally published by zhayujie
+under the MIT License. The original copyright notice is preserved in the
+LICENSE file, as required by that license.
+
+Portions of this repository remain those of the upstream project and of
+other third-party components, each under their own licenses as indicated
+in the corresponding files.
+
+maliang is not affiliated with, endorsed by, or maintained by the upstream
+CowAgent / LinkAI authors.

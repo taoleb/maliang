@@ -699,13 +699,13 @@ function deleteMcpServer(name) {
 // ---------------------------------------------------------------------
 
 const SKILL_SOURCES = {
-    hub: { labelKey: 'skill_value_hub', placeholder: 'skill-name', hintKey: 'skill_hint_hub', link: 'https://skills.cowagent.ai/' },
+    hub: { labelKey: 'skill_value_hub', placeholder: 'skill-name', hintKey: 'skill_hint_hub', link: '' },
     github: { labelKey: 'skill_value_github', placeholder: 'https://github.com/owner/repo/tree/main/skills/my-skill', hintKey: 'skill_hint_github' },
     clawhub: { labelKey: 'skill_value_clawhub', placeholder: 'skill-name', hintKey: 'skill_hint_clawhub', link: 'https://clawhub.ai/skills' },
 };
 
 const SKILL_SOURCE_LABELS = {
-    cowhub: 'Cow Skill Hub', github: 'GitHub', clawhub: 'ClawHub', url: 'URL',
+    cowhub: 'Skill Hub', github: 'GitHub', clawhub: 'ClawHub', url: 'URL',
 };
 
 const SKILL_UPLOAD_MAX_BYTES = 50 * 1024 * 1024;
@@ -1425,7 +1425,7 @@ function yamlScalar(raw) {
  * as-is it turns into a giant bold heading and a horizontal rule. Pull it out
  * so the viewer can present name/description as a proper header instead.
  *
- * Frontmatter nests: `metadata.cowagent.requires.anyEnv` is a list four levels
+ * Frontmatter nests: `metadata.maliang.requires.anyEnv` is a list four levels
  * down. Read line by line with no regard for indentation, each container key
  * showed up as an empty row and the list under it vanished. So this walks the
  * indentation instead: a nested map becomes one row per leaf, keyed by its

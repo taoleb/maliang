@@ -11,7 +11,7 @@ import crypto from 'crypto'
 // Writable data dir for the packaged app (config.json, run.log, user data).
 // Lives in the user's home so it survives app updates and avoids writing into
 // the read-only app bundle. Source/dev runs keep using the repo CWD instead.
-const COW_DATA_DIR = path.join(os.homedir(), '.cow')
+const MALIANG_DATA_DIR = path.join(os.homedir(), '.maliang')
 
 // Preferred port for the desktop backend. Deliberately not 9899 (the web
 // console's default) so a source-run `python app.py` never collides with the
@@ -94,7 +94,7 @@ export class PythonBackend extends EventEmitter {
   private portReady: Promise<number>
   private markPortReady!: (port: number) => void
   // Shared secret between this shell and the backend it spawns. Passed to the
-  // backend via COW_DESKTOP_TOKEN and echoed by the renderer on requests that
+  // backend via MALIANG_DESKTOP_TOKEN and echoed by the renderer on requests that
   // only the desktop may make (importing an attachment by local path). Fixed
   // for the life of the shell so a backend restart doesn't invalidate it.
   private readonly desktopToken = crypto.randomBytes(24).toString('hex')
@@ -169,7 +169,7 @@ export class PythonBackend extends EventEmitter {
    * that had no run.log in it at all.
    */
   getDataDir(): string {
-    return this.packaged ? COW_DATA_DIR : this.backendPath
+    return this.packaged ? MALIANG_DATA_DIR : this.backendPath
   }
 
   getDesktopToken(): string {
@@ -186,8 +186,8 @@ export class PythonBackend extends EventEmitter {
         : path.resolve(__dirname, '../../resources', 'app-config.json')
       const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8')) || {}
       const env: Record<string, string> = {}
-      if (typeof cfg.clientSource === 'string' && cfg.clientSource.trim()) env.COW_CLIENT_SOURCE = cfg.clientSource.trim()
-      if (typeof cfg.appName === 'string' && cfg.appName.trim()) env.COW_APP_NAME = cfg.appName.trim()
+      if (typeof cfg.clientSource === 'string' && cfg.clientSource.trim()) env.MALIANG_CLIENT_SOURCE = cfg.clientSource.trim()
+      if (typeof cfg.appName === 'string' && cfg.appName.trim()) env.MALIANG_APP_NAME = cfg.appName.trim()
       if (typeof cfg.agentName === 'string' && cfg.agentName.trim()) env.DEFAULT_AGENT_NAME = cfg.agentName.trim()
       return env
     } catch {
@@ -388,8 +388,8 @@ export class PythonBackend extends EventEmitter {
    * a signature we can recognise and explain, rather than a generic failure.
    */
   private inspectBundle(): { exePath: string; hasExe: boolean; hasPayload: boolean } {
-    const exeName = process.platform === 'win32' ? 'cowagent-backend.exe' : 'cowagent-backend'
-    const dirs = [path.join(this.backendPath, 'cowagent-backend'), this.backendPath]
+    const exeName = process.platform === 'win32' ? 'maliang-backend.exe' : 'maliang-backend'
+    const dirs = [path.join(this.backendPath, 'maliang-backend'), this.backendPath]
     for (const dir of dirs) {
       const exePath = path.join(dir, exeName)
       const hasExe = fs.existsSync(exePath)
@@ -434,7 +434,7 @@ export class PythonBackend extends EventEmitter {
 
   /**
    * Read an explicit `web_port` from config.json, if the user pinned one. The
-   * packaged build keeps config in COW_DATA_DIR (~/.cow); dev reads it from the
+   * packaged build keeps config in MALIANG_DATA_DIR (~/.maliang); dev reads it from the
    * repo path. Returns null when unset, so the caller can auto-pick a free port
    * instead of fighting over a fixed one.
    */
@@ -463,7 +463,7 @@ export class PythonBackend extends EventEmitter {
    * with no process to kill, which used to strand the app on "initializing".
    *
    * The result is the single source of truth handed to both the backend
-   * (COW_WEB_PORT) and the renderer (whenPortReady / the 'port' event).
+   * (MALIANG_WEB_PORT) and the renderer (whenPortReady / the 'port' event).
    */
   private async pickPort(dataDir: string): Promise<number> {
     const pinned = this.readConfiguredPort(dataDir)
@@ -707,7 +707,7 @@ export class PythonBackend extends EventEmitter {
     this.recentLogs = []
     this.lastError = null
 
-    // Packaged app stores writable data in ~/.cow; dev keeps it in the repo.
+    // Packaged app stores writable data in ~/.maliang; dev keeps it in the repo.
     const dataDir = this.getDataDir()
 
     // Start mirroring backend output to run.log before we spawn, so even an
@@ -757,18 +757,18 @@ export class PythonBackend extends EventEmitter {
     if (bundled) {
       command = bundled
       args = []
-      // Run from the writable data dir (~/.cow), NOT the install dir. When the
+      // Run from the writable data dir (~/.maliang), NOT the install dir. When the
       // app is installed under Program Files, a non-admin user has no write
       // permission to the executable's folder, so any relative-path write
       // during startup would crash the backend (works only as admin). The
       // bundle reads its read-only resources via sys._MEIPASS, so cwd is free
       // to point elsewhere.
       try {
-        fs.mkdirSync(COW_DATA_DIR, { recursive: true })
+        fs.mkdirSync(MALIANG_DATA_DIR, { recursive: true })
       } catch {
         // ignore — get_data_root() also ensures the dir on the Python side
       }
-      cwd = COW_DATA_DIR
+      cwd = MALIANG_DATA_DIR
       this.emit('log', `Starting bundled backend: ${bundled} (cwd=${cwd})`)
     } else {
       const pythonPath = this.findPython()
@@ -785,8 +785,8 @@ export class PythonBackend extends EventEmitter {
 
     this.process = spawn(command, args, {
       cwd,
-      // COW_DESKTOP enables the lighter desktop runtime (no plugins, no MCP).
-      // COW_DATA_DIR (packaged only) redirects writable data to ~/.cow so the
+      // MALIANG_DESKTOP enables the lighter desktop runtime (no plugins, no MCP).
+      // MALIANG_DATA_DIR (packaged only) redirects writable data to ~/.maliang so the
       // app bundle stays read-only; dev runs omit it and keep using the repo.
       env: {
         ...process.env,
@@ -795,14 +795,14 @@ export class PythonBackend extends EventEmitter {
         // app is launched from Finder/Dock with launchd's minimal PATH.
         PATH: this.resolveEnvPath(),
         PYTHONUNBUFFERED: '1',
-        COW_DESKTOP: '1',
+        MALIANG_DESKTOP: '1',
         // The shell owns the port: tell the backend to bind exactly here so the
         // two sides can never disagree (and we avoid the 9899 web-console clash).
-        COW_WEB_PORT: String(this.port),
-        COW_DESKTOP_TOKEN: this.desktopToken,
-        ...(bundled ? { COW_DATA_DIR } : {}),
+        MALIANG_WEB_PORT: String(this.port),
+        MALIANG_DESKTOP_TOKEN: this.desktopToken,
+        ...(bundled ? { MALIANG_DATA_DIR } : {}),
         ...this.appConfigEnv(),
-        COW_CLIENT_VERSION: app.getVersion(),
+        MALIANG_CLIENT_VERSION: app.getVersion(),
       },
       stdio: ['pipe', 'pipe', 'pipe'],
     })
@@ -960,7 +960,7 @@ export class PythonBackend extends EventEmitter {
    * Synchronously, forcefully tear the backend down and BLOCK until its files
    * are no longer held. Used only on the update-install path: the NSIS silent
    * updater starts deleting the old install almost immediately, and on Windows a
-   * still-running cowagent-backend.exe (plus the hundreds of DLLs it maps from
+   * still-running maliang-backend.exe (plus the hundreds of DLLs it maps from
    * _internal) keeps those files locked, so the installer aborts with "卸载旧
    * 应用程序文件失败:2". The normal stop() only sends SIGTERM and returns before
    * the process is actually gone — which on Windows is a no-op for a native exe.
@@ -996,7 +996,7 @@ export class PythonBackend extends EventEmitter {
       // the tree walk missed a re-parented child. Scoped to our exe name so it
       // can't touch unrelated processes.
       try {
-        execFileSync('taskkill', ['/im', 'cowagent-backend.exe', '/T', '/F'], {
+        execFileSync('taskkill', ['/im', 'maliang-backend.exe', '/T', '/F'], {
           stdio: 'ignore',
           timeout: 5000,
         })

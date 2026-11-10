@@ -1847,7 +1847,7 @@ class AgentBridge:
                 except Exception:
                     pass
 
-            # Post-message hot-reload: detect edits to ~/cow/mcp.json and
+            # Post-message hot-reload: detect edits to ~/maliang/mcp.json and
             # sync any new/removed MCP tools into the live agent in the
             # background. Off the critical path so user latency is unaffected;
             # changes take effect on the user's next message.
@@ -2015,7 +2015,7 @@ class AgentBridge:
             "linkai_api_key": "LINKAI_API_KEY",
         }
         
-        env_file = expand_path("~/.cow/.env")
+        env_file = expand_path("~/.maliang/.env")
         
         # Read existing env vars (key -> value)
         existing_env_vars = {}

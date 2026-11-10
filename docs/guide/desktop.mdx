@@ -1,32 +1,32 @@
 ---
 title: Desktop Client
-description: "Download and install the CowAgent desktop app for macOS (Apple Silicon and Intel) and Windows. It bundles the agent runtime, so no Python or dependencies are needed to run your AI assistant locally."
+description: "Download and install the maliang desktop app for macOS (Apple Silicon and Intel) and Windows. It bundles the agent runtime, so no Python or dependencies are needed to run your AI assistant locally."
 ---
 
-CowAgent ships a ready-to-use desktop client with the Agent runtime bundled in — **no need to install Python or dependencies manually**. Just download, install, and run your local super AI assistant.
+maliang ships a ready-to-use desktop client with the Agent runtime bundled in — **no need to install Python or dependencies manually**. Just download, install, and run your local super AI assistant.
 
 <Frame caption="It drives your browser, terminal, and file system directly, with long-term memory, a personal knowledge base, and self-evolution — all running locally.">
-  <video controls preload="metadata" playsInline className="w-full rounded-xl" src="https://cdn.cowagent.ai/desktop/video/cow-demo-en-v1.mp4" />
+  <video controls preload="metadata" playsInline className="w-full rounded-xl" src="(upstream-cdn-removed)/desktop/video/maliang-demo-en-v1.mp4" />
 </Frame>
 
 ## Download & Install
 
-<Card title="Go to the download page" icon="download" href="https://cowagent.ai/download/">
+<Card title="Go to the download page" icon="download" href="">
   Download the macOS / Windows installer
 </Card>
 
 <Tabs>
   <Tab title="macOS">
-    1. Open the [download page](https://cowagent.ai/download/) and pick the build for your chip:
+    1. Open the [download page]() and pick the build for your chip:
        - Apple Silicon (M1/M2/M3/M4): download the `arm64` build
        - Intel: download the `x64` build
-    2. Open the downloaded `.dmg` and drag CowAgent into your Applications folder.
-    3. Launch CowAgent from Launchpad or Applications.
+    2. Open the downloaded `.dmg` and drag maliang into your Applications folder.
+    3. Launch maliang from Launchpad or Applications.
   </Tab>
   <Tab title="Windows">
-    1. Open the [download page](https://cowagent.ai/download/) and download the Windows installer (`.exe`).
+    1. Open the [download page]() and download the Windows installer (`.exe`).
     2. Run the installer and follow the prompts (you can choose the install directory).
-    3. Launch CowAgent from the desktop or Start menu.
+    3. Launch maliang from the desktop or Start menu.
   </Tab>
 </Tabs>
 
@@ -51,7 +51,7 @@ By default only this machine can connect. To open it from other devices on the s
 
 All data of the desktop client is stored on your machine:
 
-- **Config directory**: `~/.cow` in your home folder, holding `config.json` (model keys, channels, etc.) along with logs, cache and other runtime data.
-- **Workspace**: `~/cow` by default, holding chat history, knowledge base, memory, skills, scheduled tasks and other files produced by the Agent.
+- **Config directory**: `~/.maliang` in your home folder, holding `config.json` (model keys, channels, etc.) along with logs, cache and other runtime data.
+- **Workspace**: `~/maliang` by default, holding chat history, knowledge base, memory, skills, scheduled tasks and other files produced by the Agent.
 
 Uninstalling the client does not delete these two directories, so your data is preserved across reinstalls. To fully clean up or migrate to another device, just back up or remove the corresponding folders manually.

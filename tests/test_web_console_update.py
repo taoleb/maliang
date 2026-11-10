@@ -37,8 +37,8 @@ def test_parse_and_compare_versions():
 def test_git_checkout_is_supported_on_unix(tmp_path, monkeypatch):
     (tmp_path / ".git").mkdir()
     monkeypatch.setattr(sys, "platform", "linux")
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
-    monkeypatch.delenv("COW_DOCKER", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DOCKER", raising=False)
     monkeypatch.setattr("cli.update_service._is_docker_install", lambda: False)
     kind = detect_install_kind(str(tmp_path))
     assert kind.kind == "git"
@@ -53,8 +53,8 @@ def _native_git_worktree(tmp_path, monkeypatch, detached=False, separate_gitdir=
             monkeypatch.delenv(key, raising=False)
     monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
-    monkeypatch.delenv("COW_DOCKER", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DOCKER", raising=False)
     monkeypatch.setattr("cli.update_service._is_docker_install", lambda: False)
     repo = tmp_path / "repo"
     repo.mkdir()
@@ -97,7 +97,7 @@ def test_native_gitfile_dirty_checkout_blocks_before_restart(tmp_path, monkeypat
     assert caught.value.step == "git_pull"
     assert "local changes" in str(caught.value)
     assert changed.read_text(encoding="utf-8") == "owned local changes\n"
-    assert not (worktree / ".cow.pid").exists()
+    assert not (worktree / ".maliang.pid").exists()
 
 
 def test_native_detached_worktree_pull_failure_stays_safe(tmp_path, monkeypatch):
@@ -112,7 +112,7 @@ def test_native_detached_worktree_pull_failure_stays_safe(tmp_path, monkeypatch)
 
 
 def test_arbitrary_gitfile_is_not_update_supported(tmp_path, monkeypatch):
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
     monkeypatch.setattr("cli.update_service._is_docker_install", lambda: False)
     (tmp_path / ".git").write_text("arbitrary marker\n", encoding="utf-8")
     kind = detect_install_kind(str(tmp_path))
@@ -131,7 +131,7 @@ def test_gitfile_without_git_executable_degrades(tmp_path, monkeypatch):
 def test_windows_git_checkout_degrades(tmp_path, monkeypatch):
     (tmp_path / ".git").mkdir()
     monkeypatch.setattr(sys, "platform", "win32")
-    monkeypatch.delenv("COW_DESKTOP", raising=False)
+    monkeypatch.delenv("MALIANG_DESKTOP", raising=False)
     monkeypatch.setattr("cli.update_service._is_docker_install", lambda: False)
     kind = detect_install_kind(str(tmp_path))
     assert kind.kind == "git"
@@ -147,7 +147,7 @@ def test_docker_and_packaged_degrade(tmp_path, monkeypatch):
     assert kind.update_supported is False
 
     monkeypatch.setattr("cli.update_service._is_docker_install", lambda: False)
-    monkeypatch.setenv("COW_DESKTOP", "1")
+    monkeypatch.setenv("MALIANG_DESKTOP", "1")
     kind = detect_install_kind(str(tmp_path))
     assert kind.kind == "packaged"
     assert kind.update_supported is False

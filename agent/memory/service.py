@@ -25,7 +25,7 @@ class MemoryService:
 
     def __init__(self, workspace_root: str):
         """
-        :param workspace_root: Workspace root directory (e.g. ~/cow)
+        :param workspace_root: Workspace root directory (e.g. ~/maliang)
         """
         self.workspace_root = workspace_root
         self.memory_dir = os.path.join(workspace_root, "memory")

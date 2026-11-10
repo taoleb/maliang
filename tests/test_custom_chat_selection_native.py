@@ -17,7 +17,7 @@ import config
 import web
 from channel.web.api.models import ModelsHandler
 from models.chatgpt.chat_gpt_bot import ChatGPTBot
-path = Path(os.environ['COW_DATA_DIR']) / 'config.json'
+path = Path(os.environ['MALIANG_DATA_DIR']) / 'config.json'
 def select(provider_id, model):
     app = web.application(('/api/models', 'ModelsHandler'), {'ModelsHandler': ModelsHandler})
     payload = {'action': 'set_capability', 'capability': 'chat', 'provider_id': provider_id, 'model': model}
@@ -31,7 +31,7 @@ def select(provider_id, model):
 def _run(tmp_path, config, code, **env):
     (tmp_path / "config.json").write_text(json.dumps(dict(
         config, agent=False, web_password="", agent_workspace=str(tmp_path / "workspace"))), encoding="utf-8")
-    env = dict({k: v for k, v in os.environ.items() if k != "MODEL"}, COW_DATA_DIR=str(tmp_path), **env)
+    env = dict({k: v for k, v in os.environ.items() if k != "MODEL"}, MALIANG_DATA_DIR=str(tmp_path), **env)
     result = subprocess.run([sys.executable, "-c", _PRELUDE + code], env=env,
                             capture_output=True, text=True, timeout=20)
     assert result.returncode == 0, result.stdout + result.stderr

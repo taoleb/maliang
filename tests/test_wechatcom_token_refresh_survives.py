@@ -6,7 +6,7 @@ thread is the only thing keeping the token alive, and nothing inside its loop
 catches anything: when ``fetch_access_token`` raises -- a DNS blip, a gateway
 500, an invalid ``secret`` -- the exception unwinds out of ``refresh_loop`` and
 the thread dies for the rest of the process lifetime. The token then expires
-(WeCom hands out 2h tokens) and every later call fails until CowAgent is
+(WeCom hands out 2h tokens) and every later call fails until maliang is
 restarted, with no error pointing at the real cause.
 """
 

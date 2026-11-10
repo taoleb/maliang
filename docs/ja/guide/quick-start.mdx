@@ -1,6 +1,6 @@
 ---
 title: ワンクリックインストール
-description: "1 行のコマンドで Linux、macOS、Windows に CowAgent をインストールします。依存関係と Cow CLI の導入、モデルとチャネルの設定、Web コンソールの起動まで自動。"
+description: "1 行のコマンドで Linux、macOS、Windows に maliang をインストールします。依存関係と Cow CLI の導入、モデルとチャネルの設定、Web コンソールの起動まで自動。"
 ---
 
 本プロジェクトでは、ワンクリックでのインストール、設定、起動、管理を行うスクリプトを提供しています。素早くセットアップするには、スクリプトによるデプロイを推奨します。
@@ -12,12 +12,12 @@ Linux、macOS、Windowsに対応しています。Python 3.7〜3.13が必要で�
 <Tabs>
   <Tab title="Linux / macOS">
     ```bash
-    bash <(curl -fsSL https://cdn.link-ai.tech/code/cow/run.sh)
+    bash <(curl -fsSL )
     ```
   </Tab>
   <Tab title="Windows (PowerShell)">
     ```powershell
-    irm https://cdn.link-ai.tech/code/cow/run.ps1 | iex
+    irm  | iex
     ```
   </Tab>
 </Tabs>
@@ -26,7 +26,7 @@ Linux、macOS、Windowsに対応しています。Python 3.7〜3.13が必要で�
 
 1. Python環境の確認（Python 3.7以上が必要）
 2. 必要なツールのインストール（git、curlなど）
-3. プロジェクトを `~/CowAgent` にクローン
+3. プロジェクトを `~/maliang` にクローン
 4. Pythonの依存パッケージと Cow CLI をインストール
 5. AIモデルとチャネルの対話式設定
 6. サービスの起動
@@ -35,20 +35,20 @@ Linux、macOS、Windowsに対応しています。Python 3.7〜3.13が必要で�
 
 ## 管理コマンド
 
-インストール後、`cow` コマンドでサービスを管理できます：
+インストール後、`maliang` コマンドでサービスを管理できます：
 
 | コマンド | 説明 |
 | --- | --- |
-| `cow start` | サービスを起動 |
-| `cow stop` | サービスを停止 |
-| `cow restart` | サービスを再起動 |
-| `cow status` | 実行状態を確認 |
-| `cow logs` | リアルタイムログを表示 |
-| `cow update` | コードを更新して再起動 |
-| `cow install-browser` | ブラウザツールの依存をインストール |
+| `maliang start` | サービスを起動 |
+| `maliang stop` | サービスを停止 |
+| `maliang restart` | サービスを再起動 |
+| `maliang status` | 実行状態を確認 |
+| `maliang logs` | リアルタイムログを表示 |
+| `maliang update` | コードを更新して再起動 |
+| `maliang install-browser` | ブラウザツールの依存をインストール |
 
 詳細は[コマンドドキュメント](/ja/cli/index)を参照してください。
 
 <Note>
-  `cow` コマンドが利用できない場合は、`./run.sh <コマンド>`（Linux/macOS）または `.\scripts\run.ps1 <コマンド>`（Windows）で代替できます。機能は同等です。
+  `maliang` コマンドが利用できない場合は、`./run.sh <コマンド>`（Linux/macOS）または `.\scripts\run.ps1 <コマンド>`（Windows）で代替できます。機能は同等です。
 </Note>

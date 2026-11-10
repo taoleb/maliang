@@ -3,8 +3,8 @@ import type { MenuItemConstructorOptions } from 'electron'
 import { loadAppConfig } from './themes'
 
 const isMac = process.platform === 'darwin'
-const SKILL_HUB_URL = 'https://skills.cowagent.ai/'
-const DEFAULT_DOCS_URL = 'https://docs.cowagent.ai'
+const SKILL_HUB_URL = 'https://EXAMPLE-DISABLED-NO-SKILL-HUB/'
+const DEFAULT_DOCS_URL = 'https://docs.maliang.local'
 
 // Send a menu-triggered action to the renderer (e.g. new chat, open settings).
 function emit(win: BrowserWindow | null, action: string) {
@@ -24,7 +24,7 @@ export function buildAppMenu(getWindow: () => BrowserWindow | null) {
         {
           label: app.name,
           submenu: [
-            { role: 'about' },
+            { label: 'About maliang', click: () => emit(win(), 'open-about') },
             { type: 'separator' },
             { label: 'Settings…', accelerator: 'Cmd+,', click: () => emit(win(), 'open-settings') },
             { type: 'separator' },
@@ -91,16 +91,22 @@ export function buildAppMenu(getWindow: () => BrowserWindow | null) {
   }
 
   const appConfig = loadAppConfig()
-  const docsUrl = typeof appConfig?.docsUrl === 'string' ? appConfig.docsUrl.trim() : DEFAULT_DOCS_URL
+  const configuredDocs = typeof appConfig?.docsUrl === 'string' ? appConfig.docsUrl.trim() : ''
+  const docsUrl = configuredDocs && !configuredDocs.includes('maliang.local') && !configuredDocs.includes('EXAMPLE-DISABLED')
+    ? configuredDocs
+    : ''
+  const skillHubUrl = (appConfig?.skillHubUrl || SKILL_HUB_URL || '').trim()
+  const skillHubEnabled = Boolean(
+    appConfig?.skillHub && skillHubUrl && skillHubUrl.startsWith('http') && !skillHubUrl.includes('EXAMPLE-DISABLED'),
+  )
   const linkItems: MenuItemConstructorOptions[] = [
     ...(docsUrl ? [{ label: 'Documentation', click: () => shell.openExternal(docsUrl) }] : []),
-    ...(appConfig?.skillHub !== false
-      ? [{ label: 'Skill Hub', click: () => shell.openExternal(SKILL_HUB_URL) }]
-      : []),
+    ...(skillHubEnabled ? [{ label: 'Skill Hub', click: () => shell.openExternal(skillHubUrl) }] : []),
   ]
   const helpMenu: MenuItemConstructorOptions = {
     label: 'Help',
     submenu: [
+      { label: 'About maliang', click: () => emit(win(), 'open-about') },
       { label: 'View Logs', click: () => emit(win(), 'view-logs') },
       ...(linkItems.length ? [{ type: 'separator' } as MenuItemConstructorOptions, ...linkItems] : []),
     ],

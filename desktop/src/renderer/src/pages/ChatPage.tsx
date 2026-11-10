@@ -17,6 +17,7 @@ import ChatTimeline from '../components/ChatTimeline'
 import { useTimelineStore } from '../store/timelineStore'
 import { TeamChatModal } from '../components/NewChatMenu'
 import { product } from '@product'
+import Mascot from '../components/Mascot'
 import { t, getLang } from '../i18n'
 import apiClient from '../api/client'
 import type { Attachment, ChatMessage } from '../types'
@@ -505,11 +506,13 @@ const ChatPage: React.FC<ChatPageProps> = ({ baseUrl }) => {
 
         {isEmpty ? (
           <div data-home className="chat-home flex flex-col items-center justify-center h-full px-6 py-12">
-            <div className="theme-logo w-16 h-16 rounded-2xl mb-5 shadow-md overflow-hidden">
+            <div className="theme-logo mb-5">
               {product.slots?.HomeLogo ? (
-                <product.slots.HomeLogo />
+                <div className="w-16 h-16 rounded-2xl mx-auto shadow-md overflow-hidden">
+                  <product.slots.HomeLogo />
+                </div>
               ) : (
-                <img src="./logo.jpg" alt="CowAgent" className="block w-full h-full" />
+                <Mascot className="h-44 w-auto" />
               )}
             </div>
             <h1 className="text-xl font-semibold text-content mb-2">{t('chat_welcome')}</h1>

@@ -1,6 +1,6 @@
 ---
 title: Manual Install
-description: "Deploy CowAgent manually: clone the source, install core and optional dependencies, install the Cow CLI, edit config.json and start the service, or deploy to a server with Docker Compose."
+description: "Deploy maliang manually: clone the source, install core and optional dependencies, install the Cow CLI, edit config.json and start the service, or deploy to a server with Docker Compose."
 ---
 
 ## Source Code Deployment
@@ -8,12 +8,12 @@ description: "Deploy CowAgent manually: clone the source, install core and optio
 ### 1. Clone the project
 
 ```bash
-git clone https://github.com/zhayujie/CowAgent
-cd CowAgent/
+git clone 
+cd maliang/
 ```
 
 <Tip>
-  For network issues, use the mirror: https://gitee.com/zhayujie/CowAgent
+  For network issues, use the mirror: https://gitee.com/DISABLED/maliang
 </Tip>
 
 ### 2. Install dependencies
@@ -38,14 +38,14 @@ Install the command-line tool for managing services and skills:
 pip3 install -e .
 ```
 
-Then use the `cow` command:
+Then use the `maliang` command:
 
 ```bash
-cow help
+maliang help
 ```
 
 <Note>
-  This step is recommended. After installation you can use `cow start`, `cow stop`, `cow update` to manage the service, and `cow skill` to manage skills. Without the CLI, you can use `./run.sh` or `python3 app.py` to run.
+  This step is recommended. After installation you can use `maliang start`, `maliang stop`, `maliang update` to manage the service, and `maliang skill` to manage skills. Without the CLI, you can use `./run.sh` or `python3 app.py` to run.
 </Note>
 
 ### 4. Configure
@@ -63,7 +63,7 @@ Fill in model API keys, channel type, and other settings in `config.json`. See t
 **Using Cow CLI (recommended):**
 
 ```bash
-cow start
+maliang start
 ```
 
 **Or run locally in foreground:**
@@ -95,7 +95,7 @@ Docker deployment does not require cloning source code or installing dependencie
 **1. Download config**
 
 ```bash
-curl -O https://cdn.link-ai.tech/code/cow/docker-compose.yml
+curl -O 
 ```
 
 Edit `docker-compose.yml` with your configuration.
@@ -109,14 +109,14 @@ sudo docker compose up -d
 **3. View logs**
 
 ```bash
-sudo docker logs -f chatgpt-on-wechat
+sudo docker logs -f maliang
 ```
 
 <Note>
   **Data persistence**: `docker-compose.yml` mounts two host directories by default, so your data survives container restarts and `docker compose pull` image upgrades:
 
-  - `./cow` → `/home/agent/cow` in the container: the workspace, holding conversation-installed skills, memory, knowledge base, `mcp.json`, and conversation artifacts.
-  - `./cow-data` → `/home/agent/.cow` in the container: the data directory pointed to by `COW_DATA_DIR`, holding the `config.json` saved from the web console, run logs, and channel credentials.
+  - `./maliang` → `/home/agent/maliang` in the container: the workspace, holding conversation-installed skills, memory, knowledge base, `mcp.json`, and conversation artifacts.
+  - `./maliang-data` → `/home/agent/.maliang` in the container: the data directory pointed to by `MALIANG_DATA_DIR`, holding the `config.json` saved from the web console, run logs, and channel credentials.
 
   Both directories are created next to `docker-compose.yml` by default — don't delete them.
 </Note>
@@ -133,11 +133,11 @@ sudo docker logs -f chatgpt-on-wechat
   "model": "deepseek-flash",
   "deepseek_api_key": "",
   "agent": true,
-  "agent_workspace": "~/cow",
+  "agent_workspace": "~/maliang",
   "agent_max_context_tokens": 200000,
   "agent_max_context_turns": 30,
   "agent_max_steps": 100,
-  "cow_lang": "auto"
+  "maliang_lang": "auto"
 }
 ```
 
@@ -146,12 +146,12 @@ sudo docker logs -f chatgpt-on-wechat
 | `channel_type` | Channel type | `web` |
 | `model` | Model name | `deepseek-flash` |
 | `agent` | Enable Agent mode | `true` |
-| `agent_workspace` | Agent workspace path | `~/cow` |
+| `agent_workspace` | Agent workspace path | `~/maliang` |
 | `agent_max_context_tokens` | Max context tokens | `200000` |
 | `agent_max_context_turns` | Max context turns | `30` |
 | `agent_max_steps` | Max decision steps per task | `100` |
-| `cow_lang` | Language for the UI, command text and system prompts; `auto` to detect, or set `zh` / `en` | `auto` |
+| `maliang_lang` | Language for the UI, command text and system prompts; `auto` to detect, or set `zh` / `en` | `auto` |
 
 <Tip>
-  Full configuration options are in the project [`config.py`](https://github.com/zhayujie/CowAgent/blob/master/config.py).
+  Full configuration options are in the project [`config.py`](/blob/master/config.py).
 </Tip>

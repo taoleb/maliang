@@ -1,9 +1,9 @@
 ---
 title: スキル管理
-description: "スキル管理コマンド。チャットでは /skill、ターミナルでは cow skill で、Skill Hub・GitHub・ClawHub・任意の URL のスキルを検索・インストール・有効化できます。"
+description: "スキル管理コマンド。チャットでは /skill、ターミナルでは maliang skill で、Skill Hub・GitHub・ClawHub・任意の URL のスキルを検索・インストール・有効化できます。"
 ---
 
-スキル管理コマンドは CowAgent のスキルのインストール、検索、管理に使用します。チャットでは `/skill <サブコマンド>`、ターミナルでは `cow skill <サブコマンド>` を使用します。
+スキル管理コマンドは maliang のスキルのインストール、検索、管理に使用します。チャットでは `/skill <サブコマンド>`、ターミナルでは `maliang skill <サブコマンド>` を使用します。
 
 ## list
 
@@ -15,7 +15,7 @@ description: "スキル管理コマンド。チャットでは /skill、ター�
 ```
 
 ```bash ターミナル
-cow skill list
+maliang skill list
 ```
 </CodeGroup>
 
@@ -27,7 +27,7 @@ cow skill list
 ```
 
 ```bash ターミナル
-cow skill list --remote
+maliang skill list --remote
 ```
 </CodeGroup>
 
@@ -48,7 +48,7 @@ cow skill list --remote
 ```
 
 ```bash ターミナル
-cow skill search pptx
+maliang skill search pptx
 ```
 </CodeGroup>
 
@@ -64,7 +64,7 @@ cow skill search pptx
 ```
 
 ```bash ターミナル
-cow skill install pptx
+maliang skill install pptx
 ```
 </CodeGroup>
 
@@ -84,13 +84,13 @@ cow skill install pptx
 
 ```bash ターミナル
 # リポジトリ内のすべてのスキルをインストール（SKILL.md を含むサブディレクトリを自動検出）
-cow skill install larksuite/cli
+maliang skill install larksuite/cli
 
 # サブディレクトリを指定して単一スキルをインストール
-cow skill install https://github.com/larksuite/cli/tree/main/skills/lark-im
+maliang skill install https://github.com/larksuite/cli/tree/main/skills/lark-im
 
 # # でサブディレクトリを指定
-cow skill install larksuite/cli#skills/lark-minutes
+maliang skill install larksuite/cli#skills/lark-minutes
 ```
 </CodeGroup>
 
@@ -104,7 +104,7 @@ cow skill install larksuite/cli#skills/lark-minutes
 ```
 
 ```bash ターミナル
-cow skill install clawhub:baidu-search
+maliang skill install clawhub:baidu-search
 ```
 </CodeGroup>
 
@@ -113,7 +113,7 @@ cow skill install clawhub:baidu-search
 <CodeGroup>
 ```text チャット
 # zip アーカイブからインストール（単一またはバッチ）
-/skill install https://cdn.link-ai.tech/skills/pptx.zip
+/skill install (upstream-cdn-removed)/skills/pptx.zip
 
 # SKILL.md リンクからインストール
 /skill install https://example.com/path/to/SKILL.md
@@ -121,10 +121,10 @@ cow skill install clawhub:baidu-search
 
 ```bash ターミナル
 # zip アーカイブからインストール（単一またはバッチ）
-cow skill install https://cdn.link-ai.tech/skills/pptx.zip
+maliang skill install (upstream-cdn-removed)/skills/pptx.zip
 
 # SKILL.md リンクからインストール
-cow skill install https://example.com/path/to/SKILL.md
+maliang skill install https://example.com/path/to/SKILL.md
 ```
 </CodeGroup>
 
@@ -140,7 +140,7 @@ zip / tar.gz アーカイブ URL からのインストールに対応してお�
 ```
 
 ```bash ターミナル
-cow skill uninstall pptx
+maliang skill uninstall pptx
 ```
 </CodeGroup>
 
@@ -159,8 +159,8 @@ cow skill uninstall pptx
 ```
 
 ```bash ターミナル
-cow skill enable pptx
-cow skill disable pptx
+maliang skill enable pptx
+maliang skill disable pptx
 ```
 </CodeGroup>
 
@@ -174,7 +174,7 @@ cow skill disable pptx
 ```
 
 ```bash ターミナル
-cow skill info pptx
+maliang skill info pptx
 ```
 </CodeGroup>
 
@@ -185,7 +185,7 @@ cow skill info pptx
 | ソース | 説明 |
 | --- | --- |
 | `builtin` | プロジェクト内蔵スキル |
-| `cowhub` | CowAgent Skill Hub からインストール |
+| `cowhub` | maliang Skill Hub からインストール |
 | `github` | GitHub URL から直接インストール |
 | `clawhub` | ClawHub からインストール |
 | `url` | SKILL.md URL からインストール |

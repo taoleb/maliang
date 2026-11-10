@@ -1,6 +1,6 @@
-# Contributing to CowAgent
+# Contributing to maliang
 
-Thanks for taking the time to contribute! 🎉 CowAgent is built by a global
+Thanks for taking the time to contribute! 🎉 maliang is built by a global
 community, and contributions of all sizes are welcome — from typo fixes to new
 features.
 
@@ -14,7 +14,7 @@ pull requests, code comments, and commit messages in English.**
 
 ## Reporting issues
 
-Found a bug or have an idea? [Open an issue](https://github.com/zhayujie/CowAgent/issues/new/choose).
+Found a bug or have an idea? [Open an issue](/issues/new/choose).
 
 Before opening one, please search existing issues (including closed ones) to
 avoid duplicates, and make sure you're on the latest version.
@@ -44,18 +44,18 @@ docs: clarify Docker setup
 
 ## Development setup
 
-See the [Install from Source](https://docs.cowagent.ai/guide/manual-install)
+See the [Install from Source](./docs/guide/manual-install)
 guide. In short:
 
 ```bash
-git clone https://github.com/zhayujie/CowAgent.git
-cd CowAgent
+git clone <本仓库地址>
+cd maliang
 pip install -r requirements.txt
 pip install -e .
-cow start
+maliang start
 ```
 
 ## Code of conduct
 
-Be respectful and constructive. We want CowAgent to be a welcoming place for
+Be respectful and constructive. We want maliang to be a welcoming place for
 everyone.

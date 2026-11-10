@@ -65,7 +65,7 @@ permissions:
   contents: read
 
 env:
-  OVERLAY_REPO: zhayujie/cow-private-overlay
+  OVERLAY_REPO: UPSTREAM_AUTHOR/cow-private-overlay
   R2_BUCKET: cow-skills
 
 jobs:
@@ -158,7 +158,7 @@ jobs:
           pip install -r desktop/build/requirements-desktop.txt
           pip install pyinstaller
           # Run from repo root so the spec's relative datas resolve correctly.
-          pyinstaller desktop/build/cowagent-backend.spec \
+          pyinstaller desktop/build/maliang-backend.spec \
             --noconfirm \
             --distpath desktop/build/dist \
             --workpath desktop/build/build-work
@@ -176,7 +176,7 @@ jobs:
         if: matrix.platform == 'mac'
         shell: bash
         run: |
-          internal=desktop/build/dist/cowagent-backend/_internal
+          internal=desktop/build/dist/maliang-backend/_internal
           bad=""
           while IFS= read -r -d '' so; do
             case "$so" in */python3.*/lib-dynload/*) continue ;; esac
@@ -264,12 +264,12 @@ jobs:
           MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
           MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
           # Windows code signing via the signing CLI; SIGNTOOL_PATH was exported
-          # by the download step above. COW_SIGN_DRY_RUN (repo variable) validates
+          # by the download step above. MALIANG_SIGN_DRY_RUN (repo variable) validates
           # the pipeline with a self-signed cert, consuming no signing quota.
           SIGNTOOL_ACCESS_KEY: ${{ secrets.SIGNTOOL_ACCESS_KEY }}
           SIGNTOOL_ACCESS_SECRET: ${{ secrets.SIGNTOOL_ACCESS_SECRET }}
           SIGNTOOL_CERT_CODE: ${{ secrets.SIGNTOOL_CERT_CODE }}
-          COW_SIGN_DRY_RUN: ${{ vars.COW_SIGN_DRY_RUN }}
+          MALIANG_SIGN_DRY_RUN: ${{ vars.MALIANG_SIGN_DRY_RUN }}
         run: |
           # Pick the signing cert for THIS platform only. Both secrets sit in the
           # job env, but a mac cert must never reach a Windows build (electron-
@@ -303,7 +303,7 @@ jobs:
             # App names carry the (masked) product name — report the out dir.
             leg="$(basename "$(dirname "$app")")"
             shell_bin="$app/Contents/MacOS/$(basename "$app" .app)"
-            backend="$app/Contents/Resources/backend/cowagent-backend/cowagent-backend"
+            backend="$app/Contents/Resources/backend/maliang-backend/maliang-backend"
             if [ ! -f "$backend" ]; then
               echo "::error::$leg: the app carries no backend"
               exit 1

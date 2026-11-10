@@ -19,7 +19,7 @@ description: "Agent を独立したチャットページとして公開したり
 「新規ゲストページ」をクリックし、入力して保存するとリンクが発行されます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-editor.png" alt="ゲストページの編集" width="800" />
+  <img src="screenshots/en/guest-share-editor.png" alt="ゲストページの編集" width="800" />
 </Frame>
 
 ### 基本情報
@@ -50,13 +50,13 @@ description: "Agent を独立したチャットページとして公開したり
 ページ一覧からリンクをコピーして共有します。リンクは `https://<アクセスアドレス>/share/<token>` の形式です。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-page-dark.png" alt="ゲストページ" width="800" />
+  <img src="screenshots/en/guest-share-page-dark.png" alt="ゲストページ" width="800" />
 </Frame>
 
-Web サイトに埋め込むには、ページの「Web ページに埋め込む」をクリックし、「埋め込みを許可するサイト」に自分のサイト（例：`https://example.com`）を追加してから、コードを Web ページの `<body>` 内に配置します。右下にチャットボタンが表示されます。ダイアログ内で埋め込み後の見た目をそのまま確認できます。[CowAgent 公式サイト](https://cowagent.ai/?chat=open)で実際に試せます。
+Web サイトに埋め込むには、ページの「Web ページに埋め込む」をクリックし、「埋め込みを許可するサイト」に自分のサイト（例：`https://example.com`）を追加してから、コードを Web ページの `<body>` 内に配置します。右下にチャットボタンが表示されます。ダイアログ内で埋め込み後の見た目をそのまま確認できます。[maliang 公式サイト](./?chat=open)で実際に試せます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/guest-share-embed.png" alt="Web ページに埋め込む" width="800" />
+  <img src="screenshots/en/guest-share-embed.png" alt="Web ページに埋め込む" width="800" />
 </Frame>
 
 ```html
@@ -79,4 +79,4 @@ Web サイトに埋め込むには、ページの「Web ページに埋め込む
 
 - ゲスト Agent が使えるのは、現在の会話の一時フォルダと、選択した参考資料・スキルだけです。実際のパスは見えず、これらのフォルダの外には出られません。
 - コマンドは実行できません。ネットワーク系ツールはインターネット上の公開アドレスにのみアクセスでき、ローカルや社内ネットワークのアドレスはブロックされます。
-- ページの設定は `~/cow/guests/<ページ ID>/` に保存されるため、自分の Agent に変更を頼むこともできます。ツールや参考資料の追加、ネットワークの有効化、パスワードの解除など権限を広げる変更は、コンソールで「確認して反映」をクリックするまで反映されません。
+- ページの設定は `~/maliang/guests/<ページ ID>/` に保存されるため、自分の Agent に変更を頼むこともできます。ツールや参考資料の追加、ネットワークの有効化、パスワードの解除など権限を広げる変更は、コンソールで「確認して反映」をクリックするまで反映されません。

@@ -22,11 +22,11 @@ def test_overlay_keeps_agent_mail_data_out_of_the_cow_data_mount():
         "./agent-mail-data/npm-global:/home/agent/.npm-global",
     ):
         assert mount in overlay
-    assert "cow-data" not in overlay
+    assert "maliang-data" not in overlay
     assert "./agent-mail/entrypoint.sh:/docker-entrypoint-init.d/agent-mail-entrypoint.sh:ro" in overlay
 
 
-def test_wrapper_never_blocks_cowagent_startup():
+def test_wrapper_never_blocks_maliang_startup():
     """An install failure must fall through to the original entrypoint."""
     wrapper = WRAPPER.read_text()
     code_lines = [line for line in wrapper.splitlines() if line.strip() and not line.lstrip().startswith("#")]

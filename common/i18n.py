@@ -13,9 +13,9 @@ Supported language codes (BCP 47 compliant):
   - "en" (English)
 
 Resolution priority (highest first):
-  1. Explicit `cow_lang` from config.json — also covers Docker/CI, since any
-     config key is overridable via its uppercase env var (e.g. COW_LANG=zh),
-     handled by config.load_config() before resolution. COW_LANG is a private
+  1. Explicit `maliang_lang` from config.json — also covers Docker/CI, since any
+     config key is overridable via its uppercase env var (e.g. MALIANG_LANG=zh),
+     handled by config.load_config() before resolution. MALIANG_LANG is a private
      name to avoid clashing with the gettext-standard LANGUAGE variable.
   2. macOS `defaults read -g AppleLocale` (system-level preference; a Chinese
      system locale is a strong signal that beats a shell-default LANG)
@@ -155,8 +155,8 @@ def _detect_from_env():
     is checked first (see detect_language). On Linux these vars are the
     primary signal.
 
-    The cow_lang env override (COW_LANG=zh) is intentionally NOT read here:
-    it sets config["cow_lang"] and is handled via the explicit config path,
+    The maliang_lang env override (MALIANG_LANG=zh) is intentionally NOT read here:
+    it sets config["maliang_lang"] and is handled via the explicit config path,
     not auto-detection.
     """
     for key in ("LC_ALL", "LC_MESSAGES", "LANG"):
@@ -206,7 +206,7 @@ def _detect_from_python_locale():
 def detect_language():
     """Run full auto-detection and return a supported language code.
 
-    Order (auto-detection only; explicit config["cow_lang"] is resolved
+    Order (auto-detection only; explicit config["maliang_lang"] is resolved
     before this is reached):
       1. macOS AppleLocale (system-level preference; a Chinese system locale
          is a strong, low-false-positive signal that beats a shell-default
@@ -228,7 +228,7 @@ def detect_language():
 def resolve_language(configured=None):
     """Resolve the effective language from a configured value.
 
-    `configured` is the raw `cow_lang` value from config.json (may be None,
+    `configured` is the raw `maliang_lang` value from config.json (may be None,
     "auto", "zh" or "en"). An explicit "zh"/"en" locks the result; "auto"
     or empty triggers detection. The result is cached globally.
     """

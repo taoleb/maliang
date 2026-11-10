@@ -11,7 +11,7 @@ const COLOR_THEME_KEY = 'cow_theme_id';
 const COLOR_THEME_CACHE_KEY = 'cow_theme_cache';
 const DEFAULT_COLOR_THEME = 'default';
 // Shown until /api/themes reports the real folder.
-const COLOR_THEMES_DIR_HINT = '~/cow/system/themes';
+const COLOR_THEMES_DIR_HINT = '~/maliang/system/themes';
 
 const _CT_COLOR_KEYS = [
     'accent', 'accentHover', 'accentActive', 'accentSoft', 'accentContrast',
@@ -491,7 +491,7 @@ document.addEventListener('click', (e) => {
 // ---- Custom theme dialog ----------------------------------------------------
 
 function _themeDocsUrl() {
-    return `${currentLang === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai'}/extensions/custom-theme`;
+    return `${currentLang === 'zh' ? './docs/zh' : 'https://docs.maliang.local'}/extensions/custom-theme`;
 }
 
 function openThemeAddModal() {

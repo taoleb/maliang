@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Sparkles, KeyRound, Loader2, ArrowRight, ArrowLeft, ExternalLink } from 'lucide-react'
+import { KeyRound, Loader2, ArrowRight, ArrowLeft, ExternalLink } from 'lucide-react'
 import { t, getLang, setLang, type Lang } from '../i18n'
 import apiClient from '../api/client'
 import type { ModelsData } from '../types'
 import { Field, Dropdown, TextInput, type DropdownOption } from '../pages/settings/primitives'
 import { resolveModels, providerLabel } from '../pages/settings/modelsHelpers'
 import { useOnboardingStore } from '../store/onboardingStore'
+import Mascot from './Mascot'
 
 interface OnboardingWizardProps {
   // Called after the wizard finishes so the host can refresh language/state.
@@ -51,7 +52,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
   // option (driven by OS locale) also reaches the backend, even if the user
   // doesn't tap the language buttons.
   useEffect(() => {
-    if (!localStorage.getItem('cow_lang')) switchLang(lang)
+    if (!localStorage.getItem('maliang_lang')) switchLang(lang)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -85,7 +86,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
     setLangState(next)
     // Mirror the choice to the backend so the agent/logs use the same language
     // (matches BasicSettings). Non-blocking: the UI already switched locally.
-    apiClient.updateConfig({ cow_lang: next }).catch(() => {})
+    apiClient.updateConfig({ maliang_lang: next }).catch(() => {})
   }
 
   // Step 1 (language) can always advance; step 2 needs a provider, key, model.
@@ -152,9 +153,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
 
         {step === 1 && (
           <div className="text-center space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-accent-soft text-accent flex items-center justify-center mx-auto">
-              <Sparkles size={30} />
-            </div>
+            <Mascot className="h-40 w-auto" />
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-content">{t('onboarding_welcome_title')}</h1>
               <p className="text-sm text-content-secondary">{t('onboarding_welcome_desc')}</p>

@@ -1,15 +1,15 @@
 ---
 title: Backup and Restore
-description: "Export and restore CowAgent configuration and workspace data as a portable archive, including config.json, persona files, memory, sessions, knowledge, custom skills and scheduled tasks."
+description: "Export and restore maliang configuration and workspace data as a portable archive, including config.json, persona files, memory, sessions, knowledge, custom skills and scheduled tasks."
 ---
 
-CowAgent can create a portable local archive for migration or disaster recovery.
+maliang can create a portable local archive for migration or disaster recovery.
 
 ## Create a backup
 
 ```bash
-cow backup
-cow backup --output /safe/location/cow-backup.zip
+maliang backup
+maliang backup --output /safe/location/maliang-backup.zip
 ```
 
 The archive contains:
@@ -31,20 +31,20 @@ supports them.
 
 ## Restore a backup
 
-Stop CowAgent before restoring:
+Stop maliang before restoring:
 
 ```bash
-cow stop
-cow restore /safe/location/cow-backup.zip
+maliang stop
+maliang restore /safe/location/maliang-backup.zip
 ```
 
 Use `--workspace` to migrate workspace files to a different location:
 
 ```bash
-cow restore cow-backup.zip --workspace ~/cow-restored
+maliang restore maliang-backup.zip --workspace ~/maliang-restored
 ```
 
-For a multi-Agent archive, `--workspace` is the instance root. CowAgent restores
+For a multi-Agent archive, `--workspace` is the instance root. maliang restores
 the default Agent into that root and every other Agent into
 `<root>/agents/<agent-id>`, the same layout the Agent registry derives on its
 own. Without the option, Agent IDs that already exist locally keep their current
@@ -53,7 +53,7 @@ uses.
 
 Restore validates the archive format and paths before writing anything. It
 overwrites matching files but does not delete unrelated files already present
-at the destination. When current CowAgent data exists, the command first
-creates a `cow-pre-restore-*.zip` rollback archive beside the selected backup.
+at the destination. When current maliang data exists, the command first
+creates a `maliang-pre-restore-*.zip` rollback archive beside the selected backup.
 
 For unattended scripts, pass `--yes` to acknowledge overwrites.

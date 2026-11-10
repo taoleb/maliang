@@ -290,7 +290,7 @@ def test_write_handler_falls_back_to_state_root_for_system_assets(tmp_path):
     """Memory files stay in the state root even while a project is open."""
     from channel.web.api.workspace import WorkspaceWriteHandler
 
-    state_root = tmp_path / "cow"
+    state_root = tmp_path / "maliang"
     (state_root / "memory").mkdir(parents=True)
     memory_file = _write(state_root / "memory" / "MEMORY.md", "old\n")
     project = tmp_path / "project"

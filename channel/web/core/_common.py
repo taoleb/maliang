@@ -79,16 +79,16 @@ def _desktop_token_matches() -> bool:
     """Whether the request carries the secret the desktop shell handed us.
 
     The shell generates a random token per launch and passes it in via
-    COW_DESKTOP_TOKEN when it spawns the backend, then sends it back on its own
+    MALIANG_DESKTOP_TOKEN when it spawns the backend, then sends it back on its own
     requests. A browser tab talking to the same port never sees the env of the
     process, so it can't forge this; a source run without the shell has no
     token, and the check simply fails closed.
     """
-    expected = os.environ.get("COW_DESKTOP_TOKEN", "")
+    expected = os.environ.get("MALIANG_DESKTOP_TOKEN", "")
     if not expected:
         return False
     env = getattr(web.ctx, "env", {}) or {}
-    provided = env.get("HTTP_X_COW_DESKTOP_TOKEN", "")
+    provided = env.get("HTTP_X_MALIANG_DESKTOP_TOKEN", "")
     return bool(provided) and constant_time_equals(provided, expected)
 
 
@@ -286,7 +286,7 @@ def _log_bind_failure(host: str, port: int, err: OSError):
         )
     elif winerror == 10048 or err_no in (48, 98):  # WSAEADDRINUSE / macOS / Linux
         logger.error(
-            f"[WebChannel] 端口 {port} 已被占用，可执行 `cow restart` 清理残留进程，"
+            f"[WebChannel] 端口 {port} 已被占用，可执行 `maliang restart` 清理残留进程，"
             f"或在 config.json 中修改 web_port"
         )
     else:
@@ -440,7 +440,7 @@ def _get_workspace_root(session_id: str = None, agent_id: str = None) -> str:
 
     When a session has opened a project directory, that project is the working
     directory the file panel / preview / ``@`` picker operate in. Otherwise it
-    is the Agent's workspace (``state_root``, e.g. ``~/cow``). Memory and skills
+    is the Agent's workspace (``state_root``, e.g. ``~/maliang``). Memory and skills
     always stay in ``state_root`` regardless; only the working root moves.
     """
     if session_id:

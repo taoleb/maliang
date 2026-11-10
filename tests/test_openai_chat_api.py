@@ -206,7 +206,7 @@ def test_non_streaming_completion_maps_content_reasoning_and_tools():
                             "id": "call-1",
                             "name": "read",
                             "arguments": {"path": "README.md"},
-                            "result": "CowAgent",
+                            "result": "maliang",
                             "status": "success",
                             "elapsed": "0.01s",
                         }
@@ -247,7 +247,7 @@ def test_non_streaming_completion_maps_content_reasoning_and_tools():
                             "id": "call-1",
                             "name": "read",
                             "arguments": {"path": "README.md"},
-                            "result": "CowAgent",
+                            "result": "maliang",
                             "status": "success",
                             "elapsed": "0.01s",
                         },
@@ -277,7 +277,7 @@ def test_streaming_completion_uses_standard_deltas_and_additive_cow_events():
                     "chunk_type": "tool_start",
                     "tool": "search",
                     "tool_id": "call-2",
-                    "arguments": {"query": "CowAgent"},
+                    "arguments": {"query": "maliang"},
                 },
                 {"chunk_type": "content", "delta": "Hello"},
                 {"chunk_type": "content", "delta": " world"},
@@ -305,7 +305,7 @@ def test_streaming_completion_uses_standard_deltas_and_additive_cow_events():
         "type": "tool_start",
         "id": "call-2",
         "name": "search",
-        "arguments": {"query": "CowAgent"},
+        "arguments": {"query": "maliang"},
     }
     assert [
         payload["choices"][0]["delta"].get("content") for payload in payloads[3:5]
@@ -371,7 +371,7 @@ def test_streaming_agent_failure_after_first_event_finishes_with_error():
     assert payloads[1]["choices"][0]["delta"] == {"content": "partial"}
     assert payloads[2]["cow_event"] == {
         "type": "error",
-        "message": "CowAgent failed to complete the request.",
+        "message": "maliang failed to complete the request.",
     }
     assert payloads[-1]["choices"][0]["finish_reason"] == "error"
 
@@ -958,7 +958,7 @@ def test_http_stream_first_event_timeout_returns_500_and_cancels(monkeypatch):
     assert response.status == "500 Internal Server Error"
     assert response.headers["Content-Type"] == "application/json; charset=utf-8"
     assert json.loads(response.data)["error"] == {
-        "message": "CowAgent timed out before producing a response.",
+        "message": "maliang timed out before producing a response.",
         "type": "api_error",
         "code": "timeout",
     }

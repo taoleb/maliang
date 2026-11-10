@@ -13,8 +13,8 @@ description: Docker デプロイで Agent Mail を導入し、Agent がメール
 
 ```bash
 mkdir -p agent-mail
-curl -o docker-compose.agent-mail.yml https://raw.githubusercontent.com/zhayujie/CowAgent/master/docker/docker-compose.agent-mail.yml
-curl -o agent-mail/entrypoint.sh https://raw.githubusercontent.com/zhayujie/CowAgent/master/docker/agent-mail/entrypoint.sh
+curl -o docker-compose.agent-mail.yml https://raw.githubusercontent.com/DISABLED/maliang/master/docker/docker-compose.agent-mail.yml
+curl -o agent-mail/entrypoint.sh https://raw.githubusercontent.com/DISABLED/maliang/master/docker/agent-mail/entrypoint.sh
 echo "COMPOSE_FILE=docker-compose.yml:docker-compose.agent-mail.yml" >> .env
 ```
 
@@ -26,7 +26,7 @@ echo "COMPOSE_FILE=docker-compose.yml:docker-compose.agent-mail.yml" >> .env
 sudo docker compose up -d
 ```
 
-初回起動時に Node.js と `agently-cli` が `./agent-mail-data/` にダウンロードされるため、以降の再起動、コンテナの再作成、イメージのアップグレードで再ダウンロードされることはありません。ダウンロードに失敗しても CowAgent は通常どおり起動し、Agent Mail のみ利用できない状態になります。`docker compose logs` で `[agent-mail]` から始まるログを確認し、コンテナを再起動すると再試行されます。
+初回起動時に Node.js と `agently-cli` が `./agent-mail-data/` にダウンロードされるため、以降の再起動、コンテナの再作成、イメージのアップグレードで再ダウンロードされることはありません。ダウンロードに失敗しても maliang は通常どおり起動し、Agent Mail のみ利用できない状態になります。`docker compose logs` で `[agent-mail]` から始まるログを確認し、コンテナを再起動すると再試行されます。
 
 <Tip>
   ダウンロードが遅い場合は、`docker-compose.agent-mail.yml` の `NODE_MIRROR` と `NPM_CONFIG_REGISTRY` を近くのミラーに変更してください（例：`https://npmmirror.com/mirrors/node`、`https://registry.npmmirror.com`）。
@@ -35,7 +35,7 @@ sudo docker compose up -d
 ## 3. メールボックスの認証
 
 ```bash
-sudo docker compose exec -u agent chatgpt-on-wechat agently-cli auth login
+sudo docker compose exec -u agent maliang agently-cli auth login
 ```
 
 出力されたリンクをブラウザで開いて認証を完了します。認証が成功するとコマンドは自動的に終了します。
@@ -51,10 +51,10 @@ sudo docker compose exec -u agent chatgpt-on-wechat agently-cli auth login
 またはターミナルで実行します：
 
 ```bash
-sudo docker compose exec -u agent chatgpt-on-wechat cow skill install https://agent.qq.com/.well-known/skills/agently-mail/SKILL.md
+sudo docker compose exec -u agent maliang maliang skill install https://agent.qq.com/.well-known/skills/agently-mail/SKILL.md
 ```
 
-スキルはワークスペース（`./cow/skills`）にインストールされます。インストール後は、Agent にメールの送信や確認を依頼するだけです。
+スキルはワークスペース（`./maliang/skills`）にインストールされます。インストール後は、Agent にメールの送信や確認を依頼するだけです。
 
 ## データの永続化
 

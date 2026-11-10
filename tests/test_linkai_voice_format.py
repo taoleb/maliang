@@ -61,7 +61,7 @@ class LinkAIVoiceFormatTest(unittest.TestCase):
             return self.voice.voiceToText(voice_file)
 
     def test_silk_voice_is_converted_before_upload(self):
-        """SILK is the container CowAgent itself writes for WeChat voice notes."""
+        """SILK is the container maliang itself writes for WeChat voice notes."""
         reply = self._run(self._source("wx_7.silk"))
         self.assertEqual(1, len(self.converted))
         self.assertEqual(["wx_7.mp3"], self.uploaded)

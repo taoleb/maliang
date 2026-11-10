@@ -189,7 +189,7 @@ class AgentAdminService:
     def _instance_root(settings: Mapping) -> Path:
         return Path(
             AgentAdminService._normalise_workspace(
-                settings.get("agent_workspace") or "~/cow"
+                settings.get("agent_workspace") or "~/maliang"
             )
         )
 

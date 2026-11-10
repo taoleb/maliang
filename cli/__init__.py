@@ -1,4 +1,4 @@
-"""CowAgent CLI - Manage your CowAgent from the command line."""
+"""maliang CLI - Manage your maliang from the command line."""
 
 import os as _os
 

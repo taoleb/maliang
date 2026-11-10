@@ -1353,7 +1353,7 @@ if (!guestEmbedded && !isMobileView() && localStorage.getItem('cow_guest_panel')
 if (guestEmbedded) {
     const closeBtn = document.getElementById('guest-close-btn');
     closeBtn.classList.remove('hidden');
-    closeBtn.addEventListener('click', () => window.parent.postMessage({ type: 'cow-guest:close' }, '*'));
+    closeBtn.addEventListener('click', () => window.parent.postMessage({ type: 'maliang-guest:close' }, '*'));
 }
 
 showViewLoading();

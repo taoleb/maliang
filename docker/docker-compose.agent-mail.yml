@@ -1,5 +1,5 @@
 services:
-  chatgpt-on-wechat:
+  maliang:
     user: root
     volumes:
       - ./agent-mail-data/config:/home/agent/.agently-cli

@@ -64,7 +64,7 @@ def _is_jsonc(path: str) -> bool:
 
     Only well-known names, plus any file that already has comments (see
     _pick_checker): in a strict JSON file a comment is a real error - npm
-    rejects one in package.json, and so does CowAgent in its own config.json.
+    rejects one in package.json, and so does maliang in its own config.json.
     """
     name = os.path.basename(path).lower()
     return (

@@ -1535,10 +1535,10 @@ class WebChannel(ChatChannel):
     def startup(self):
         configured_host = conf().get("web_host", "")
         host = configured_host or ("0.0.0.0" if _is_password_enabled() else "127.0.0.1")
-        # The desktop app passes its chosen port via COW_WEB_PORT so its backend
+        # The desktop app passes its chosen port via MALIANG_WEB_PORT so its backend
         # never collides with a source-run web console (default 9899). This makes
         # the port a single source of truth owned by the Electron shell.
-        port = int(os.environ.get("COW_WEB_PORT") or conf().get("web_port", 9899))
+        port = int(os.environ.get("MALIANG_WEB_PORT") or conf().get("web_port", 9899))
 
         self._cleanup_stale_voice_recordings()
 
@@ -1595,7 +1595,7 @@ class WebChannel(ChatChannel):
 
             # In desktop mode the Electron shell renders the UI, so don't pop a
             # browser window (also avoids issues when running detached/headless).
-            if os.environ.get("COW_DESKTOP") != "1":
+            if os.environ.get("MALIANG_DESKTOP") != "1":
                 try:
                     import webbrowser
                     webbrowser.open(f"{scheme}://localhost:{port}")
@@ -1636,7 +1636,7 @@ class WebChannel(ChatChannel):
         func = web.httpserver.LogMiddleware(func)
 
         # The desktop shell probes and loads the console over plain http.
-        https_enabled = bool(conf().get("web_https_enabled", False)) and os.environ.get("COW_DESKTOP") != "1"
+        https_enabled = bool(conf().get("web_https_enabled", False)) and os.environ.get("MALIANG_DESKTOP") != "1"
         try:
             certfile, keyfile = resolve_tls_config(
                 https_enabled,
@@ -1751,7 +1751,7 @@ class WebChannel(ChatChannel):
 
         if is_loopback_host(host):
             return False
-        return os.environ.get("COW_DESKTOP") == "1" or not can_bind(host, 0)
+        return os.environ.get("MALIANG_DESKTOP") == "1" or not can_bind(host, 0)
 
     def _bind_again(self, build, target: tuple, previous: tuple):
         """Bind the new address, else go back to the previous one. The console
@@ -1781,7 +1781,7 @@ class WebChannel(ChatChannel):
         on one other address would cut off, so loopback is served alongside."""
         from channel.web.api.integrations import is_loopback_host
 
-        if os.environ.get("COW_DESKTOP") != "1" or host in ("0.0.0.0", "::") or is_loopback_host(host):
+        if os.environ.get("MALIANG_DESKTOP") != "1" or host in ("0.0.0.0", "::") or is_loopback_host(host):
             return
         server = build("127.0.0.1", port)
         try:

@@ -1,6 +1,6 @@
 """Shared source-update helpers for the CLI and the Web console.
 
-`cow update` and the console one-click updater must not drift: git pull,
+`maliang update` and the console one-click updater must not drift: git pull,
 dependency install, and the restart contract live here so both callers run
 the same steps. GitHub is contacted only from `check_for_updates()`, never
 from version/status reads or page load.
@@ -23,7 +23,7 @@ from cli.utils import _ensure_project_on_path, get_project_root
 
 logger = logging.getLogger(__name__)
 
-GITHUB_REPO = "zhayujie/CowAgent"
+GITHUB_REPO = "DISABLED/maliang"
 GITHUB_RELEASES_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
 STATUS_RELATIVE = Path("tmp") / "web-update-status.json"
 
@@ -74,7 +74,7 @@ def compare_versions(left: str, right: str) -> int:
 
 
 def _is_docker_install() -> bool:
-    if os.environ.get("COW_DOCKER") == "1":
+    if os.environ.get("MALIANG_DOCKER") == "1":
         return True
     try:
         return Path("/.dockerenv").exists()
@@ -87,7 +87,7 @@ def detect_install_kind(root: Optional[str] = None) -> InstallKind:
     root = root or get_project_root()
     platform = sys.platform
 
-    if os.environ.get("COW_DESKTOP") == "1" or getattr(sys, "frozen", False):
+    if os.environ.get("MALIANG_DESKTOP") == "1" or getattr(sys, "frozen", False):
         return InstallKind(
             kind="packaged",
             update_supported=False,
@@ -124,7 +124,7 @@ def detect_install_kind(root: Optional[str] = None) -> InstallKind:
                 update_supported=False,
                 unsupported_reason=(
                     "Web one-click update cannot restart the Windows process "
-                    "from inside itself. Run `cow update` in a terminal instead."
+                    "from inside itself. Run `maliang update` in a terminal instead."
                 ),
                 platform=platform,
             )
@@ -194,8 +194,20 @@ def _release_brief(item: Dict[str, Any]) -> Dict[str, Any]:
 def check_for_updates(current_version: Optional[str] = None) -> Dict[str, Any]:
     """Hit GitHub releases. Call only from an explicit user action."""
     from cli import __version__
+    import os
 
     current = current_version or __version__
+    repo = (os.environ.get("MALIANG_UPDATE_REPO") or GITHUB_REPO or "").strip()
+    if not repo or repo.startswith("DISABLED/") or "DISABLED" in repo:
+        return {
+            "status": "success",
+            "current_version": current,
+            "up_to_date": True,
+            "latest": None,
+            "newer_releases": [],
+            "current_release": None,
+            "unsupported_reason": "No maliang update repository is configured yet. Set MALIANG_UPDATE_REPO when you have one.",
+        }
     releases = []
     for item in fetch_github_releases():
         if item.get("draft"):
@@ -292,7 +304,7 @@ def ensure_clean_checkout(root: str) -> None:
         raise UpdateError(
             "git_pull",
             "The checkout has local changes to tracked files; commit or stash "
-            "them, or run `cow update` in a terminal",
+            "them, or run `maliang update` in a terminal",
             changes,
         )
 
@@ -385,7 +397,7 @@ def apply_source_update(
                 "Dependency install failed",
                 deps.stdout or "",
             )
-        _emit(progress, "install_cli", "Reinstalling the cow CLI")
+        _emit(progress, "install_cli", "Reinstalling the maliang CLI")
         cli = install_editable(root, python, quiet=quiet)
         if cli.returncode != 0:
             raise UpdateError(
@@ -509,16 +521,16 @@ def _configure_worker_logging(log_file: str) -> None:
 def run_web_update_worker() -> None:
     """Detached entry point: git pull + pip, self-check, then restart.
 
-    No backup step: like `cow update` / `cow restart`, this only touches the
+    No backup step: like `maliang update` / `maliang restart`, this only touches the
     git checkout. User data lives outside the repo (agent_workspace, default
-    ~/cow) and config.json is git-ignored, so `git pull` never overwrites them.
+    ~/maliang) and config.json is git-ignored, so `git pull` never overwrites them.
     """
     root = get_project_root()
     status = read_update_status(root)
     python = status.get("python") or sys.executable
     old_pid = int(status.get("old_pid") or 0)
     log_file = status.get("log_file") or os.path.join(root, "nohup.out")
-    pid_file = status.get("pid_file") or os.path.join(root, ".cow.pid")
+    pid_file = status.get("pid_file") or os.path.join(root, ".maliang.pid")
 
     _configure_worker_logging(log_file)
     previous_sha = git_rev_parse(root)

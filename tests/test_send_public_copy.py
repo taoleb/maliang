@@ -41,7 +41,7 @@ def publish_dir(tmp_path, monkeypatch):
 
 
 def _copies(pub):
-    send_dir = pub / cloud_client.COW_SEND_WEB_SUBDIR
+    send_dir = pub / cloud_client.MALIANG_SEND_WEB_SUBDIR
     return sorted(p.name for p in send_dir.iterdir()) if send_dir.exists() else []
 
 
@@ -53,7 +53,7 @@ def test_sending_the_same_file_again_reuses_its_copy(tmp_path, publish_dir):
     second = cloud_client.copy_send_file(str(src), str(tmp_path))
 
     assert first == second
-    assert first.startswith(f"{BASE}/{cloud_client.COW_SEND_WEB_SUBDIR}/")
+    assert first.startswith(f"{BASE}/{cloud_client.MALIANG_SEND_WEB_SUBDIR}/")
     assert first.endswith(".pdf")
     assert len(_copies(publish_dir)) == 1
 
@@ -66,7 +66,7 @@ def test_an_edited_file_gets_a_new_copy_and_the_old_one_stays(tmp_path, publish_
     second = cloud_client.copy_send_file(str(src), str(tmp_path))
 
     assert first != second
-    old = publish_dir / cloud_client.COW_SEND_WEB_SUBDIR / first.rsplit("/", 1)[1]
+    old = publish_dir / cloud_client.MALIANG_SEND_WEB_SUBDIR / first.rsplit("/", 1)[1]
     assert old.read_bytes() == b"v1"
     assert len(_copies(publish_dir)) == 2
 

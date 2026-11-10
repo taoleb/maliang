@@ -26,11 +26,11 @@ def agent(tmp_path, monkeypatch):
     """An Agent whose knowledge lives in the shared root, not its workspace."""
     from common import state_dir
 
-    shared_root = tmp_path / "cow" / "knowledge"
+    shared_root = tmp_path / "maliang" / "knowledge"
     (shared_root / "entities").mkdir(parents=True)
     (shared_root / "entities" / "linkai.md").write_text("# LinkAI\nshared page\n")
 
-    workspace = tmp_path / "cow" / "agents" / "pm-agent"
+    workspace = tmp_path / "maliang" / "agents" / "pm-agent"
     workspace.mkdir(parents=True)
 
     def fake_knowledge_dir(base=None, ensure=False):

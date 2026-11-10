@@ -1,9 +1,9 @@
 ---
 title: Web コンソール
-description: "Web コンソールは CowAgent の既定チャネルです。ブラウザで Agent と会話し、モデル・スキル・記憶・チャネルを管理でき、パスワード保護と OpenAI 互換 API にも対応。"
+description: "Web コンソールは maliang の既定チャネルです。ブラウザで Agent と会話し、モデル・スキル・記憶・チャネルを管理でき、パスワード保護と OpenAI 互換 API にも対応。"
 ---
 
-Web コンソールは CowAgent のデフォルトチャネルです。起動後に自動的に実行され、ブラウザを通じて Agent と対話できるほか、モデル、Skill、メモリ、チャネルなどの設定をオンラインで管理できます。
+Web コンソールは maliang のデフォルトチャネルです。起動後に自動的に実行され、ブラウザを通じて Agent と対話できるほか、モデル、Skill、メモリ、チャネルなどの設定をオンラインで管理できます。
 
 ## 設定
 
@@ -47,7 +47,7 @@ Web コンソールは CowAgent のデフォルトチャネルです。起動後
 - **リスンアドレス**：サービスがリスンする IP とポート。`127.0.0.1` はこのマシンからのみアクセス可能、`0.0.0.0` はローカルネットワークやインターネット上の他のデバイスからもアクセスでき、事前にアクセスパスワードの設定が必要です。保存するとサービスは再起動せずに新しいアドレスへ切り替わり、新しいアドレスが使えない場合は元のアドレスに戻ります。他のデバイスからアクセスできる状態では、このマシンのローカルネットワークアドレスが下に表示されます。
 
 <Frame>
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-integrations.png" alt="連携設定" width="800" />
+  <img src="screenshots/en/web-console-integrations.png" alt="連携設定" width="800" />
 </Frame>
 
 ## HTTPS とドメインでのアクセス
@@ -59,10 +59,10 @@ Web コンソールは CowAgent のデフォルトチャネルです。起動後
 ```nginx
 server {
     listen 443 ssl;
-    server_name cow.example.com;
+    server_name maliang.example.com;
 
-    ssl_certificate     /etc/letsencrypt/live/cow.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/cow.example.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/maliang.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/maliang.example.com/privkey.pem;
 
     location / {
         proxy_pass http://127.0.0.1:9899;
@@ -84,8 +84,8 @@ server {
 ```json
 {
   "web_https_enabled": true,
-  "web_ssl_certfile": "/etc/letsencrypt/live/cow.example.com/fullchain.pem",
-  "web_ssl_keyfile": "/etc/letsencrypt/live/cow.example.com/privkey.pem"
+  "web_ssl_certfile": "/etc/letsencrypt/live/maliang.example.com/fullchain.pem",
+  "web_ssl_keyfile": "/etc/letsencrypt/live/maliang.example.com/privkey.pem"
 }
 ```
 
@@ -98,7 +98,7 @@ server {
 証明書ファイルが存在しない、または読み取れない場合は起動時にエラーで停止し、HTTP にはフォールバックしません。
 
 <Note>
-  コンソールはルートパスで公開する必要があります。`/cow/` のようなサブパスではなく専用のサブドメインを使ってください。OAuth が必要な MCP サーバーを使う場合は、`"mcp_oauth_redirect_base": "https://cow.example.com"` も設定してください。
+  コンソールはルートパスで公開する必要があります。`/maliang/` のようなサブパスではなく専用のサブドメインを使ってください。OAuth が必要な MCP サーバーを使う場合は、`"mcp_oauth_redirect_base": "https://maliang.example.com"` も設定してください。
 </Note>
 
 ## チャット API
@@ -111,7 +111,7 @@ Web コンソールのポートでは OpenAI 互換のチャット API `/v1/chat
 
 ストリーミング出力に対応しており、Agent の思考プロセス（Reasoning）とツール呼び出しプロセス（Tool Calls）をリアルタイムで表示でき、Agent の意思決定をより直感的に観察できます。深い思考機能は設定またはコンソールの「Agent 設定」スイッチで制御できます。
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227180120.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227180120.png" />
 
 #### マルチセッション管理
 
@@ -125,7 +125,7 @@ Web コンソールのポートでは OpenAI 互換のチャット API `/v1/chat
 - **ワークスペース / モデル / 権限**：入力欄の下で、現在のセッションにワークスペース・モデル・権限モードを個別に設定できます。複数のプロジェクトを使う場合、過去のセッションは自動的にプロジェクトごとにグループ化されます。詳しくは [アーキテクチャ - プロジェクトワークスペース](/ja/intro/architecture#project-workspace) を参照してください
 
 <Frame caption="ワークスペースごとにグループ化されたセッション。セッション単位でワークスペースとモデルを設定できます">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-workspace-project-demo.png" style={{ maxWidth: "800px" }} />
+  <img src="screenshots/en/web-console-workspace-project-demo.png" style={{ maxWidth: "800px" }} />
 </Frame>
 
 #### 権限モード
@@ -133,47 +133,47 @@ Web コンソールのポートでは OpenAI 互換のチャット API `/v1/chat
 セッションごとに権限モードを設定し、Agent がファイルやコマンドに触れる範囲を制御できます：読み取り専用（read-only）、ワークスペース書き込み可（workspace-write）、フルアクセス（full-access）。権限でツール呼び出しがブロックされた際は、その場で調整できるクリック可能なヒントが表示されます。
 
 <Frame caption="セッション単位の権限モード：読み取り専用、ワークスペース書き込み可、フルアクセス">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-access-mode.png" style={{ maxWidth: "600px" }} />
+  <img src="screenshots/en/web-console-access-mode.png" style={{ maxWidth: "600px" }} />
 </Frame>
 
 ### 成果物
 
 Agent が作成した Web ページ、ドキュメント、画像、動画をタイムラインにまとめ、プレビュー、ピン留め、元の会話への移動ができます。初期状態では非表示で、[カスタムメニュー](/ja/extensions/custom-menu) のエディタから表示できます：
 
-<img width="850" src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-artifacts.png" />
+<img width="850" src="screenshots/en/web-console-artifacts.png" />
 
 ### モデル管理
 
 設定ファイルを手動で編集することなく、異なるモデルプロバイダーのテキスト、画像、音声、埋め込みモデル設定をオンラインで管理できます：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260521212949.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260521212949.png" />
 
 ### Skill 管理
 
 Agent の Skill をオンラインで閲覧・管理できます：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173403.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173403.png" />
 
 ### メモリ管理
 
 Agent のメモリをオンラインで閲覧・管理できます：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173349.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173349.png" />
 
 ### チャネル管理
 
 接続中のチャネルをオンラインで管理でき、リアルタイムでの接続・切断操作に対応しています：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173331.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173331.png" />
 
 ### スケジュールタスク
 
 スケジュールタスクをオンラインで閲覧・管理できます。一回限りのタスク、固定間隔、Cron 式など複数のスケジューリング方式を可視化管理できます：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173704.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173704.png" />
 
 ### ログ
 
 Agent のランタイムログをオンラインでリアルタイムに確認でき、実行状態の監視やトラブルシューティングに便利です：
 
-<img width="850" src="https://cdn.link-ai.tech/doc/20260227173514.png" />
+<img width="850" src="(upstream-cdn-removed)/doc/20260227173514.png" />

@@ -1,6 +1,6 @@
 ---
 title: DeepSeek
-description: "在 CowAgent 中配置 DeepSeek 模型：Agent 模式默认推荐的高性价比厂商，支持文本对话与任务规划，V4 系列可开启思考模式输出思维链，在 Web 控制台或 config.json 中配置。"
+description: "在 maliang 中配置 DeepSeek 模型：Agent 模式默认推荐的高性价比厂商，支持文本对话与任务规划，V4 系列可开启思考模式输出思维链，在 Web 控制台或 config.json 中配置。"
 ---
 
 DeepSeek 是当前 Agent 模式默认推荐的厂商之一，主打高性价比的文本对话和任务规划能力。
@@ -65,8 +65,8 @@ DeepSeek 是当前 Agent 模式默认推荐的厂商之一，主打高性价比�
 
 ### 行为说明
 
-- **采样参数**：思考模式下 `temperature`、`top_p`、`presence_penalty`、`frequency_penalty` 会被服务端忽略（不会报错），CowAgent 会自动跳过传入。
-- **多轮工具调用**：当历史中包含工具调用时，DeepSeek 要求所有 assistant 消息必须回传 `reasoning_content`。CowAgent 会自动处理回传逻辑，跨轮次切换思考开关也不会出错。
+- **采样参数**：思考模式下 `temperature`、`top_p`、`presence_penalty`、`frequency_penalty` 会被服务端忽略（不会报错），maliang 会自动跳过传入。
+- **多轮工具调用**：当历史中包含工具调用时，DeepSeek 要求所有 assistant 消息必须回传 `reasoning_content`。maliang 会自动处理回传逻辑，跨轮次切换思考开关也不会出错。
 
 <Tip>
   默认使用 `deepseek-flash`（V4.1 Flash，原生多模态）；复杂任务可使用 `deepseek-v4-pro`；需要深度推理可开启 `enable_thinking`。

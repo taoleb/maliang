@@ -66,14 +66,14 @@ def _channel(loop, bot, tmp_path, monkeypatch):
 def test_remote_file_reply_is_downloaded_and_uploaded(server, loop, tmp_path, monkeypatch):
     bot = _Bot()
     ch = _channel(loop, bot, tmp_path, monkeypatch)
-    reply = Reply(ReplyType.FILE, f"{server}/cow-send/3f9a1c.pdf")
+    reply = Reply(ReplyType.FILE, f"{server}/maliang-send/3f9a1c.pdf")
     reply.file_name = "report.pdf"
 
     ch.send(reply, {"telegram_chat_id": 42})
 
     assert bot.documents == [(BODY, "report.pdf")]
     assert list(tmp_path.iterdir()) == [], "downloaded temp file was left behind"
-    assert reply.content == f"{server}/cow-send/3f9a1c.pdf"
+    assert reply.content == f"{server}/maliang-send/3f9a1c.pdf"
 
 
 def test_local_file_reply_is_unchanged(loop, tmp_path, monkeypatch):

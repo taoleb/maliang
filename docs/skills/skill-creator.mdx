@@ -47,13 +47,13 @@ Frontmatter fields in the SKILL.md header:
 | --- | --- |
 | `name` | Skill name — lowercase with hyphens, must match the directory name |
 | `description` | **The most important field.** Clearly state what the skill does and when to use it. The Agent reads this to decide whether to invoke it. All trigger-related descriptions go here, not in the body |
-| `metadata.cowagent.requires.bins` | System CLI tools that must be installed |
-| `metadata.cowagent.requires.env` | Required environment variables (all must be present) |
-| `metadata.cowagent.requires.anyEnv` | Multiple API keys — at least one must be set |
-| `metadata.cowagent.requires.anyBins` | Multiple tools — at least one must be installed |
-| `metadata.cowagent.always` | Set to `true` to always load, skipping dependency checks |
-| `metadata.cowagent.emoji` | Display emoji (optional) |
-| `metadata.cowagent.os` | OS restriction, e.g. `["darwin", "linux"]` |
+| `metadata.maliang.requires.bins` | System CLI tools that must be installed |
+| `metadata.maliang.requires.env` | Required environment variables (all must be present) |
+| `metadata.maliang.requires.anyEnv` | Multiple API keys — at least one must be set |
+| `metadata.maliang.requires.anyBins` | Multiple tools — at least one must be installed |
+| `metadata.maliang.always` | Set to `true` to always load, skipping dependency checks |
+| `metadata.maliang.emoji` | Display emoji (optional) |
+| `metadata.maliang.os` | OS restriction, e.g. `["darwin", "linux"]` |
 
 <Note>
 The `category` field does not need to be set manually — the system automatically sets it to `skill`.
@@ -63,14 +63,14 @@ Two ways to declare API key dependencies:
 
 ```yaml
 metadata:
-  cowagent:
+  maliang:
     requires:
       env: ["MYAPI_KEY"]            # Must be present
 ```
 
 ```yaml
 metadata:
-  cowagent:
+  maliang:
     requires:
       anyEnv: ["OPENAI_API_KEY", "LINKAI_API_KEY"]   # At least one
 ```

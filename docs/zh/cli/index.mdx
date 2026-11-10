@@ -1,38 +1,38 @@
 ---
 title: 命令总览
-description: "CowAgent 命令系统总览：终端中的 cow 命令用于启动、停止、更新服务和管理技能，对话中输入 / 开头的命令可查看状态、调整配置、管理技能，附终端与对话命令对照表。"
+description: "maliang 命令系统总览：终端中的 maliang 命令用于启动、停止、更新服务和管理技能，对话中输入 / 开头的命令可查看状态、调整配置、管理技能，附终端与对话命令对照表。"
 ---
 
-CowAgent 提供两种命令交互方式：
+maliang 提供两种命令交互方式：
 
-- **终端CLI** — 在系统终端中执行 `cow <命令>`，用于服务管理、技能管理等运维操作
-- **对话命令** — 在对话中输入 `/<命令>` 或 `cow <命令>`，用于查看状态、管理技能、调整配置等
+- **终端CLI** — 在系统终端中执行 `maliang <命令>`，用于服务管理、技能管理等运维操作
+- **对话命令** — 在对话中输入 `/<命令>` 或 `maliang <命令>`，用于查看状态、管理技能、调整配置等
 
 ## 终端命令
 
-通过一键安装脚本部署后，`cow` 命令会自动可用。手动安装的用户需要在项目根目录下额外执行：
+通过一键安装脚本部署后，`maliang` 命令会自动可用。手动安装的用户需要在项目根目录下额外执行：
 
 ```bash
 pip install -e .
 ```
 
-安装后即可在任意位置使用 `cow` 命令：
+安装后即可在任意位置使用 `maliang` 命令：
 
 ```bash
-cow help
+maliang help
 ```
 
 输出示例：
 
 ```
-CowAgent CLI
+maliang CLI
 
-Usage: cow <command>
+Usage: maliang <command>
 
 Service:
-  start     Start the CowAgent service
-  stop      Stop the CowAgent service
-  restart   Restart the CowAgent service
+  start     Start the maliang service
+  stop      Stop the maliang service
+  restart   Restart the maliang service
   update    Update code and restart service
   status    Show service status
   logs      View service logs
@@ -46,7 +46,7 @@ Memory & Knowledge:
 
 Data portability:
   backup    Back up config and agent workspace
-  restore   Restore a CowAgent backup
+  restore   Restore a maliang backup
 
 Others:
   help      Show this help message
@@ -82,7 +82,7 @@ Others:
 
 以下是各命令在终端和对话中的可用性：
 
-| 命令 | 终端 (`cow`) | 对话 (`/`) |
+| 命令 | 终端 (`maliang`) | 对话 (`/`) |
 | --- | :---: | :---: |
 | help | ✓ | ✓ |
 | version | ✓ | ✓ |

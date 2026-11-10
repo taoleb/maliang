@@ -106,7 +106,7 @@ const ChatApiCard: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
   const enabled = !!state?.enabled
   const key = state?.api_key || ''
   const apiBase = `${baseUrl.replace(/\/$/, '')}/v1`
-  const docsUrl = `${getLang() === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai'}/extensions/chat-api`
+  const docsUrl = `${getLang() === 'zh' ? './docs/zh' : 'https://docs.maliang.local'}/extensions/chat-api`
 
   return (
     <Card

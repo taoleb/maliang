@@ -45,12 +45,12 @@ const FALLBACK_VERSION = '2.2.2'
 // in the main process routes window.open() through shell.openExternal.
 // English is the default (no suffix); Chinese gets a /zh suffix. Skill hub is
 // language-agnostic.
-const SKILL_HUB_URL = 'https://skills.cowagent.ai/'
+const SKILL_HUB_URL = 'https://EXAMPLE-DISABLED-NO-SKILL-HUB/'
 // GitHub issues — where users report bugs / request features.
-const FEEDBACK_URL = 'https://github.com/zhayujie/CowAgent/issues'
+const FEEDBACK_URL = '/issues'
 
-const websiteUrl = () => (getLang() === 'zh' ? 'https://cowagent.ai/zh' : 'https://cowagent.ai')
-const docsUrl = () => (getLang() === 'zh' ? 'https://docs.cowagent.ai/zh' : 'https://docs.cowagent.ai')
+const websiteUrl = () => (getLang() === 'zh' ? './zh' : 'https://maliang.local')
+const docsUrl = () => (getLang() === 'zh' ? './docs/zh' : 'https://docs.maliang.local')
 
 const openExternal = (url: string) => {
   window.open(url, '_blank', 'noopener,noreferrer')
@@ -363,7 +363,7 @@ const NavRail: React.FC<NavRailProps> = ({ onLangChange }) => {
 const BrandLogo: React.FC = () => (
   <img
     src={brandLogo}
-    alt="CowAgent"
+    alt="maliang"
     draggable={false}
     className="flex-shrink-0 w-7 h-7 object-contain"
   />
@@ -420,7 +420,9 @@ const FooterMenu: React.FC<{
         extension may hide this group to keep the menu to app actions only. */}
     {!product.nav?.hideExternalLinks && (
       <>
-        <MenuItem icon={<Store size={16} />} label={t('menu_skill_hub')} onClick={() => onOpenLink(SKILL_HUB_URL)} />
+        {SKILL_HUB_URL.startsWith('http') && !SKILL_HUB_URL.includes('EXAMPLE-DISABLED') ? (
+          <MenuItem icon={<Store size={16} />} label={t('menu_skill_hub')} onClick={() => onOpenLink(SKILL_HUB_URL)} />
+        ) : null}
         <MenuItem icon={<FileText size={16} />} label={t('menu_docs')} onClick={() => onOpenLink(docsUrl())} />
         <MenuItem icon={<Globe size={16} />} label={t('menu_website')} onClick={() => onOpenLink(websiteUrl())} />
         <MenuItem

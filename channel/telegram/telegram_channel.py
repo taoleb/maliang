@@ -10,8 +10,8 @@ Features:
 
 Implementation note:
     python-telegram-bot is async-first. We run the bot inside a dedicated
-    thread with its own asyncio loop so the rest of cow (which is sync)
-    stays untouched. Inbound updates are dispatched onto cow's existing
+    thread with its own asyncio loop so the rest of maliang (which is sync)
+    stays untouched. Inbound updates are dispatched onto maliang's existing
     sync ChatChannel.produce() pipeline; outbound send() schedules
     coroutines back onto that loop via asyncio.run_coroutine_threadsafe.
 """
@@ -107,7 +107,7 @@ class TelegramChannel(ChatChannel):
             self.report_startup_error(err)
             return
 
-        # Run the asyncio event loop in a dedicated thread so the sync cow body
+        # Run the asyncio event loop in a dedicated thread so the sync maliang body
         # is untouched.
         self._loop = asyncio.new_event_loop()
 
@@ -381,7 +381,7 @@ class TelegramChannel(ChatChannel):
                     file_cache.clear(session_id)
                     logger.info(f"[Telegram] Attached {len(cached_files)} cached file(s) to query")
 
-            # Dispatch to cow main pipeline (reuses ChatChannel._compose_context routing)
+            # Dispatch to maliang main pipeline (reuses ChatChannel._compose_context routing)
             context = self._compose_context(
                 tg_msg.ctype,
                 tg_msg.content,
@@ -578,7 +578,7 @@ class TelegramChannel(ChatChannel):
     # ------------------------------------------------------------------
 
     def send(self, reply: Reply, context: Context):
-        """Called from cow's sync main thread; we marshal the coroutine onto the loop thread."""
+        """Called from maliang's sync main thread; we marshal the coroutine onto the loop thread."""
         if self._loop is None or self._bot is None:
             logger.warning("[Telegram] bot not ready, drop reply")
             return

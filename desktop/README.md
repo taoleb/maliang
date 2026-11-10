@@ -1,6 +1,6 @@
-# CowAgent Desktop
+# maliang Desktop
 
-Cross-platform desktop client for CowAgent, built with Electron + React + TypeScript.
+Cross-platform desktop client for maliang, built with Electron + React + TypeScript.
 
 ## Development
 

@@ -1,9 +1,9 @@
 {
-  "name": "cowagent-desktop",
+  "name": "maliang-desktop",
   "version": "2.2.2",
-  "description": "CowAgent Desktop Client - AI Agent on your desktop",
+  "description": "maliang Desktop — 长安前瞻院桌面智能体助手",
   "main": "dist/main/index.js",
-  "author": "CowAgent",
+  "author": "长安前瞻院",
   "license": "MIT",
   "scripts": {
     "dev": "npm run build && electron .",
@@ -46,8 +46,8 @@
     "vite": "^6.0.3"
   },
   "build": {
-    "appId": "com.cowagent.desktop",
-    "productName": "CowAgent",
+    "appId": "com.changanqianzhan.maliang",
+    "productName": "maliang",
     "directories": {
       "output": "release"
     },
@@ -57,8 +57,8 @@
     ],
     "extraResources": [
       {
-        "from": "build/dist/cowagent-backend",
-        "to": "backend/cowagent-backend"
+        "from": "build/dist/maliang-backend",
+        "to": "backend/maliang-backend"
       },
       {
         "from": "resources",
@@ -107,12 +107,17 @@
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "shortcutName": "maliang",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/installerSidebar.bmp",
+      "include": "build/installer.nsh"
     },
     "publish": {
       "provider": "generic",
-      "url": "https://cowagent.ai/update/"
-    }
+      "url": ""
+    },
+    "copyright": "Copyright 长安前瞻院. See LICENSE and NOTICE."
   },
   "overrides": {
     "js-yaml": "4.3.1",

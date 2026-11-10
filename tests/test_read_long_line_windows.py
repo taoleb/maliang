@@ -80,8 +80,8 @@ def test_windows_command_returns_the_line_through_the_bash_tool(monkeypatch, tmp
     # Three-byte characters, so the byte cap falls inside one. Cut there, the
     # output is no longer valid UTF-8 and the bash tool garbles it.
     line = "数" * (DEFAULT_MAX_BYTES // 3 + 10)
-    monkeypatch.setenv("COW_READ_TEST", "expanded")
-    path = tmp_path / "数据 John\u2019s %COW_READ_TEST% export's.json"
+    monkeypatch.setenv("MALIANG_READ_TEST", "expanded")
+    path = tmp_path / "数据 John\u2019s %MALIANG_READ_TEST% export's.json"
     path.write_bytes(b"[\r\n" + line.encode("utf-8") + b"\r\n]\r\n")
 
     command = _suggested_command(tmp_path, path, 2)

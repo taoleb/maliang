@@ -9,7 +9,7 @@ from common import i18n
 
 @pytest.fixture
 def config_file(tmp_path, monkeypatch):
-    monkeypatch.setenv("COW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(tmp_path))
     monkeypatch.setenv("HOME", str(tmp_path))
     monkeypatch.setenv("USERPROFILE", str(tmp_path))
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
@@ -23,7 +23,7 @@ def config_file(tmp_path, monkeypatch):
     ('"channel_type":["terminal"]', ["terminal"]),
 ])
 def test_status_and_terminal_decision_share_all_configured_channels(config_file, monkeypatch, body, channels):
-    config_file.write_text('{"cow_lang":"en","model":"fixture-model",' + body + '}')
+    config_file.write_text('{"maliang_lang":"en","model":"fixture-model",' + body + '}')
     assert load_config_json()["channel_type"] == channels
     assert process._is_terminal_only() is (channels == ["terminal"])
     monkeypatch.setattr(process, "_read_pid", lambda: None)
@@ -86,7 +86,7 @@ def test_standalone_cli_reader_needs_no_app_modules(tmp_path, body, expected):
     data.mkdir()
     (data / "config.json").write_text(body)
     env = {"PATH": os.environ["PATH"], "HOME": str(isolated), "USERPROFILE": str(isolated),
-           "COW_DATA_DIR": str(data), "PYTHONPATH": str(isolated), "PYTHONDONTWRITEBYTECODE": "1"}
+           "MALIANG_DATA_DIR": str(data), "PYTHONPATH": str(isolated), "PYTHONDONTWRITEBYTECODE": "1"}
     code = ('import json,sys;from cli.utils import load_config_json;'
             'print(json.dumps({"value":load_config_json(),"app":"config" in sys.modules,'
             '"common":"common" in sys.modules}))')

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from '../i18n'
 import { product } from '@product'
+import Mascot from './Mascot'
 import type { BackendErrorCode } from '../types'
 
 interface StatusScreenProps {
@@ -45,15 +46,21 @@ const StatusScreen: React.FC<StatusScreenProps> = ({ status, error, code, path, 
     void window.electronAPI?.openPath(dataDir)
   }, [dataDir])
 
+  const isSplash = status === 'connecting'
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-50 dark:bg-[#111111]">
+    <div
+      className={`h-screen w-screen flex items-center justify-center ${isSplash ? '' : 'bg-gray-50 dark:bg-[#111111]'}`}
+      style={isSplash ? { backgroundColor: '#FDF9F2' } : undefined}
+    >
       <div className="text-center space-y-6 max-w-md px-8">
         {product.slots?.StatusLogo ? (
           <div className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-primary-500/20 overflow-hidden">
             <product.slots.StatusLogo />
           </div>
+        ) : isSplash ? (
+          <Mascot className="h-56 w-auto" />
         ) : (
-          <img src="./logo.jpg" alt="Agent" className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-primary-500/20" />
+          <img src="./logo.jpg" alt="maliang" className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-primary-500/20" />
         )}
 
         {status === 'connecting' && (

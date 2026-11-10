@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CowAgent Console</title>
+    <title>maliang Console</title>
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
     <!-- Vendored third-party assets (no external CDN dependency).
          See channel/web/static/vendor/README.md for sources & versions. -->
@@ -74,7 +74,7 @@
     <script>
     // Map an arbitrary locale string (zh-CN, en-US, fr ...) to 'zh' / 'zh-Hant' / 'en',
     // or '' when unrecognized so callers can fall through to the next source.
-    window.__cowNormalizeLang__ = function(raw) {
+    window.__maliangNormalizeLang__ = function(raw) {
         if (!raw) return '';
         var v = String(raw).trim().toLowerCase().replace('_', '-');
         if (v === 'auto') return '';
@@ -87,15 +87,15 @@
     };
     // Resolve the console language by priority:
     //   user choice (localStorage) -> backend-detected -> browser -> 'zh'.
-    window.__cowResolveLang__ = function() {
-        return window.__cowNormalizeLang__(localStorage.getItem('cow_lang'))
-            || window.__cowNormalizeLang__(window.__COW_DEFAULT_LANG__)
-            || window.__cowNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
+    window.__maliangResolveLang__ = function() {
+        return window.__maliangNormalizeLang__(localStorage.getItem('maliang_lang'))
+            || window.__maliangNormalizeLang__(window.__MALIANG_DEFAULT_LANG__)
+            || window.__maliangNormalizeLang__(navigator.language || (navigator.languages && navigator.languages[0]))
             || 'zh';
     };
     (function() {
-        // Backend-resolved default language (from cow_lang config / auto-detect).
-        window.__COW_DEFAULT_LANG__ = '{{COW_DEFAULT_LANG}}';
+        // Backend-resolved default language (from maliang_lang config / auto-detect).
+        window.__MALIANG_DEFAULT_LANG__ = '{{MALIANG_DEFAULT_LANG}}';
         var theme = localStorage.getItem('cow_theme') || 'dark';
         if (theme === 'dark') document.documentElement.classList.add('dark');
         // Replay the color theme's last variables (written by themes.js) so
@@ -121,7 +121,7 @@
             document.documentElement.classList.add('menu-pending');
             setTimeout(function () { document.documentElement.classList.remove('menu-pending'); }, 3000);
         }
-        document.documentElement.setAttribute('lang', window.__cowResolveLang__());
+        document.documentElement.setAttribute('lang', window.__maliangResolveLang__());
     })();
     </script>
 </head>

@@ -43,13 +43,19 @@ function isLegacyWindows(): boolean {
 // is specific to the default build's infrastructure). Absent -> default feed.
 const CONFIGURED_FEED = (loadAppConfig()?.updateFeedUrl || '').trim()
 
+function hasUpdateFeed(): boolean {
+  const feed = (CONFIGURED_FEED || process.env.MALIANG_UPDATE_FEED || '').trim()
+  return /^https?:\/\//i.test(feed)
+}
+
+
 // The update feed. Both entries hit the same Pages Function
-// (https://cowagent.ai/update/); the ?lang=zh query tells it to 302 installer
+// (); the ?lang=zh query tells it to 302 installer
 // downloads to the China CDN mirror instead of R2. The feed metadata is
 // identical either way, so we can freely switch the feed URL between attempts
 // to fall back from one download origin to the other. Legacy Windows appends a
 // /legacy/ segment so it gets the win-legacy release instead of the standard.
-const FEED_BASE = 'https://cowagent.ai/update/' + (isLegacyWindows() ? 'legacy/' : '')
+const FEED_BASE = '' + (isLegacyWindows() ? 'legacy/' : '')
 const feedUrlFor = (china: boolean) => {
   if (CONFIGURED_FEED) return withFeedQuery(CONFIGURED_FEED)
   return withFeedQuery(china ? `${FEED_BASE}?lang=zh` : FEED_BASE)
@@ -266,13 +272,19 @@ let userInitiatedCheck = false
 //   panel re-opens even if the version was previously dismissed. The startup +
 //   interval polls pass false, so a dismissed version only lights the dot.
 export function checkForUpdates(userInitiated = false): void {
+  if (!hasUpdateFeed()) {
+    log('checkForUpdates: no update feed configured; skipping (set updateFeedUrl or MALIANG_UPDATE_FEED)')
+    send({ state: 'not-available' })
+    return
+  }
+
   userInitiatedCheck = userInitiated
   if (!app.isPackaged) {
-    // Dev-only UI harness: set COW_MOCK_UPDATE=1 to simulate an available
+    // Dev-only UI harness: set MALIANG_MOCK_UPDATE=1 to simulate an available
     // update so the update panel/menu interactions can be exercised in
     // `npm run dev` (where there's no real feed). Never runs in a packaged app.
-    if (process.env.COW_MOCK_UPDATE) {
-      const version = process.env.COW_MOCK_UPDATE_VERSION || '9.9.9'
+    if (process.env.MALIANG_MOCK_UPDATE) {
+      const version = process.env.MALIANG_MOCK_UPDATE_VERSION || '9.9.9'
       log(`checkForUpdates: not packaged, MOCK available version=${version}`)
       send({ state: 'available', version, userInitiated: userInitiatedCheck })
       return

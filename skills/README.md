@@ -4,13 +4,13 @@ Skills are reusable instruction sets that extend the agent's capabilities. Each 
 
 ## Skill Hub
 
-Browse, search, and install skills from [Cow Skill Hub](https://skills.cowagent.ai/).
+Browse, search, and install skills from [Skill Hub](https://EXAMPLE-DISABLED-NO-SKILL-HUB/).
 
-Open source: [github.com/zhayujie/cow-skill-hub](https://github.com/zhayujie/cow-skill-hub)
+Open source: []()
 
 ## Install Skills
 
-Install skills from multiple sources via chat (`/skill`) or terminal (`cow skill`):
+Install skills from multiple sources via chat (`/skill`) or terminal (`maliang skill`):
 
 ```bash
 /skill install <name>                   # From Skill Hub
@@ -36,7 +36,7 @@ List all available remote skills:
 /skill uninstall <name>      # Uninstall a skill
 ```
 
-> In terminal, replace `/skill` with `cow skill`.
+> In terminal, replace `/skill` with `maliang skill`.
 
 ## Skill Structure
 
@@ -54,7 +54,7 @@ skills/
 ---
 name: my-skill
 description: Brief description of what the skill does
-metadata: {"cow":{"emoji":"🔧","requires":{"bins":["tool"],"env":["API_KEY"]}}}
+metadata: {"maliang":{"emoji":"🔧","requires":{"bins":["tool"],"env":["API_KEY"]}}}
 ---
 
 # My Skill
@@ -68,22 +68,22 @@ Instructions, examples, and usage patterns...
 |---|---|
 | `name` | Skill name (must match directory name) |
 | `description` | Brief description (required) |
-| `metadata.cow.emoji` | Display emoji |
-| `metadata.cow.always` | Always include this skill (default: false) |
-| `metadata.cow.requires.bins` | Required binaries |
-| `metadata.cow.requires.env` | Required environment variables |
-| `metadata.cow.requires.config` | Required config paths |
-| `metadata.cow.os` | Supported OS (e.g., `["darwin", "linux"]`) |
+| `metadata.maliang.emoji` | Display emoji |
+| `metadata.maliang.always` | Always include this skill (default: false) |
+| `metadata.maliang.requires.bins` | Required binaries |
+| `metadata.maliang.requires.env` | Required environment variables |
+| `metadata.maliang.requires.config` | Required config paths |
+| `metadata.maliang.os` | Supported OS (e.g., `["darwin", "linux"]`) |
 
 ## Skill Loading Order
 
 Skills are loaded from two locations (higher precedence overrides lower):
 
 1. **Builtin skills** (lower): `<project_root>/skills/` — shipped with the codebase
-2. **Custom skills** (higher): `~/cow/skills/` — installed via `cow skill install` or skill creator
+2. **Custom skills** (higher): `~/maliang/skills/` — installed via `maliang skill install` or skill creator
 
 Skills with the same name in the custom directory override builtin ones.
 
 ## Create & Contribute
 
-See the [Skill Creation docs](https://docs.cowagent.ai/skills/create) for details, or submit your skill to [Skill Hub](https://skills.cowagent.ai/submit).
+See the [Skill Creation docs](./docs/skills/create) for details, or submit your skill to [Skill Hub](https://EXAMPLE-DISABLED-NO-SKILL-HUB/submit).

@@ -1,15 +1,15 @@
 ---
 title: 备份与恢复
-description: "导出和恢复 CowAgent 的配置与 Agent 工作区数据，生成便携的本地归档，包含 config.json、人格文件、记忆、会话、知识库、自定义技能和定时任务，用于设备迁移或灾难恢复。"
+description: "导出和恢复 maliang 的配置与 Agent 工作区数据，生成便携的本地归档，包含 config.json、人格文件、记忆、会话、知识库、自定义技能和定时任务，用于设备迁移或灾难恢复。"
 ---
 
-CowAgent 可以生成便携的本地归档，用于设备迁移或灾难恢复。
+maliang 可以生成便携的本地归档，用于设备迁移或灾难恢复。
 
 ## 创建备份
 
 ```bash
-cow backup
-cow backup --output /safe/location/cow-backup.zip
+maliang backup
+maliang backup --output /safe/location/maliang-backup.zip
 ```
 
 归档包含：
@@ -28,21 +28,21 @@ cow backup --output /safe/location/cow-backup.zip
 
 ## 恢复备份
 
-恢复前先停止 CowAgent：
+恢复前先停止 maliang：
 
 ```bash
-cow stop
-cow restore /safe/location/cow-backup.zip
+maliang stop
+maliang restore /safe/location/maliang-backup.zip
 ```
 
 迁移到不同工作区时，可以显式指定路径：
 
 ```bash
-cow restore cow-backup.zip --workspace ~/cow-restored
+maliang restore maliang-backup.zip --workspace ~/maliang-restored
 ```
 
 恢复多 Agent 归档时，`--workspace` 表示实例根目录：默认 Agent 恢复到该根目录，其余 Agent 恢复到 `<根目录>/agents/<agent-id>`，与 Agent registry 自身推导的布局一致。未传该参数时，本机已存在的同名 Agent 沿用当前工作区，其余 Agent 落在本机当前使用的实例根目录下。
 
-恢复命令会在写入前校验归档格式和所有路径。它会覆盖同名文件，但不会删除目标目录中无关的现有文件。如果检测到当前 CowAgent 数据，会先在所选归档旁创建 `cow-pre-restore-*.zip` 回滚备份。
+恢复命令会在写入前校验归档格式和所有路径。它会覆盖同名文件，但不会删除目标目录中无关的现有文件。如果检测到当前 maliang 数据，会先在所选归档旁创建 `maliang-pre-restore-*.zip` 回滚备份。
 
 无人值守脚本可传入 `--yes` 确认覆盖。

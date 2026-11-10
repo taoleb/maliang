@@ -1,6 +1,6 @@
 r"""Local skill directories written the Windows way install from disk.
 
-``cow skill install`` takes a local directory as well as a Skill Hub name or a
+``maliang skill install`` takes a local directory as well as a Skill Hub name or a
 repository. On Windows that directory is typed or tab-completed as ``C:\...``,
 ``.\...`` or ``~\...``, so those must reach the local installer instead of
 being looked up on Skill Hub, and the web console must keep refusing them.

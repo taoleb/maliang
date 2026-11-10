@@ -51,12 +51,11 @@ const SOURCES: Record<
   { label: string; icon: IconComponent; valueKey: string; hintKey: string; placeholder: string; link?: string }
 > = {
   hub: {
-    label: 'Cow Skill Hub',
+    label: 'Skill Hub',
     icon: Box,
     valueKey: 'skill_value_hub',
     hintKey: 'skill_hint_hub',
     placeholder: 'skill-name',
-    link: 'https://skills.cowagent.ai/',
   },
   github: {
     label: 'GitHub',
@@ -75,7 +74,7 @@ const SOURCES: Record<
   },
 }
 
-const SOURCE_LABELS: Record<string, string> = { cowhub: 'Cow Skill Hub', github: 'GitHub', clawhub: 'ClawHub', url: 'URL' }
+const SOURCE_LABELS: Record<string, string> = { cowhub: 'Skill Hub', github: 'GitHub', clawhub: 'ClawHub', url: 'URL' }
 
 function sourceLabel(source: string): string {
   if (!source) return ''

@@ -143,7 +143,7 @@ def download_public_image(
         validate_public_image_url(current)
         response = get(
             current,
-            headers={"User-Agent": "CowAgent/Feishu"},
+            headers={"User-Agent": "maliang/Feishu"},
             timeout=(5, 15),
             allow_redirects=False,
             stream=True,

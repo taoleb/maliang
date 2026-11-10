@@ -8,7 +8,7 @@
   - serply  (https://serply.io, Google/Bing SERP API)
   - tavily  (https://tavily.com, AI-optimized search API)
   - outcrawl (https://outcrawl.ai, scrape and search API for AI agents)
-  - firecrawl (https://www.firecrawl.dev/?utm_source=cowagent&utm_medium=integration, context API for AI agents)
+  - firecrawl (https://www.firecrawl.dev/?utm_source=maliang&utm_medium=integration, context API for AI agents)
   - specstream (https://specstream.ai/docs/search-api, web search and page extraction API)
   - searxng (https://docs.searxng.org, self-hosted meta search engine)
   - keenable (https://keenable.ai, keyless tier behind an explicit opt-in)
@@ -534,7 +534,7 @@ class WebSearch(BaseTool):
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
-            "X-Appbuilder-From": "cow",
+            "X-Appbuilder-From": "maliang",
         }
 
         count = max(1, min(int(count or 10), 50))
@@ -917,7 +917,7 @@ class WebSearch(BaseTool):
             "Accept": "application/json",
             # Serply sits behind Cloudflare, which rejects the default
             # requests User-Agent, so send an explicit one.
-            "User-Agent": "CowAgent",
+            "User-Agent": "maliang",
         }
 
         logger.debug(f"[WebSearch] serply: query='{query}', count={count}")
@@ -958,7 +958,7 @@ class WebSearch(BaseTool):
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "X-Keenable-Title": "cowagent",
+            "X-Keenable-Title": "maliang",
         }
         if api_key:
             url = "https://api.keenable.ai/v1/search"
@@ -1121,7 +1121,7 @@ class WebSearch(BaseTool):
             "Accept": "application/json",
         }
         limit = max(1, min(int(count or 10), 20))
-        payload: Dict[str, Any] = {"query": query, "limit": limit, "origin": "cowagent"}
+        payload: Dict[str, Any] = {"query": query, "limit": limit, "origin": "maliang"}
 
         logger.debug(f"[WebSearch] firecrawl: query='{query}', limit={limit}")
         resp = requests.post(url, headers=headers, json=payload, timeout=DEFAULT_TIMEOUT)
@@ -1217,7 +1217,7 @@ class WebSearch(BaseTool):
         url = f"{base_url}/search?{urlencode(params)}"
         headers = {
             "Accept": "application/json",
-            "User-Agent": "CowAgent",
+            "User-Agent": "maliang",
         }
 
         logger.debug(f"[WebSearch] searxng: query='{query}', instance={base_url}")

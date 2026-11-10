@@ -19,19 +19,19 @@ def _reset_conf(monkeypatch, **overrides):
 
 
 def test_single_instance_keeps_legacy_path(monkeypatch):
-    monkeypatch.delenv("COW_DATA_DIR", raising=False)
+    monkeypatch.delenv("MALIANG_DATA_DIR", raising=False)
     _reset_conf(monkeypatch)
     assert get_weixin_credentials_path() == os.path.expanduser(
-        "~/.weixin_cow_credentials.json"
+        "~/.weixin_maliang_credentials.json"
     )
 
 
 def test_instance_id_isolates_the_file(monkeypatch):
-    monkeypatch.delenv("COW_DATA_DIR", raising=False)
+    monkeypatch.delenv("MALIANG_DATA_DIR", raising=False)
     _reset_conf(monkeypatch)
     path = get_weixin_credentials_path("weixin-abc123")
     assert path == os.path.expanduser(
-        "~/.weixin_cow_credentials.weixin-abc123.json"
+        "~/.weixin_maliang_credentials.weixin-abc123.json"
     )
     # Two instances never resolve to the same file.
     assert path != get_weixin_credentials_path("weixin-def456")

@@ -1,7 +1,7 @@
 """
 Google gemini bot
 
-@author zhayujie
+@author 长安前瞻院
 @Date 2023/12/15
 """
 # encoding:utf-8

@@ -1,9 +1,9 @@
 ---
 title: 对话 API
-description: "开启 OpenAI 兼容的 /v1/chat/completions 接口，让任意应用、SDK 或工作流调用完整的 CowAgent：背后会使用工具、技能、记忆和知识库，并返回思考过程、工具调用和 Token 用量。"
+description: "开启 OpenAI 兼容的 /v1/chat/completions 接口，让任意应用、SDK 或工作流调用完整的 maliang：背后会使用工具、技能、记忆和知识库，并返回思考过程、工具调用和 Token 用量。"
 ---
 
-> CowAgent 提供与 OpenAI Chat Completions 协议兼容的对话接口，复用 Web 控制台的端口。任何支持 OpenAI 协议的应用、SDK 或工作流都可以直接接入。
+> maliang 提供与 OpenAI Chat Completions 协议兼容的对话接口，复用 Web 控制台的端口。任何支持 OpenAI 协议的应用、SDK 或工作流都可以直接接入。
 
 和直接调用模型不同，接口背后是完整的 Agent：它会使用工具、技能、记忆和知识库完成任务，并把思考过程、工具调用和 Token 用量一并返回。
 
@@ -16,7 +16,7 @@ description: "开启 OpenAI 兼容的 /v1/chat/completions 接口，让任意应
 进入「配置 → 集成配置 → 对话 API」，打开开关并确认后会自动生成 API Key，并给出接口地址和调用示例（cURL / Python / Node.js），可直接复制使用。
 
 <Frame caption="配置页的「对话 API」卡片">
-  <img src="https://cdn.link-ai.tech/doc/chat-api-config-zh.png" alt="对话 API 配置" width="700" />
+  <img src="(upstream-cdn-removed)/doc/chat-api-config-zh.png" alt="对话 API 配置" width="700" />
 </Frame>
 
 - **重新生成**：生成新的 API Key，旧 Key 立即失效
@@ -100,10 +100,10 @@ Authorization: Bearer <API Key>
 | --- | --- | --- | --- |
 | `messages` | array | 是 | 对话消息，支持 `system`、`developer`、`user`、`assistant` 角色；`content` 可以是字符串，或 `type` 为 `text` 的内容数组 |
 | `model` | string | 否 | 本次回答使用的模型，不传时使用智能体的默认模型。可用值见 [模型列表](#模型列表) |
-| `agent_id` | string | 否 | CowAgent 扩展参数，指定由哪个智能体回答，不传时使用默认智能体，见 [指定智能体](#指定智能体) |
+| `agent_id` | string | 否 | maliang 扩展参数，指定由哪个智能体回答，不传时使用默认智能体，见 [指定智能体](#指定智能体) |
 | `stream` | boolean | 否 | 是否流式输出，默认 `false` |
 | `stream_options` | object | 否 | 设置 `{"include_usage": true}` 后，流式输出会在最后返回 Token 用量 |
-| `conversation_id` | string | 否 | CowAgent 扩展参数，指定后由服务端保存会话历史，见 [会话管理](#会话管理) |
+| `conversation_id` | string | 否 | maliang 扩展参数，指定后由服务端保存会话历史，见 [会话管理](#会话管理) |
 
 Agent 使用自己的工具和系统提示词，因此 `temperature`、`max_tokens`、`tools` 等参数会被忽略。
 
@@ -144,8 +144,8 @@ curl http://localhost:9899/v1/chat/completions \
 
 接口支持两种会话方式：
 
-- **无状态（默认）**：不传 `conversation_id`，与调用普通模型一样，每次请求带上完整的 `messages`。最后一条 `user` 消息作为本轮输入，之前的 `user` / `assistant` 消息作为上下文。本次对话不会写入 CowAgent 的会话记录。
-- **有状态**：传入 `conversation_id`，会话历史由 CowAgent 保存，之后每次只需发送新消息，`messages` 中更早的消息会被忽略。同一会话的请求按顺序依次处理。
+- **无状态（默认）**：不传 `conversation_id`，与调用普通模型一样，每次请求带上完整的 `messages`。最后一条 `user` 消息作为本轮输入，之前的 `user` / `assistant` 消息作为上下文。本次对话不会写入 maliang 的会话记录。
+- **有状态**：传入 `conversation_id`，会话历史由 maliang 保存，之后每次只需发送新消息，`messages` 中更早的消息会被忽略。同一会话的请求按顺序依次处理。
 
 ```json
 {
@@ -206,7 +206,7 @@ curl http://localhost:9899/v1/chat/completions \
 | `model` | 本次回答使用的模型 |
 | `message.content` | 最终回复 |
 | `message.reasoning_content` | 思考过程，开启深度思考且模型支持时返回 |
-| `message.tool_trace` | CowAgent 扩展字段，工具调用记录，每次调用包含参数、结果、状态和耗时；委派给其他智能体、生成文件等过程也会记录在这里，格式同下方的 [过程事件](#过程事件) |
+| `message.tool_trace` | maliang 扩展字段，工具调用记录，每次调用包含参数、结果、状态和耗时；委派给其他智能体、生成文件等过程也会记录在这里，格式同下方的 [过程事件](#过程事件) |
 | `usage` | Token 用量。Agent 完成一轮任务可能多次调用模型，这里是所有调用的总和；`prompt_tokens_details.cached_tokens` 为命中缓存的输入 Token。模型未返回用量时不包含此字段 |
 
 ### 流式

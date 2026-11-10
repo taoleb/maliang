@@ -6,7 +6,7 @@ description: "Web コンソールとデスクトップアプリのサイドバ�
 サイドバーメニューは使い方に合わせて調整できます。並べ替えやグループ分け、あまり使わないページの非表示に加えて、Agent が作成した Web ページやドキュメント、任意の URL をメニューに追加し、組み込みページと同じようにワンクリックで開けます。Web コンソールとデスクトップクライアントは同じメニューを共有します。
 
 <Frame caption="Agent が更新する運用ダッシュボードを「ワークベンチ」グループに追加し、コンソール内で直接開く">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-custom-menu.png" alt="カスタムメニュー" width="800" />
+  <img src="screenshots/en/web-console-custom-menu.png" alt="カスタムメニュー" width="800" />
 </Frame>
 
 ## メニューを編集
@@ -20,7 +20,7 @@ description: "Web コンソールとデスクトップアプリのサイドバ�
 - 「成果物」ページで Web ページや Markdown ドキュメントをプレビュー中に「メニューに追加」をクリック
 
 <Frame caption="メニューエディタ：ドラッグで並べ替え・グループ分けし、成果物や Web リンクを追加">
-  <img src="https://cdn.jsdelivr.net/gh/zhayujie/cowagent-assets@main/screenshots/en/web-console-custom-menu-config.png" alt="メニューエディタ" width="800" />
+  <img src="screenshots/en/web-console-custom-menu-config.png" alt="メニューエディタ" width="800" />
 </Frame>
 
 エディタで変更した後、保存をクリックすると反映されます。
@@ -70,7 +70,7 @@ description: "Web コンソールとデスクトップアプリのサイドバ�
 
 ### 保存場所
 
-メニューはデフォルト Agent のワークスペース内の `system/menu.json` に保存され（ソースからのデプロイでは `~/cow/system/menu.json`）、Web コンソールとデスクトップクライアントの両方が読み込みます。一方のクライアントにないページはそのクライアントではスキップされ、もう一方のためにメニューに残ります。
+メニューはデフォルト Agent のワークスペース内の `system/menu.json` に保存され（ソースからのデプロイでは `~/maliang/system/menu.json`）、Web コンソールとデスクトップクライアントの両方が読み込みます。一方のクライアントにないページはそのクライアントではスキップされ、もう一方のためにメニューに残ります。
 
 ### ファイル形式
 
@@ -85,7 +85,7 @@ description: "Web コンソールとデスクトップアプリのサイドバ�
       "title": "",
       "items": [
         { "id": "chat", "type": "builtin", "view": "chat", "title": "", "icon": "", "hidden": false },
-        { "id": "m_report", "type": "artifact", "title": "週報", "icon": "chart", "path": "/Users/me/cow/websites/report.html" },
+        { "id": "m_report", "type": "artifact", "title": "週報", "icon": "chart", "path": "/Users/me/maliang/websites/report.html" },
         { "id": "m_board", "type": "url", "title": "ダッシュボード", "icon": "gauge", "url": "https://example.com/board", "open": "embed" }
       ]
     }

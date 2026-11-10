@@ -8,7 +8,7 @@ import config
 def _load(tmp_path, monkeypatch, saved, env):
     (tmp_path / "config.json").write_text(json.dumps(saved))
     monkeypatch.setenv("HOME", str(tmp_path))
-    monkeypatch.setenv("COW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("MALIANG_DATA_DIR", str(tmp_path))
     for key, value in env.items():
         monkeypatch.setenv(key, value)
     config.load_config()

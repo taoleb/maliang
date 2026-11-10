@@ -19,7 +19,7 @@ env:
 
 jobs:
   build-and-push-image:
-    if: github.repository == 'zhayujie/CowAgent'
+    if: github.repository == 'DISABLED/maliang'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,8 +51,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ env.REGISTRY }}/zhayujie/chatgpt-on-wechat
-            ${{ env.REGISTRY }}/zhayujie/cowagent
+            ${{ env.REGISTRY }}/DISABLED/maliang
+            ${{ env.REGISTRY }}/UPSTREAM_AUTHOR/maliang
           tags: |
             type=raw,value=latest-arm64,enable={{is_default_branch}}
             type=ref,event=branch,suffix=-arm64
@@ -72,7 +72,7 @@ jobs:
 
       - uses: actions/delete-package-versions@v4
         with:
-          package-name: 'chatgpt-on-wechat'
+          package-name: 'maliang'
           package-type: 'container'
           min-versions-to-keep: 10
           delete-only-untagged-versions: 'true'

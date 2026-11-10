@@ -54,7 +54,7 @@ class ChatHandler:
         # scripts while unchanged ones stay cacheable.
         html = template.render('chat.html')
         # Inject the backend-resolved default language for first-load fallback.
-        html = html.replace("{{COW_DEFAULT_LANG}}", i18n.get_language())
+        html = html.replace("{{MALIANG_DEFAULT_LANG}}", i18n.get_language())
         return html
 
 
