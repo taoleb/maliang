@@ -43,19 +43,38 @@ jobs:
       - name: Package NSIS installer
         working-directory: desktop
         shell: pwsh
-        # Call electron-builder directly. `npm run dist:win -- --config ...`
-        # can be swallowed by npm's own --config flag on Windows, which left
-        # this step exiting 0 after tsc with no installer.
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        # Invoke electron-builder through node, not npm/npx. npm and npx treat
+        # --config as their own flag, and the previous npx call returned in
+        # under a second with no packager output and no .exe.
         # Unsigned build is expected unless signing secrets are provided.
         run: |
           npm run build
+          if ($LASTEXITCODE -ne 0) { throw "npm run build failed: $LASTEXITCODE" }
+
           if (-not (Test-Path resources/bin)) {
             New-Item -ItemType Directory -Path resources/bin | Out-Null
           }
-          npx --no-install electron-builder --win --config electron-builder.win.js
+
+          $cli = Join-Path $PWD "node_modules/electron-builder/cli.js"
+          if (-not (Test-Path $cli)) {
+            Write-Host "node_modules/.bin contents:"
+            if (Test-Path "node_modules/.bin") {
+              Get-ChildItem "node_modules/.bin" | ForEach-Object { Write-Host $_.Name }
+            }
+            throw "electron-builder CLI not found at $cli"
+          }
+
+          Write-Host "Running electron-builder via $cli"
+          & node $cli --win --x64 --config electron-builder.win.js --publish never
+          if ($LASTEXITCODE -ne 0) { throw "electron-builder exited with code $LASTEXITCODE" }
+
           Write-Host "Release directory:"
           if (Test-Path release) {
             Get-ChildItem -Recurse release | ForEach-Object { Write-Host ("{0}  {1}" -f $_.Length, $_.FullName) }
+          } else {
+            Write-Host "(release/ does not exist)"
           }
           $exes = @(Get-ChildItem -Path release -Filter *.exe -Recurse -ErrorAction SilentlyContinue)
           if ($exes.Count -eq 0) {
