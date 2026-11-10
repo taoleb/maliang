@@ -42,12 +42,29 @@ jobs:
 
       - name: Package NSIS installer
         working-directory: desktop
+        shell: pwsh
+        # Call electron-builder directly. `npm run dist:win -- --config ...`
+        # can be swallowed by npm's own --config flag on Windows, which left
+        # this step exiting 0 after tsc with no installer.
         # Unsigned build is expected unless signing secrets are provided.
-        run: npm run dist:win -- --config electron-builder.win.js
+        run: |
+          npm run build
+          if (-not (Test-Path resources/bin)) {
+            New-Item -ItemType Directory -Path resources/bin | Out-Null
+          }
+          npx --no-install electron-builder --win --config electron-builder.win.js
+          Write-Host "Release directory:"
+          if (Test-Path release) {
+            Get-ChildItem -Recurse release | ForEach-Object { Write-Host ("{0}  {1}" -f $_.Length, $_.FullName) }
+          }
+          $exes = @(Get-ChildItem -Path release -Filter *.exe -Recurse -ErrorAction SilentlyContinue)
+          if ($exes.Count -eq 0) {
+            throw "electron-builder finished but no .exe was found under desktop/release"
+          }
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
           name: maliang-windows-x64
-          path: desktop/release/*.exe
+          path: desktop/release/**/*.exe
           if-no-files-found: error

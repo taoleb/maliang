@@ -124,9 +124,12 @@ config.win = { ...config.win, signtoolOptions: { sign: customSign, signingHashAl
 // put it on the backend's PATH (shutil.which("rg") -> fast rg backend instead
 // of the slow PowerShell fallback). Declared here, not in package.json, so the
 // macOS build (which never creates resources/bin) never references it.
-config.extraResources = [
-  ...(config.extraResources || []),
-  { from: 'resources/bin', to: 'bin', filter: ['rg.exe'] },
-]
+const rgDir = path.join(__dirname, 'resources', 'bin')
+if (fs.existsSync(rgDir)) {
+  config.extraResources = [
+    ...(config.extraResources || []),
+    { from: 'resources/bin', to: 'bin', filter: ['rg.exe'] },
+  ]
+}
 
 module.exports = config
