@@ -99,7 +99,7 @@ def test_handler_uses_saved_key_when_the_ui_sends_a_masked_sentinel(monkeypatch)
     monkeypatch.setattr(
         models_api,
         "conf",
-        lambda: {"open_ai_api_key": "stored-secret", "open_ai_api_base": "https://api.example.com/v1"},
+        lambda: {"tianshu_api_key": "stored-secret", "tianshu_api_base": "https://api.example.com/v1"},
     )
     monkeypatch.setattr(
         models_api,
@@ -110,14 +110,14 @@ def test_handler_uses_saved_key_when_the_ui_sends_a_masked_sentinel(monkeypatch)
     )
 
     payload = json.loads(models_api.ModelsHandler()._handle_discover_models({
-        "provider_id": "openai",
+        "provider_id": "tianshu",
         "api_key": "stor********cret",
     }))
 
     assert payload["status"] == "success"
     assert payload["models"] == [{"name": "discovered-model", "capabilities": ["text"]}]
     assert seen == {
-        "provider_id": "openai",
+        "provider_id": "tianshu",
         "api_key": "stored-secret",
         "api_base": "https://api.example.com/v1",
     }
@@ -128,7 +128,7 @@ def test_handler_never_sends_the_saved_key_to_another_base(monkeypatch):
     monkeypatch.setattr(
         models_api,
         "conf",
-        lambda: {"open_ai_api_key": "stored-secret", "open_ai_api_base": "https://api.example.com/v1"},
+        lambda: {"tianshu_api_key": "stored-secret", "tianshu_api_base": "https://api.example.com/v1"},
     )
     monkeypatch.setattr(
         models_api,
@@ -137,7 +137,7 @@ def test_handler_never_sends_the_saved_key_to_another_base(monkeypatch):
     )
 
     payload = json.loads(models_api.ModelsHandler()._handle_discover_models({
-        "provider_id": "openai",
+        "provider_id": "tianshu",
         "api_key": "stor********cret",
         "api_base": "https://collector.invalid/v1",
     }))
@@ -190,35 +190,33 @@ def test_structured_modalities_and_budgets_win_over_the_name(monkeypatch):
     assert "jev-latest" not in by_name
 
 
-def test_linkai_dashscope_minimax_have_a_discoverable_default_base():
-    assert PROVIDER_MODELS["linkai"]["api_base_default"].endswith("/v1")
-    assert "compatible-mode" in PROVIDER_MODELS["dashscope"]["api_base_default"]
-    assert PROVIDER_MODELS["minimax"]["api_base_default"].endswith("/v1")
-    assert models_api._models_endpoint("linkai", "https://api.link-ai.tech") == (
-        "https://api.link-ai.tech/v1/models"
+def test_tianshu_and_changan_huoshan_have_a_discoverable_default_base():
+    assert PROVIDER_MODELS["tianshu"]["api_base_default"] == "https://ai.sda.changan.com.cn/api/v1"
+    assert PROVIDER_MODELS["changan_huoshan"]["api_base_default"] == (
+        "https://ark.cn-beijing.volces.com/api/v3"
     )
-    assert models_api._models_endpoint("linkai", "https://api.link-ai.tech/v1") == (
-        "https://api.link-ai.tech/v1/models"
-    )
+    assert models_api._models_endpoint(
+        "tianshu", "https://ai.sda.changan.com.cn/api/v1"
+    ) == "https://ai.sda.changan.com.cn/api/v1/models"
 
 
-def test_handler_uses_linkai_default_base(monkeypatch):
+def test_handler_uses_tianshu_default_base(monkeypatch):
     seen = {}
-    monkeypatch.setattr(models_api, "conf", lambda: {"linkai_api_key": "link-secret"})
+    monkeypatch.setattr(models_api, "conf", lambda: {"tianshu_api_key": "ts-secret"})
     monkeypatch.setattr(
         models_api,
         "_discover_models",
         lambda provider_id, api_key, api_base: seen.update(
             provider_id=provider_id, api_key=api_key, api_base=api_base
-        ) or [{"name": "gpt-6-luna", "capabilities": ["text"]}],
+        ) or [{"name": "my-model", "capabilities": ["text"]}],
     )
 
     payload = json.loads(models_api.ModelsHandler()._handle_discover_models({
-        "provider_id": "linkai",
-        "api_key": "link********cret",
+        "provider_id": "tianshu",
+        "api_key": "ts-s********cret",
     }))
 
     assert payload["status"] == "success"
-    assert seen["provider_id"] == "linkai"
-    assert seen["api_key"] == "link-secret"
-    assert seen["api_base"] == "https://api.link-ai.tech/v1"
+    assert seen["provider_id"] == "tianshu"
+    assert seen["api_key"] == "ts-secret"
+    assert seen["api_base"] == "https://ai.sda.changan.com.cn/api/v1"

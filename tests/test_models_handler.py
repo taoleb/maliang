@@ -59,39 +59,11 @@ class TestModelsHandler(unittest.TestCase):
                 result = json.loads(ConfigHandler().GET())
 
         self.assertEqual(result["reasoning_effort"], "max")
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["deepseek"]["reasoning"]["options"]],
-            ["low", "high", "xhigh", "max"],
-        )
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["deepseek"]["reasoning_by_model"]["deepseek-v4-flash"]["options"]],
-            ["low", "high", "xhigh", "max"],
-        )
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["zhipu"]["reasoning"]["options"]],
-            ["low", "medium", "high", "xhigh", "max"],
-        )
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["claudeAPI"]["reasoning_by_model"]["claude-opus-5"]["options"]],
-            ["low", "medium", "high", "xhigh", "max"],
-        )
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["claudeAPI"]["reasoning_by_model"]["claude-sonnet-4-6"]["options"]],
-            ["low", "medium", "high", "max"],
-        )
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["dashscope"]["reasoning_by_model"]["qwen3.8-max"]["options"]],
-            ["low", "medium", "xhigh"],
-        )
-        self.assertFalse(result["providers"]["dashscope"]["reasoning_by_model"]["qwen3.7-plus"]["supported"])
-        self.assertEqual(
-            [item["value"] for item in result["providers"]["moonshot"]["reasoning_by_model"]["kimi-k3"]["options"]],
-            ["low", "high", "max"],
-        )
-        self.assertTrue(result["providers"]["moonshot"]["reasoning_by_model"]["kimi-k3"]["thinking_only"])
-        self.assertFalse(result["providers"]["moonshot"]["reasoning_by_model"]["kimi-k2.7-code"]["supported"])
-        self.assertFalse(result["providers"]["openai"]["reasoning"]["supported"])
-        self.assertFalse(result["providers"]["gemini"]["reasoning"]["supported"])
+        # The settings payload only lists the three user-facing chat providers.
+        self.assertEqual(set(result["providers"].keys()), {"tianshu", "changan_huoshan", "custom"})
+        for pid in ("tianshu", "changan_huoshan", "custom"):
+            self.assertIn("reasoning", result["providers"][pid])
+            self.assertIn("supported", result["providers"][pid]["reasoning"])
 
     def test_reasoning_effort_is_editable_config_key(self):
         from channel.web.api.config import ConfigHandler
@@ -138,7 +110,10 @@ class TestModelsHandler(unittest.TestCase):
             with patch("channel.web.api.config.conf", return_value=local_config):
                 result = json.loads(ConfigHandler().GET())
 
-        self.assertFalse(result["providers"]["deepseek"]["reasoning"]["supported"])
+        # deepseek is no longer a user-facing provider in this payload.
+        self.assertNotIn("deepseek", result["providers"])
+        self.assertIn("tianshu", result["providers"])
+        self.assertFalse(result["providers"]["tianshu"]["reasoning"]["supported"])
 
     def test_set_asr_capability_persists_provider_and_model(self):
         from channel.web.api.models import ModelsHandler
@@ -229,7 +204,9 @@ class TestModelsHandler(unittest.TestCase):
             "model": "deepseek-v4-flash",
             "deepseek_api_key": "sk-test-placeholder",
         })
-        self.assertEqual(cap["current_provider"], "deepseek")
+        # deepseek is no longer in the user-facing catalog, so an inferred
+        # vendor that isn't offered in the UI stays unset (onboarding can run).
+        self.assertEqual(cap["current_provider"], "")
         self.assertEqual(cap["current_model"], "deepseek-v4-flash")
 
     def test_chat_capability_empty_bot_type_use_linkai_stays_linkai(self):

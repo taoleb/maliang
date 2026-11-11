@@ -365,18 +365,15 @@ class TestQianfanSurfaces(unittest.TestCase):
         with open(os.path.join(root, relative_path), encoding="utf-8") as f:
             return f.read()
 
-    def test_web_console_registers_qianfan_provider(self):
-        # Assert against the registry itself rather than the source text, so
-        # reformatting or switching the label to an i18n dict cannot break this.
+    def test_web_console_no_longer_lists_qianfan_as_a_chat_provider(self):
+        # The chat UI catalog is limited to 天枢 / 长安火山 / 自定义.
+        # Qianfan remains as a backend implementation, but is not a user-facing option.
         from channel.web.core import providers
-        from common import const
 
-        provider = providers.PROVIDER_MODELS["qianfan"]
-
-        self.assertEqual(provider["api_key_field"], "qianfan_api_key")
-        self.assertEqual(provider["api_base_key"], "qianfan_api_base")
-        self.assertEqual(provider["api_base_default"], "https://qianfan.baidubce.com/v2")
-        self.assertIn(const.ERNIE_5_1, provider["models"])
+        self.assertNotIn("qianfan", providers.PROVIDER_MODELS)
+        self.assertEqual(list(providers.PROVIDER_MODELS.keys()), [
+            "tianshu", "changan_huoshan", "custom",
+        ])
 
     def test_web_console_allows_qianfan_config_edits(self):
         from conftest import web_backend_py

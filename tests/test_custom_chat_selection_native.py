@@ -71,7 +71,7 @@ def endpoint():
     ("custom:owned", "", "selected-model", ""),
     ("custom:owned", "provider-default", "selected-model", "environment-model"),
     ("custom", "provider-default", "selected-model", ""),
-    ("openai", "provider-default", "selected-model", ""),
+    ("tianshu", "provider-default", "selected-model", ""),
 ])
 def test_main_model_selection_reaches_native_wire(tmp_path, endpoint, provider_id, default, selected, env_model):
     url, captured = endpoint
@@ -82,7 +82,7 @@ def test_main_model_selection_reaches_native_wire(tmp_path, endpoint, provider_i
     ]
     config = {"model": "global-model", "bot_type": provider_id, "custom_providers": providers,
               "custom_api_base": url, "custom_api_key": "legacy-fixture-key",
-              "open_ai_api_base": url, "open_ai_api_key": "openai-fixture-key"}
+              "open_ai_api_base": url, "open_ai_api_key": "openai-fixture-key", "tianshu_api_base": url, "tianshu_api_key": "tianshu-fixture-key"}
     output = _run(tmp_path, config, """
 config.config = config.Config(json.loads(path.read_text()))
 saved = select(os.environ['PROVIDER'], os.environ['SELECTED'])

@@ -207,36 +207,47 @@ html:not(.dark) #login-overlay .welcome-mascot {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 11.5rem;
-    height: 11.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 50%;
+    width: auto;
+    height: 13.75rem;
+    max-height: 260px;
+    margin-bottom: 0.75rem;
+    padding: 0.2rem;
+    border-radius: 1.25rem;
     overflow: hidden;
     background: rgb(var(--cw-canvas));
-    box-shadow: 0 0 0 3px rgb(var(--cw-primary-400) / 0.28), 0 16px 32px rgba(43, 32, 18, 0.08);
+    box-shadow: 0 0 0 2px rgb(var(--cw-primary-400) / 0.28), 0 12px 28px rgba(43, 32, 18, 0.08);
 }
 html:not(.dark) .welcome-mascot img,
 html:not(.dark) #login-overlay .welcome-mascot img {
-    width: 120%;
-    height: 120%;
-    object-fit: cover;
-    object-position: center 18%;
-    /* Feather any hard rectangular edge in the GIF into the cream canvas. */
-    -webkit-mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
-            mask-image: radial-gradient(ellipse 72% 76% at 50% 48%, #000 62%, transparent 82%);
+    width: auto;
+    height: 100%;
+    max-height: 13.75rem;
+    object-fit: contain;
+    object-position: center;
+    -webkit-mask-image: none;
+            mask-image: none;
+}
+html:not(.dark) #login-overlay .welcome-mascot {
+    height: 9rem;
+    max-height: 9rem;
+    margin-bottom: 1rem;
+}
+html:not(.dark) #login-overlay .welcome-mascot img {
+    max-height: 9rem;
 }
 html:not(.dark) #welcome-title {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     letter-spacing: 0.02em;
     color: rgb(var(--cw-slate-800));
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 html:not(.dark) #welcome-subtitle {
     color: rgb(var(--cw-slate-600));
-    font-size: 0.95rem;
-    line-height: 1.8;
+    font-size: 0.75rem;
+    line-height: 1.5;
     max-width: 28rem;
+    margin-bottom: 1rem;
 }
 
 /* Quick-action cards */

@@ -35,13 +35,17 @@ available_setting = {
     "gemini_api_base": "https://generativelanguage.googleapis.com",  # gemini api base
     "custom_api_key": "",  # custom OpenAI-compatible provider api key (used when bot_type is "custom"); legacy single-provider field
     "custom_api_base": "",  # custom OpenAI-compatible provider api base (used when bot_type is "custom"); legacy single-provider field
+    "tianshu_api_key": "",  # 天枢模型 (OpenAI-compatible)
+    "tianshu_api_base": "https://ai.sda.changan.com.cn/api/v1",
+    "changan_huoshan_api_key": "",  # 长安火山 / Volcengine Ark (OpenAI-compatible)
+    "changan_huoshan_api_base": "https://ark.cn-beijing.volces.com/api/v3",
     # Multiple custom (OpenAI-compatible) providers. Activated via bot_type: "custom:<id>".
     # Each item: {"id": "3f2a9c1b", "name": "my-provider", "api_key": "sk-...", "api_base": "https://api.example.com/v1", "model": "model-name"}
     "custom_providers": [],
     "proxy": "",  # proxy used by openai
     # chatgpt model; when use_azure_chatgpt is true, this is the Azure model deployment name
     "model": "deepseek-flash",  # options: gpt-4o, gpt-4o-mini, gpt-4-turbo, claude-3-sonnet, wenxin, moonshot, qwen-turbo, xunfei, glm-4, minimax, gemini, etc. See common/const.py for the full list
-    "bot_type": "",  # optional; for OpenAI-compatible third-party services set "openai" or "custom" (in custom mode switching model won't auto-switch bot_type). See common/const.py for bot names; inferred from model name if left empty
+    "bot_type": "",  # optional; default UI selection is "tianshu"; also "changan_huoshan" or "custom" (in custom mode switching model won't auto-switch bot_type). See common/const.py for bot names; inferred from model name if left empty
     # Fallback chat models, tried in order after the primary one has failed
     # permanently for a turn (all retries exhausted). Opt-in: an empty `chain`
     # disables the switch and the error surfaces as before.
@@ -522,6 +526,10 @@ def _quarantine_corrupted_config(config_path):
 CONFIG_TO_ENV = {
     "open_ai_api_key": "OPENAI_API_KEY",
     "open_ai_api_base": "OPENAI_API_BASE",
+    "tianshu_api_key": "TIANSHU_API_KEY",
+    "tianshu_api_base": "TIANSHU_API_BASE",
+    "changan_huoshan_api_key": "CHANGAN_HUOSHAN_API_KEY",
+    "changan_huoshan_api_base": "CHANGAN_HUOSHAN_API_BASE",
     "linkai_api_key": "LINKAI_API_KEY",
     "linkai_api_base": "LINKAI_API_BASE",
     "claude_api_key": "CLAUDE_API_KEY",

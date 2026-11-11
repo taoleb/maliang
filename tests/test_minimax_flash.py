@@ -179,17 +179,12 @@ def test_global_agent_default_is_unchanged(monkeypatch, settings):
 
 def test_picker_defaults_and_saved_catalog_overrides(monkeypatch):
     from channel.web.api.models import ModelsHandler
-    from channel.web.core.providers import PROVIDER_MODELS
 
-    assert PROVIDER_MODELS["minimax"]["models"] == [
-        const.MINIMAX_M3_1_FLASH, const.MINIMAX_M3, const.MINIMAX_M2_7, const.MINIMAX_M2_7_HIGHSPEED,
-    ]
-    assert [m for m in PROVIDER_MODELS["linkai"]["models"] if m.startswith("MiniMax")] == [
-        const.MINIMAX_M3_1_FLASH, const.MINIMAX_M3, const.MINIMAX_M2_7_HIGHSPEED, const.MINIMAX_M2_7,
-    ]
     catalog = ModelsHandler._merged_catalog("minimax", catalog_map={}, hidden_map={})
+    # MiniMax is no longer in the user-facing chat catalog; the merged
+    # backend catalog still carries the current MiniMax text models.
     assert [e["name"] for e in catalog if "text" in e["capabilities"]] == [
-        const.MINIMAX_M3_1_FLASH, const.MINIMAX_M3, const.MINIMAX_M2_7, const.MINIMAX_M2_7_HIGHSPEED,
+        const.MINIMAX_M3_1_FLASH, const.MINIMAX_M3,
     ]
     assert catalog[0]["context_window"] == 1000000
     assert catalog[0]["max_output_tokens"] == 524288

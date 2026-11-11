@@ -1,6 +1,12 @@
 {
   "maliang_lang": "zh",
   "channel_type": "web",
+  "tianshu_api_key": "",
+  "tianshu_api_base": "https://ai.sda.changan.com.cn/api/v1",
+  "changan_huoshan_api_key": "",
+  "changan_huoshan_api_base": "https://ark.cn-beijing.volces.com/api/v3",
+  "custom_api_key": "",
+  "custom_api_base": "",
   "model": "deepseek-flash",
   "deepseek_api_key": "",
   "deepseek_api_base": "https://api.deepseek.com/v1",

@@ -522,7 +522,10 @@ def _session_model_catalog() -> List[dict]:
 
     catalog: List[dict] = []
     for pid, pinfo in PROVIDER_MODELS.items():
-        if pid == "custom" or not pinfo.get("models"):
+        # Legacy "custom" is expanded below via custom_providers. Built-in
+        # catalog providers (天枢/长安火山) have no preset model list — still
+        # include them when they have a key or are active, using the typed model.
+        if pid == "custom":
             continue
         key_field = pinfo.get("api_key_field")
         has_key = bool(key_field and str(local_config.get(key_field) or "").strip())
@@ -530,21 +533,21 @@ def _session_model_catalog() -> List[dict]:
             continue
         # Overlay onto the presets, then keep only text-tagged entries — only
         # those belong in the conversation switcher. Without an overlay this is
-        # just the preset model list.
+        # just the preset model list (possibly empty for free-text vendors).
         if catalog_map.get(pid) or hidden_map.get(pid):
             effective = ModelsHandler._merged_catalog(
                 pid, ModelsHandler._preset_seed(pid), catalog_map, hidden_map)
             models = [e["name"] for e in effective if "text" in (e.get("capabilities") or [])]
         else:
-            models = list(pinfo["models"])
-        if not models:
-            continue
+            models = list(pinfo.get("models") or [])
         # The user can pin a custom model name to a built-in provider (via the
         # global config / capability "custom model" field). That model won't be
         # in the preset list, so surface it here for the active provider so the
         # chat picker can both display and re-select it.
         if pid == active_provider and active_model and active_model not in models:
             models.insert(0, active_model)
+        if not models:
+            continue
         catalog.append({
             "id": pid,
             "label": pinfo["label"],

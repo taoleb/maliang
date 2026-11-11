@@ -4,7 +4,7 @@ import { t, getLang, setLang, type Lang } from '../i18n'
 import apiClient from '../api/client'
 import type { ModelsData } from '../types'
 import { Field, Dropdown, TextInput, type DropdownOption } from '../pages/settings/primitives'
-import { resolveModels, providerLabel } from '../pages/settings/modelsHelpers'
+import { resolveModels, providerLabel, usesFreeTextModel } from '../pages/settings/modelsHelpers'
 import { useOnboardingStore } from '../store/onboardingStore'
 import Mascot from './Mascot'
 
@@ -48,6 +48,15 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
       .catch(() => setError(t('onboarding_save_failed')))
   }, [])
 
+  // Default the provider picker to 天枢模型 once the catalog arrives.
+  useEffect(() => {
+    if (!models || provider) return
+    const ids = models.capabilities?.chat?.providers || []
+    const def = ids.includes('tianshu') ? 'tianshu' : ids[0] || ''
+    if (def) handleProvider(def)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [models])
+
   // Persist the auto-detected default language on first show so the pre-selected
   // option (driven by OS locale) also reaches the backend, even if the user
   // doesn't tap the language buttons.
@@ -76,9 +85,10 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
 
   const handleProvider = (id: string) => {
     setProvider(id)
-    setApiBase('')
+    const meta = models?.providers?.find((p) => p.id === id)
+    setApiBase(meta?.api_base_default || '')
     const first = resolveModels(models, id, models?.capabilities?.chat?.provider_models)[0]
-    setModel(first?.value || '')
+    setModel(usesFreeTextModel(id, models) ? '' : (first?.value || ''))
   }
 
   const switchLang = (next: Lang) => {
@@ -107,7 +117,7 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
         action: 'set_provider',
         provider_id: provider,
         api_key: apiKey.trim(),
-        ...(apiBase.trim() ? { api_base: apiBase.trim() } : {}),
+        api_base: apiBase.trim() || providerMeta?.api_base_default || '',
       })
       await apiClient.modelsAction({
         action: 'set_capability',
@@ -231,12 +241,21 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({ onDone }) => {
                     </Field>
                   )}
                   <Field label={t('onboarding_model')}>
-                    <Dropdown
-                      value={model}
-                      options={modelOptions}
-                      placeholder={t('onboarding_select_model')}
-                      onChange={setModel}
-                    />
+                    {usesFreeTextModel(provider, models) ? (
+                      <TextInput
+                        value={model}
+                        onChange={(e) => setModel(e.target.value)}
+                        placeholder={t('config_custom_model_hint')}
+                        className="font-mono"
+                      />
+                    ) : (
+                      <Dropdown
+                        value={model}
+                        options={modelOptions}
+                        placeholder={t('onboarding_select_model')}
+                        onChange={setModel}
+                      />
+                    )}
                   </Field>
                 </>
               )}

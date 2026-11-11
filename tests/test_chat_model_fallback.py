@@ -350,7 +350,7 @@ class TestConsoleValidation:
         return result, written
 
     def test_enabling_without_a_model_is_rejected(self, monkeypatch):
-        result, _ = self._saved(monkeypatch, "openai", "", True)
+        result, _ = self._saved(monkeypatch, "tianshu", "", True)
         assert "error" in result
 
     def test_enabling_without_a_provider_is_rejected(self, monkeypatch):
@@ -374,7 +374,7 @@ class TestConsoleValidation:
     def test_an_unknown_provider_inside_the_chain_is_rejected(self, monkeypatch):
         result, _ = self._saved(
             monkeypatch, "", "", True,
-            chain=[{"provider": "openai", "model": "ok"},
+            chain=[{"provider": "tianshu", "model": "ok"},
                    {"provider": "not-a-vendor", "model": "m"}],
         )
         assert "error" in result
@@ -383,18 +383,18 @@ class TestConsoleValidation:
         """Order is the whole point: link 1 is tried before link 2."""
         result, written = self._saved(
             monkeypatch, "", "", True,
-            chain=[{"provider": "openai", "model": "backup-1"},
-                   {"provider": "qianfan", "model": "backup-2"}],
+            chain=[{"provider": "tianshu", "model": "backup-1"},
+                   {"provider": "changan_huoshan", "model": "backup-2"}],
         )
         assert '"status": "success"' in result
         assert written["chat_fallback"]["chain"] == [
-            {"provider": "openai", "model": "backup-1"},
-            {"provider": "qianfan", "model": "backup-2"},
+            {"provider": "tianshu", "model": "backup-1"},
+            {"provider": "changan_huoshan", "model": "backup-2"},
         ]
 
     def test_a_long_chain_is_persisted_whole(self, monkeypatch):
         """No cap: five links in, five links out."""
-        chain = [{"provider": "openai", "model": f"backup-{i}"} for i in range(5)]
+        chain = [{"provider": "tianshu", "model": f"backup-{i}"} for i in range(5)]
         _, written = self._saved(monkeypatch, "", "", True, chain=chain)
         assert len(written["chat_fallback"]["chain"]) == 5
 
@@ -402,12 +402,12 @@ class TestConsoleValidation:
         """One half-filled row shouldn't block saving the good ones."""
         _, written = self._saved(
             monkeypatch, "", "", True,
-            chain=[{"provider": "openai", "model": "backup-1"},
-                   {"provider": "qianfan", "model": ""},
+            chain=[{"provider": "tianshu", "model": "backup-1"},
+                   {"provider": "changan_huoshan", "model": ""},
                    {"provider": "", "model": "orphan"}],
         )
         assert written["chat_fallback"]["chain"] == [
-            {"provider": "openai", "model": "backup-1"}
+            {"provider": "tianshu", "model": "backup-1"}
         ]
 
     def test_an_untouched_row_is_dropped_rather_than_rejected(self, monkeypatch):
@@ -415,10 +415,10 @@ class TestConsoleValidation:
         _, written = self._saved(
             monkeypatch, "", "", True,
             chain=[{"provider": "", "model": ""},
-                   {"provider": "openai", "model": "backup-1"}],
+                   {"provider": "tianshu", "model": "backup-1"}],
         )
         assert written["chat_fallback"]["chain"] == [
-            {"provider": "openai", "model": "backup-1"}
+            {"provider": "tianshu", "model": "backup-1"}
         ]
 
     def test_a_non_list_chain_is_rejected(self, monkeypatch):
@@ -428,10 +428,10 @@ class TestConsoleValidation:
     def test_the_legacy_two_argument_call_still_works(self, monkeypatch):
         """An older client sending one provider/model pair gets a one-link
         chain, so it keeps working against the new config."""
-        _, written = self._saved(monkeypatch, "openai", "backup-model", True)
+        _, written = self._saved(monkeypatch, "tianshu", "backup-model", True)
         assert written["chat_fallback"] == {
             "enabled": True,
-            "chain": [{"provider": "openai", "model": "backup-model"}],
+            "chain": [{"provider": "tianshu", "model": "backup-model"}],
         }
 
     def test_provider_models_is_a_list_per_provider(self, monkeypatch):
@@ -446,16 +446,17 @@ class TestConsoleValidation:
 
         cap = ModelsHandler._chat_fallback_capability({})
         provider_models = cap["provider_models"]
-        assert provider_models, "expected a non-empty model catalog"
+        # Catalog providers may have empty model lists (user types the name).
+        assert "tianshu" in provider_models
+        assert "changan_huoshan" in provider_models
+        assert "custom" in provider_models
         for pid, models in provider_models.items():
             assert isinstance(models, list), f"{pid} -> {type(models).__name__}"
             for m in models:
                 assert isinstance(m, str), f"{pid} has a non-string model: {m!r}"
-        # Spot-check that the lists were really lifted out of the catalog.
         assert isinstance(
-            providers.PROVIDER_MODELS["openai"], dict
+            providers.PROVIDER_MODELS["tianshu"], dict
         ), "PROVIDER_MODELS entries are dicts — hence the reduction"
-        assert "gpt-4o" in provider_models["openai"]
 
     def test_the_capability_exposes_the_saved_chain(self, monkeypatch):
         monkeypatch.setattr(

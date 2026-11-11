@@ -39,15 +39,15 @@ class TestSessionModelCatalog(unittest.TestCase):
     def test_custom_model_on_builtin_provider_is_selectable(self):
         """A custom model name pinned to a built-in provider shows up."""
         catalog = _catalog_with({
-            "bot_type": "openai",
-            "open_ai_api_key": "sk-xxx",
-            "model": "gpt-5-custom-preview",
+            "bot_type": "tianshu",
+            "tianshu_api_key": "sk-xxx",
+            "model": "my-custom-preview",
         })
-        openai = next((c for c in catalog if c["id"] == "openai"), None)
-        self.assertIsNotNone(openai)
-        self.assertIn("gpt-5-custom-preview", openai["models"])
+        tianshu = next((c for c in catalog if c["id"] == "tianshu"), None)
+        self.assertIsNotNone(tianshu)
+        self.assertIn("my-custom-preview", tianshu["models"])
         # The custom model is listed first so it is easy to find + re-select.
-        self.assertEqual(openai["models"][0], "gpt-5-custom-preview")
+        self.assertEqual(tianshu["models"][0], "my-custom-preview")
 
     def test_custom_provider_with_model_is_selectable(self):
         catalog = _catalog_with({

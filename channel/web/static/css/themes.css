@@ -103,9 +103,13 @@
 /* ---- Theme logo ----
    Replaces the new-chat logo; the <img> keeps its box (and its src), its
    own picture is pushed out of view so only the theme's shows. */
-html[data-theme-logo] #welcome-screen > img:first-child {
+html[data-theme-logo] #welcome-screen > img:first-child,
+html[data-theme-logo] #welcome-screen > .welcome-mascot {
     object-position: -9999px 0;
-    background: var(--cw-theme-logo) center / cover no-repeat;
+    background: var(--cw-theme-logo) center / contain no-repeat;
+}
+html[data-theme-logo] #welcome-screen > .welcome-mascot img {
+    visibility: hidden;
 }
 
 /* ---- Wallpaper ----

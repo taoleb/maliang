@@ -35,11 +35,11 @@ SEED = {
 # Each of these actions reaches _write_config_file_for_write on master.
 WRITE_ACTIONS = [
     pytest.param(
-        {"action": "set_provider", "provider_id": "deepseek", "api_key": "sk-lock"},
+        {"action": "set_provider", "provider_id": "tianshu", "api_key": "sk-lock"},
         id="set_provider",
     ),
     pytest.param(
-        {"action": "delete_provider", "provider_id": "deepseek"},
+        {"action": "delete_provider", "provider_id": "tianshu"},
         id="delete_provider",
     ),
     pytest.param(
@@ -151,7 +151,7 @@ def test_a_concurrent_settings_save_keeps_the_models_change(console, monkeypatch
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         models = pool.submit(post_models, {
-            "action": "set_provider", "provider_id": "deepseek", "api_key": "sk-lock"})
+            "action": "set_provider", "provider_id": "tianshu", "api_key": "sk-lock"})
         try:
             assert models_read.wait(5)
             other = pool.submit(settings)
@@ -167,7 +167,7 @@ def test_a_concurrent_settings_save_keeps_the_models_change(console, monkeypatch
     assert saved["status"] == "success"
     on_disk = json.loads(path.read_text(encoding="utf-8"))
     # Both writes happened; neither may be lost.
-    assert on_disk["deepseek_api_key"] == "sk-lock"
+    assert on_disk["tianshu_api_key"] == "sk-lock"
     assert on_disk["enable_thinking"] is True
     assert config.conf()["enable_thinking"] is True
 
@@ -177,11 +177,11 @@ def test_a_plain_models_save_still_succeeds(console):
     post_models, _, path = console
 
     resp = post_models({
-        "action": "set_provider", "provider_id": "deepseek", "api_key": "sk-lock"})
+        "action": "set_provider", "provider_id": "tianshu", "api_key": "sk-lock"})
 
     assert json.loads(resp.data)["status"] == "success"
-    assert json.loads(path.read_text(encoding="utf-8"))["deepseek_api_key"] == "sk-lock"
-    assert config.conf()["deepseek_api_key"] == "sk-lock"
+    assert json.loads(path.read_text(encoding="utf-8"))["tianshu_api_key"] == "sk-lock"
+    assert config.conf()["tianshu_api_key"] == "sk-lock"
 
 
 def test_model_discovery_does_not_hold_the_save_lock(console, monkeypatch):
@@ -197,7 +197,7 @@ def test_model_discovery_does_not_hold_the_save_lock(console, monkeypatch):
 
     monkeypatch.setattr(ModelsHandler, "_handle_discover_models", fake_discover)
 
-    resp = post_models({"action": "discover_models", "provider_id": "deepseek"})
+    resp = post_models({"action": "discover_models", "provider_id": "tianshu"})
 
     assert json.loads(resp.data)["status"] == "success"
     assert seen == [False], "a read-only network probe held the config save lock"

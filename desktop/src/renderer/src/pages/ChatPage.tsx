@@ -505,23 +505,23 @@ const ChatPage: React.FC<ChatPageProps> = ({ baseUrl }) => {
         )}
 
         {isEmpty ? (
-          <div data-home className="chat-home flex flex-col items-center justify-center h-full px-6 py-12">
-            <div className="theme-logo mascot-frame mb-5">
+          <div data-home className="chat-home flex flex-col items-center justify-center h-full px-6 py-4">
+            <div className="theme-logo mascot-frame mb-3">
               {product.slots?.HomeLogo ? (
                 <div className="w-16 h-16 rounded-2xl mx-auto shadow-md overflow-hidden">
                   <product.slots.HomeLogo />
                 </div>
               ) : (
-                <Mascot className="h-full w-full object-cover" />
+                <Mascot className="h-full w-auto object-contain" />
               )}
             </div>
-            <h1 className="text-2xl font-bold text-content mb-2 tracking-wide">{t('chat_welcome')}</h1>
-            <p className="text-content-tertiary text-sm text-center max-w-md mb-8 leading-loose whitespace-pre-line">
+            <h1 className="text-xl font-bold text-content mb-1 tracking-wide">{t('chat_welcome')}</h1>
+            <p className="text-content-tertiary text-xs text-center max-w-md mb-4 leading-relaxed whitespace-pre-line">
               {t('welcome_subtitle')}
             </p>
 
             {suggestions.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-2xl">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full max-w-xl">
                 {suggestions.map(({ key, title, text, prompt, icon: Icon, iconClass, bgClass, onSelect }) => (
                   <button
                     key={key}
@@ -535,17 +535,17 @@ const ChatPage: React.FC<ChatPageProps> = ({ baseUrl }) => {
                       // Fill the input (don't auto-send) so the user can tweak it first.
                       inputResetRef.current?.(prompt, [])
                     }}
-                    className="group flex flex-col justify-start text-left bg-surface border border-default rounded-xl p-3.5 cursor-pointer hover:border-accent hover:shadow-md transition-all hover:-translate-y-px"
+                    className="group flex flex-col justify-start text-left bg-surface border border-default rounded-lg p-2.5 cursor-pointer hover:border-accent hover:shadow-md transition-all hover:-translate-y-px"
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-1.5 mb-1">
                       <span
-                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${bgClass}`}
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${bgClass}`}
                       >
-                        <Icon size={15} className={iconClass} />
+                        <Icon size={12} className={iconClass} />
                       </span>
-                      <span className="font-medium text-sm text-content">{title}</span>
+                      <span className="font-medium text-xs text-content">{title}</span>
                     </div>
-                    <p className="text-xs text-content-tertiary leading-relaxed line-clamp-2">{text}</p>
+                    <p className="text-[11px] text-content-tertiary leading-snug line-clamp-2">{text}</p>
                   </button>
                 ))}
               </div>

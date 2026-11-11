@@ -55,3 +55,14 @@ export function resolveVoices(
 }
 
 export const CUSTOM_OPTION = '__custom__'
+
+/** Built-in catalog providers plus custom entries that have no model list. */
+export function isFreeTextChatProvider(id: string): boolean {
+  return id === 'tianshu' || id === 'changan_huoshan' || id === 'custom' || id.startsWith('custom:')
+}
+
+/** Free-text model name when the provider has no catalog to pick from. */
+export function usesFreeTextModel(id: string, data: ModelsData | null): boolean {
+  if (!id || !isFreeTextChatProvider(id)) return false
+  return !data?.providers?.find((x) => x.id === id)?.catalog?.length
+}

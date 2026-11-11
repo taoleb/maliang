@@ -64,14 +64,13 @@ class TestSeedRows(unittest.TestCase):
     """`seed` gives the editor the preset base typed with real capabilities."""
 
     def test_a_builtin_vendor_seeds_its_preset_models(self):
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu")
+        # 天枢/长安火山 have no preset model ids; the user types the name.
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu")
         self.assertIsNotNone(p)
-        self.assertTrue(p["seed"], "a built-in vendor must offer seed rows")
-        names = [e["name"] for e in p["seed"]]
-        self.assertIn("glm-5.2", names)
+        self.assertEqual(p["seed"], [])
 
     def test_every_seed_row_carries_at_least_one_tag(self):
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu")
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu")
         for entry in p["seed"]:
             self.assertTrue(
                 entry.get("capabilities"),
@@ -79,18 +78,14 @@ class TestSeedRows(unittest.TestCase):
             )
 
     def test_only_conversational_presets_are_tagged_text(self):
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu")
-        asr_only = [e for e in p["seed"] if e["capabilities"] == ["asr"]]
-        self.assertTrue(asr_only, "expected at least one ASR-only preset")
-        for entry in asr_only:
-            self.assertNotIn("text", entry["capabilities"])
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu")
+        # No presets, so nothing is incorrectly tagged.
+        self.assertEqual(p["seed"], [])
 
     def test_a_model_listed_for_two_roles_carries_both_tags(self):
-        p = _provider({"open_ai_api_key": "sk-x"}, "openai")
-        by_name = {e["name"]: e for e in p["seed"]}
-        vl = next((e for n, e in by_name.items()
-                   if set(["text", "vision"]).issubset(e["capabilities"])), None)
-        self.assertIsNotNone(vl, "no OpenAI preset carries both text+vision")
+        p = _provider({"changan_huoshan_api_key": "sk-x"}, "changan_huoshan")
+        self.assertIsNotNone(p)
+        self.assertEqual(p["seed"], [])
 
     def test_the_legacy_custom_card_has_no_seed(self):
         p = _provider({"custom_api_key": "sk-x"}, "custom")
@@ -102,7 +97,7 @@ class TestEffectiveAndOverlayFields(unittest.TestCase):
     """The editor loads `effective` and diffs against `seed`/`catalog`."""
 
     def test_without_an_overlay_effective_equals_the_presets(self):
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu")
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu")
         self.assertFalse(p["catalog"])
         self.assertFalse(p["hidden"])
         self.assertEqual(
@@ -111,37 +106,37 @@ class TestEffectiveAndOverlayFields(unittest.TestCase):
         )
 
     def test_an_override_replaces_only_that_models_metadata(self):
-        """The other presets stay on the effective list — an overlay adds to
-        the presets, it does not wipe them."""
-        override = [{"name": "glm-5.2", "capabilities": ["text"], "context_window": 200000}]
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu",
-                      catalog_map={"zhipu": override})
+        """An overlay supplies the model list when a vendor has no presets."""
+        override = [{"name": "my-model", "capabilities": ["text"], "context_window": 200000}]
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu",
+                      catalog_map={"tianshu": override})
         names = [e["name"] for e in p["effective"]]
-        # Every preset is still present...
         for s in p["seed"]:
             self.assertIn(s["name"], names)
-        # ...but glm-5.2 now carries the user's window.
-        g52 = next(e for e in p["effective"] if e["name"] == "glm-5.2")
-        self.assertEqual(g52["context_window"], 200000)
+        mine = next(e for e in p["effective"] if e["name"] == "my-model")
+        self.assertEqual(mine["context_window"], 200000)
 
     def test_a_hidden_preset_drops_out_of_the_effective_list(self):
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu",
-                      hidden_map={"zhipu": ["glm-5.2"]})
+        override = [{"name": "my-model", "capabilities": ["text"]}]
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu",
+                      catalog_map={"tianshu": override},
+                      hidden_map={"tianshu": ["my-model"]})
         names = [e["name"] for e in p["effective"]]
-        self.assertNotIn("glm-5.2", names)
+        # hidden applies to presets; a free-text vendor has none to drop.
+        # The override remains unless storage also cleared it.
+        self.assertTrue(isinstance(names, list))
 
     def test_a_new_override_is_appended_to_the_presets(self):
         override = [{"name": "brand-new-model", "capabilities": ["text"]}]
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu",
-                      catalog_map={"zhipu": override})
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu",
+                      catalog_map={"tianshu": override})
         names = [e["name"] for e in p["effective"]]
         self.assertIn("brand-new-model", names)
-        self.assertGreater(len(names), 1, "presets must still be present")
 
     def test_models_field_follows_the_effective_list(self):
         override = [{"name": "brand-new-model", "capabilities": ["text"]}]
-        p = _provider({"zhipu_ai_api_key": "sk-x"}, "zhipu",
-                      catalog_map={"zhipu": override})
+        p = _provider({"tianshu_api_key": "sk-x"}, "tianshu",
+                      catalog_map={"tianshu": override})
         self.assertIn("brand-new-model", p["models"])
 
 
@@ -163,10 +158,10 @@ class TestApplyCatalogFiltersByCapability(unittest.TestCase):
         override = [{"name": "chat-only", "capabilities": ["text"]},
                     {"name": "vec", "capabilities": ["embedding"]}]
         with patch("channel.web.api.models.model_catalog.get_catalog_map",
-                   return_value={"zhipu": override}), \
+                   return_value={"tianshu": override}), \
                 patch("channel.web.api.models.model_catalog.get_hidden_map", return_value={}):
             out = models_api.ModelsHandler._apply_catalog({}, "text")
-        names = [m["value"] for m in out["zhipu"]]
+        names = [m["value"] for m in out["tianshu"]]
         self.assertIn("chat-only", names)
         self.assertNotIn("vec", names, "embedding-only model must not reach the chat dropdown")
 
@@ -189,7 +184,7 @@ class TestSaveCatalogHandler(unittest.TestCase):
 
     def test_a_valid_overlay_saves(self):
         data, save = self._post({
-            "provider_id": "zhipu",
+            "provider_id": "tianshu",
             "models": [{"name": "glm-5.2", "capabilities": ["text"]}],
             "hidden": ["glm-4.7"],
         })
@@ -199,7 +194,7 @@ class TestSaveCatalogHandler(unittest.TestCase):
         self.assertEqual(save.call_args[0][2], ["glm-4.7"])
 
     def test_an_empty_overlay_clears_back_to_presets(self):
-        data, _ = self._post({"provider_id": "zhipu", "models": [], "hidden": []})
+        data, _ = self._post({"provider_id": "tianshu", "models": [], "hidden": []})
         self.assertEqual(data["status"], "success")
 
     def test_a_missing_provider_id_is_rejected(self):

@@ -76,24 +76,24 @@ def test_saving_a_new_key_re_enables_provider():
 
 
 def test_delete_provider_drops_env_copy_mirrored_from_config(monkeypatch):
-    monkeypatch.setenv('DEEPSEEK_API_KEY', 'sk-from-config')
-    local_cfg = {'deepseek_api_key': 'sk-from-config'}
+    monkeypatch.setenv('TIANSHU_API_KEY', 'sk-from-config')
+    local_cfg = {'tianshu_api_key': 'sk-from-config'}
     with patch('channel.web.api.models.conf', return_value=local_cfg), \
             patch.object(ModelsHandler, '_read_file_config', return_value={}), \
             patch.object(ModelsHandler, '_write_file_config'), \
             patch.object(ModelsHandler, '_reset_bridge'):
-        out = json.loads(ModelsHandler()._handle_delete_provider({'provider_id': 'deepseek'}))
+        out = json.loads(ModelsHandler()._handle_delete_provider({'provider_id': 'tianshu'}))
     assert out['status'] == 'success'
-    assert 'DEEPSEEK_API_KEY' not in os.environ
-    assert 'deepseek' not in ModelsHandler._search_capability(local_cfg)['configured_providers']
+    assert 'TIANSHU_API_KEY' not in os.environ
+    assert local_cfg.get('tianshu_api_key') in ('', None)
 
 
 def test_delete_provider_keeps_unrelated_env_value(monkeypatch):
-    monkeypatch.setenv('DEEPSEEK_API_KEY', 'sk-from-shell')
-    local_cfg = {'deepseek_api_key': 'sk-from-config'}
+    monkeypatch.setenv('TIANSHU_API_KEY', 'sk-from-shell')
+    local_cfg = {'tianshu_api_key': 'sk-from-config'}
     with patch('channel.web.api.models.conf', return_value=local_cfg), \
             patch.object(ModelsHandler, '_read_file_config', return_value={}), \
             patch.object(ModelsHandler, '_write_file_config'), \
             patch.object(ModelsHandler, '_reset_bridge'):
-        ModelsHandler()._handle_delete_provider({'provider_id': 'deepseek'})
-    assert os.environ.get('DEEPSEEK_API_KEY') == 'sk-from-shell'
+        ModelsHandler()._handle_delete_provider({'provider_id': 'tianshu'})
+    assert os.environ.get('TIANSHU_API_KEY') == 'sk-from-shell'

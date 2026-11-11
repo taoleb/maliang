@@ -167,3 +167,37 @@ def resolve_custom_headers(bot_type=None):
     if not is_custom or not provider_id:
         return {}
     return get_provider_headers(_find_provider_by_id(get_custom_providers(), provider_id))
+
+
+# Built-in OpenAI-compatible catalog providers (天枢 / 长安火山).
+# These are first-class bot_type values, not custom:<id> entries, but they
+# use the same ChatGPTBot HTTP path. Base URLs fall back to the defaults
+# below when the config field is empty.
+TIANSHU_DEFAULT_BASE = "https://ai.sda.changan.com.cn/api/v1"
+CHANGAN_HUOSHAN_DEFAULT_BASE = "https://ark.cn-beijing.volces.com/api/v3"
+
+OPENAI_COMPAT_CATALOG_PROVIDERS = {
+    "tianshu": ("tianshu_api_key", "tianshu_api_base", TIANSHU_DEFAULT_BASE),
+    "changan_huoshan": ("changan_huoshan_api_key", "changan_huoshan_api_base", CHANGAN_HUOSHAN_DEFAULT_BASE),
+}
+
+
+def is_openai_compat_catalog_provider(bot_type) -> bool:
+    return (bot_type or "") in OPENAI_COMPAT_CATALOG_PROVIDERS
+
+
+def resolve_catalog_compat_credentials(bot_type=None):
+    """Return ``(api_key, api_base, model)`` for tianshu / changan_huoshan.
+
+    ``model`` is always None: these vendors use the global ``model`` field
+    (typed in by the user). ``api_base`` falls back to the known default.
+    """
+    if bot_type is None:
+        bot_type = conf().get("bot_type", "")
+    spec = OPENAI_COMPAT_CATALOG_PROVIDERS.get(bot_type or "")
+    if not spec:
+        return "", None, None
+    key_field, base_field, default_base = spec
+    api_key = conf().get(key_field) or ""
+    api_base = (conf().get(base_field) or "").strip() or default_base
+    return api_key, api_base, None

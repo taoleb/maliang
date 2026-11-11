@@ -35,7 +35,7 @@ def create_bot(bot_type, credential_bot_type=None):
         from models.mimo.mimo_bot import MimoBot
         return MimoBot()
 
-    elif bot_type in (const.OPENAI, const.CHATGPT, const.CUSTOM) or bot_type.startswith("custom:"):  # OpenAI-compatible API
+    elif bot_type in (const.OPENAI, const.CHATGPT, const.CUSTOM, const.TIANSHU, const.CHANGAN_HUOSHAN) or bot_type.startswith("custom:"):  # OpenAI-compatible API
         from models.chatgpt.chat_gpt_bot import ChatGPTBot
         return ChatGPTBot(credential_bot_type)
 

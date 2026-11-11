@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react'
 import { t } from '../../i18n'
 import type { CapabilityState, ModelsData } from '../../types'
 import { Card, Field, Dropdown, TextInput, type DropdownOption } from './primitives'
-import { resolveModels, providerLabel, CUSTOM_OPTION } from './modelsHelpers'
+import { resolveModels, providerLabel, CUSTOM_OPTION, usesFreeTextModel } from './modelsHelpers'
 
 // Generic provider+model capability card used by chat/vision/asr/embedding/image.
 // tts (voice) and search have bespoke cards.
@@ -44,13 +44,14 @@ const CapabilityCard: React.FC<CapabilityCardProps> = ({
   children,
   action,
 }) => {
-  const [provider, setProvider] = useState(state.current_provider || '')
+  const initialProvider = state.current_provider || 'tianshu'
+  const [provider, setProvider] = useState(initialProvider)
   const [model, setModel] = useState(state.current_model || '')
   // Custom providers render the model as a free-form input only while they
   // have no catalog; once the vendor maintains a model catalog, the model is
   // picked from a dropdown like any built-in vendor.
   const [customModel, setCustomModel] = useState(
-    (state.current_provider || '').startsWith('custom:') ? state.current_model || '' : ''
+    usesFreeTextModel(initialProvider, data) ? state.current_model || '' : ''
   )
   const [showCustom, setShowCustom] = useState(false)
   // Remembers the custom model typed per provider so switching vendors and
@@ -59,9 +60,9 @@ const CapabilityCard: React.FC<CapabilityCardProps> = ({
 
   const providerHasCatalog = (id: string): boolean =>
     !!data?.providers?.find((x) => x.id === id)?.catalog?.length
-  const isCustomProvider = provider.startsWith('custom:')
-  // Free-form input only for custom vendors without a catalog.
-  const useFreeText = isCustomProvider && !providerHasCatalog(provider)
+  const isCustomProvider = provider.startsWith('custom:') || provider === 'custom' || provider === 'tianshu' || provider === 'changan_huoshan'
+  // Free-form input when the vendor has no model catalog (天枢/长安火山/自定义).
+  const useFreeText = usesFreeTextModel(provider, data)
 
   // A provider is configured when it has credentials (a custom provider counts
   // only once it actually carries a name/key, not as an empty placeholder).
@@ -112,7 +113,7 @@ const CapabilityCard: React.FC<CapabilityCardProps> = ({
     setProvider(id)
     setShowCustom(false)
     const remembered = customModelByProvider.current[id]
-    if (id.startsWith('custom:') && !providerHasCatalog(id)) {
+    if (usesFreeTextModel(id, data)) {
       // Catalog-less custom vendor uses the free-form input: prefill with a
       // remembered value, else the saved model when re-selecting the same
       // provider. A custom vendor WITH a catalog falls through to the normal

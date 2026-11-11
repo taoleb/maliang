@@ -17,6 +17,8 @@ MiniMax = "minimax"
 DEEPSEEK = "deepseek"
 MIMO = "mimo"  # Xiaomi MiMo
 CUSTOM = "custom"  # custom OpenAI-compatible API, bot_type won't auto-switch on model change
+TIANSHU = "tianshu"  # ChangAn Tianshu, OpenAI-compatible
+CHANGAN_HUOSHAN = "changan_huoshan"  # ChangAn Volcengine Ark, OpenAI-compatible
 MODELSCOPE = "modelscope"
 
 # Model list

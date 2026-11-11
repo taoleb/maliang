@@ -1558,7 +1558,7 @@ class ModelsHandler:
                 # DeepSeek is edited as base + key in the search card; the
                 # base is a plain URL, echoed back to prefill the field.
                 "api_base": (
-                    local_config.get("deepseek_api_base") or PROVIDER_MODELS["deepseek"].get("api_base_default", "")
+                    local_config.get("deepseek_api_base") or "https://api.deepseek.com/v1"
                 ) if pid == "deepseek" else "",
                 "api_key_masked": mask_key(raw_key) if raw_key else "",
             })

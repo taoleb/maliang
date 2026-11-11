@@ -16,7 +16,13 @@ from common import const
 from common.i18n import t as _t
 from models.bot import Bot
 from models.openai_compatible_bot import OpenAICompatibleBot
-from models.custom_provider import resolve_custom_credentials, resolve_custom_headers, parse_custom_bot_type
+from models.custom_provider import (
+    resolve_custom_credentials,
+    resolve_custom_headers,
+    parse_custom_bot_type,
+    is_openai_compat_catalog_provider,
+    resolve_catalog_compat_credentials,
+)
 from models.chatgpt.chat_gpt_session import ChatGPTSession
 from models.openai.open_ai_image import OpenAIImage
 from models.session_manager import SessionManager
@@ -29,6 +35,27 @@ from models.baidu.baidu_wenxin_session import BaiduWenxinSession
 
 # OpenAI对话模型API (可用)
 class ChatGPTBot(Bot, OpenAIImage, OpenAICompatibleBot):
+
+    def _compat_creds(self, context=None):
+        """Resolve (api_key, api_base, provider_model) for this bot_type.
+
+        Custom and the 天枢/长安火山 catalog providers use their own key/base.
+        Official OpenAI keeps the historical open_ai_* fields. ``context`` may
+        override the key (``openai_api_key``) or model (``gpt_model``).
+        """
+        ctx = context or {}
+        is_custom, _ = parse_custom_bot_type(self._bot_type)
+        if is_custom:
+            key, base, model = resolve_custom_credentials(self._bot_type)
+        elif is_openai_compat_catalog_provider(self._bot_type):
+            key, base, model = resolve_catalog_compat_credentials(self._bot_type)
+        else:
+            key = conf().get("open_ai_api_key")
+            base = conf().get("open_ai_api_base") or None
+            model = None
+        api_key = ctx.get("openai_api_key") or key
+        return api_key, base, model
+
     def __init__(self, bot_type=None):
         super().__init__()
         # Resolve api key / base from config (no global SDK state anymore).
@@ -40,17 +67,11 @@ class ChatGPTBot(Bot, OpenAIImage, OpenAICompatibleBot):
         # value here would pair that provider's model id with this vendor's
         # api_base — which the upstream answers with a 404 "model is not found".
         self._bot_type = bot_type or conf().get("bot_type", "")
-        is_custom, _ = parse_custom_bot_type(self._bot_type)
-        custom_model = None
         extra_headers = None
+        is_custom, _ = parse_custom_bot_type(self._bot_type)
         if is_custom:
-            # Supports multiple custom providers via bot_type "custom:<id>"
-            # with automatic fallback to the legacy custom_api_key/base fields.
-            self._api_key, self._api_base, custom_model = resolve_custom_credentials(self._bot_type)
             extra_headers = resolve_custom_headers(self._bot_type)
-        else:
-            self._api_key = conf().get("open_ai_api_key")
-            self._api_base = conf().get("open_ai_api_base") or None
+        self._api_key, self._api_base, custom_model = self._compat_creds()
         self._proxy = conf().get("proxy") or None
         self._http_client = OpenAIHTTPClient(
             api_key=self._api_key,
@@ -85,16 +106,8 @@ class ChatGPTBot(Bot, OpenAIImage, OpenAICompatibleBot):
 
     def get_api_config(self):
         """Get API configuration for OpenAI-compatible base class"""
-        is_custom, _ = parse_custom_bot_type(self._bot_type)
-        if is_custom:
-            custom_key, custom_base, custom_model = resolve_custom_credentials(self._bot_type)
-            api_key = custom_key
-            api_base = custom_base
-            model = custom_model or conf().get("model", "gpt-3.5-turbo")
-        else:
-            api_key = conf().get("open_ai_api_key")
-            api_base = conf().get("open_ai_api_base")
-            model = conf().get("model", "gpt-3.5-turbo")
+        api_key, api_base, custom_model = self._compat_creds()
+        model = custom_model or conf().get("model", "gpt-3.5-turbo")
         return {
             'api_key': api_key,
             'api_base': api_base,
@@ -110,7 +123,7 @@ class ChatGPTBot(Bot, OpenAIImage, OpenAICompatibleBot):
         """``open_ai_api_type`` applies to the OpenAI endpoint only; custom
         providers keep the default routing."""
         is_custom, _ = parse_custom_bot_type(self._bot_type)
-        if is_custom:
+        if is_custom or is_openai_compat_catalog_provider(self._bot_type):
             return responses_adapter.API_TYPE_AUTO
         return responses_adapter.resolve_api_type(conf().get("open_ai_api_type"))
 
@@ -221,16 +234,8 @@ class ChatGPTBot(Bot, OpenAIImage, OpenAICompatibleBot):
             mime_type = mime_type_map.get(extension, "image/jpeg")
             
             # Get model and API config
-            is_custom, _ = parse_custom_bot_type(self._bot_type)
-            if is_custom:
-                custom_key, custom_base, custom_model = resolve_custom_credentials(self._bot_type)
-                model = context.get("gpt_model") or custom_model or conf().get("model", "gpt-4o")
-                api_key = context.get("openai_api_key") or custom_key
-                api_base = custom_base
-            else:
-                model = context.get("gpt_model") or conf().get("model", "gpt-4o")
-                api_key = context.get("openai_api_key") or conf().get("open_ai_api_key")
-                api_base = conf().get("open_ai_api_base")
+            api_key, api_base, custom_model = self._compat_creds(context)
+            model = context.get("gpt_model") or custom_model or conf().get("model", "gpt-4o")
             
             # Build vision request
             messages = [

@@ -121,14 +121,16 @@ function newChat(optimistic = true, inherit = true) {
     messagesDiv.innerHTML = '';
     const ws = document.createElement('div');
     ws.id = 'welcome-screen';
-    ws.className = 'flex flex-col items-center justify-center h-full px-6 pb-16';
-    ws.style.paddingTop = '6vh';
+    ws.className = 'flex flex-col items-center justify-center h-full px-6 pb-4';
+    ws.style.paddingTop = '1.25rem';
     ws.innerHTML = `
-        <img src="/assets/mascot.gif" alt="maliang" class="h-44 w-auto mb-6 select-none" draggable="false">
-        <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">${appConfig.title || 'maliang'}</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-center max-w-lg mb-10 leading-relaxed" data-i18n="welcome_subtitle">${t('welcome_subtitle')}</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-2xl">
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
+        <div class="welcome-mascot">
+            <img src="/assets/mascot.gif" alt="maliang" class="select-none" draggable="false">
+        </div>
+        <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-1">${appConfig.title || 'maliang'}</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-center max-w-lg mb-4 leading-relaxed text-xs" data-i18n="welcome_subtitle">${t('welcome_subtitle')}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full max-w-xl">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
                         <i class="fas fa-folder-open text-blue-500 text-xs"></i>
@@ -137,7 +139,7 @@ function newChat(optimistic = true, inherit = true) {
                 </div>
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="example_sys_text">${t('example_sys_text')}</p>
             </div>
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
                         <i class="fas fa-clock text-amber-500 text-xs"></i>
@@ -146,7 +148,7 @@ function newChat(optimistic = true, inherit = true) {
                 </div>
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="example_task_text">${t('example_task_text')}</p>
             </div>
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
                         <i class="fas fa-code text-emerald-500 text-xs"></i>
@@ -155,7 +157,7 @@ function newChat(optimistic = true, inherit = true) {
                 </div>
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="example_code_text">${t('example_code_text')}</p>
             </div>
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center">
                         <i class="fas fa-book text-violet-500 text-xs"></i>
@@ -164,7 +166,7 @@ function newChat(optimistic = true, inherit = true) {
                 </div>
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="example_knowledge_text">${t('example_knowledge_text')}</p>
             </div>
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-900/30 flex items-center justify-center">
                         <i class="fas fa-puzzle-piece text-rose-500 text-xs"></i>
@@ -173,7 +175,7 @@ function newChat(optimistic = true, inherit = true) {
                 </div>
                 <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="example_skill_text">${t('example_skill_text')}</p>
             </div>
-            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-xl p-4 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200" data-send="/help">
+            <div class="example-card group bg-panel border border-slate-200 dark:border-white/10 rounded-lg p-2.5 cursor-pointer hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all duration-200" data-send="/help">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                         <i class="fas fa-terminal text-slate-500 text-xs"></i>
