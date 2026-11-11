@@ -66,6 +66,29 @@ interface ChatState {
 // EventSource instances kept outside the store (not serializable).
 const streams: Record<string, EventSource> = {}
 
+type StreamWaiter = { promise: Promise<void>; resolve: () => void }
+const streamWaiters: Record<string, StreamWaiter> = {}
+
+function notifySessionIdle(sid: string) {
+  const waiter = streamWaiters[sid]
+  if (!waiter) return
+  delete streamWaiters[sid]
+  waiter.resolve()
+}
+
+/** Resolves when this session is no longer streaming (or immediately if idle). */
+export function waitForSessionIdle(sid: string): Promise<void> {
+  if (!useChatStore.getState().sessions[sid]?.isStreaming) return Promise.resolve()
+  const existing = streamWaiters[sid]
+  if (existing) return existing.promise
+  let resolve!: () => void
+  const promise = new Promise<void>((r) => {
+    resolve = r
+  })
+  streamWaiters[sid] = { promise, resolve }
+  return promise
+}
+
 // A backend restarting after a crash is back within seconds; after a minute
 // the history is left to load on the next visit to the session.
 const RELOAD_AFTER_DROP_ATTEMPTS = 30
@@ -426,6 +449,7 @@ export const useChatStore = create<ChatState>((set, get) => {
       patchMessages(sid, (msgs) =>
         msgs.map((m) => (opened.has(m.id) ? { ...m, isStreaming: false } : m))
       )
+      notifySessionIdle(sid)
     }
 
     const finishStream = () => {
@@ -855,13 +879,16 @@ export const useChatStore = create<ChatState>((set, get) => {
         } else if (res.inline_reply) {
           updateMsg(sid, botId, (m) => ({ ...m, content: res.inline_reply || '', isStreaming: false }))
           patchSession(sid, { isStreaming: false })
+          notifySessionIdle(sid)
         } else {
           updateMsg(sid, botId, (m) => ({ ...m, error: res.message || 'send failed', isStreaming: false }))
           patchSession(sid, { isStreaming: false })
+          notifySessionIdle(sid)
         }
       } catch (err) {
         updateMsg(sid, botId, (m) => ({ ...m, error: `${err}`, isStreaming: false }))
         patchSession(sid, { isStreaming: false })
+        notifySessionIdle(sid)
       }
     },
 
@@ -883,6 +910,7 @@ export const useChatStore = create<ChatState>((set, get) => {
         return [...msgs]
       })
       patchSession(sid, { isStreaming: false, requestId: null })
+      notifySessionIdle(sid)
       delete streams[sid]
       try {
         await apiClient.cancel({ requestId: s.requestId, sessionId: sid })

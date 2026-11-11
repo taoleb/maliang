@@ -67,8 +67,9 @@ from channel.web.api.scheduler import (  # noqa: F401
 from channel.web.api.sessions import (  # noqa: F401
     HistoryHandler, MessageDeleteHandler, PromptOptimizeHandler,
     SessionClearContextHandler, SessionCompactContextHandler,
-    SessionContextUsageHandler, SessionDetailHandler, SessionSettingsHandler,
-    SessionTitleHandler, SessionsHandler, UserMessagesHandler,
+    SessionContextUsageHandler, SessionDetailHandler, SessionPrewarmHandler,
+    SessionSettingsHandler, SessionTitleHandler, SessionsHandler,
+    UserMessagesHandler,
 )
 from channel.web.api.skills import (  # noqa: F401
     McpServerTestHandler, McpServersHandler,
@@ -177,6 +178,7 @@ URLS = (
     '/api/agents/([^/]+)/avatar', 'AgentAvatarHandler',
     '/api/agents/([^/]+)/files/([^/]+)', 'AgentCoreFileHandler',
     '/api/sessions', 'SessionsHandler',
+    '/api/sessions/(.*)/prewarm', 'SessionPrewarmHandler',
     '/api/sessions/(.*)/generate_title', 'SessionTitleHandler',
     '/api/prompt/optimize', 'PromptOptimizeHandler',
     '/api/sessions/(.*)/clear_context', 'SessionClearContextHandler',

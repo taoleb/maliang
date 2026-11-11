@@ -751,9 +751,9 @@ def _warn_if_legacy_workspace_data_exists():
 def _sync_builtin_skills():
     """Sync builtin skills from project skills/ into every enabled Agent's
     workspace, so a newly configured Agent is not born without them."""
-    import shutil
     try:
         from agent.registry import get_agent_registry
+        from agent.skills.sync_builtin import sync_builtin_skills_to_workspace
         from common.runtime_identity import RuntimeIdentity
         from common.state_dir import skills_dir
 
@@ -766,24 +766,20 @@ def _sync_builtin_skills():
             custom_dir = str(
                 skills_dir(RuntimeIdentity(agent_id=profile.id), ensure=True)
             )
-            synced = 0
-            for name in os.listdir(builtin_dir):
-                src = os.path.join(builtin_dir, name)
-                if not os.path.isdir(src) or not os.path.isfile(os.path.join(src, "SKILL.md")):
-                    continue
-                dst = os.path.join(custom_dir, name)
-                try:
-                    if os.path.isdir(dst):
-                        shutil.rmtree(dst)
-                    shutil.copytree(src, dst)
-                    synced += 1
-                except Exception as e:
-                    logger.warning(f"[App] Failed to sync builtin skill '{name}': {e}")
-            if synced:
-                logger.info(
-                    f"[App] Synced {synced} builtin skill(s) to workspace of "
-                    f"agent '{profile.id}'"
-                )
+            try:
+                copied, skipped = sync_builtin_skills_to_workspace(builtin_dir, custom_dir)
+                if copied:
+                    logger.info(
+                        f"[App] Synced builtin skills to workspace of agent "
+                        f"'{profile.id}': copied={copied} unchanged={skipped}"
+                    )
+                else:
+                    logger.info(
+                        f"[App] Builtin skills already up to date for agent "
+                        f"'{profile.id}' ({skipped} unchanged)"
+                    )
+            except Exception as e:
+                logger.warning(f"[App] Failed to sync builtin skills for '{profile.id}': {e}")
     except Exception as e:
         logger.warning(f"[App] Builtin skills sync failed: {e}")
 
@@ -871,6 +867,13 @@ def run():
         # Sync builtin skills to workspace before channels start
         _sync_builtin_skills()
         _scaffold_subagent_assets()
+
+        # Reuse TCP/TLS to the configured model base; never block health/startup.
+        try:
+            from models.openai.openai_http_client import schedule_http_warmup
+            schedule_http_warmup()
+        except Exception as e:
+            logger.debug(f"[App] HTTP warmup not started: {e}")
 
         # Kick off MCP server loading in the background so first-message
         # latency isn't dominated by npx package downloads. Skipped in desktop

@@ -56,6 +56,7 @@ class ToolManager:
                 instance.workspace_root = key
                 instance.tool_classes = {}  # Store tool classes instead of instances
                 instance._initialized = False
+                instance._builtin_tools_loaded = False
                 cls._instances[key] = instance
             return instance
 
@@ -124,12 +125,19 @@ class ToolManager:
 
         :param tools_dir: Directory to scan for tool modules
         """
-        if tools_dir:
+        already_loaded = bool(getattr(self, "_builtin_tools_loaded", False) and self.tool_classes)
+        if already_loaded:
+            # Builtin classes are workspace-level; skip the per-session cls() pass.
+            if not tools_dir:
+                self._configure_tools_from_config(config_dict)
+        elif tools_dir:
             self._load_tools_from_directory(tools_dir)
             self._configure_tools_from_config()
+            self._builtin_tools_loaded = bool(self.tool_classes)
         else:
             self._load_tools_from_init()
             self._configure_tools_from_config(config_dict)
+            self._builtin_tools_loaded = bool(self.tool_classes)
 
         self._load_mcp_tools()
 

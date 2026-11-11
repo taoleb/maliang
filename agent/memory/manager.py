@@ -87,7 +87,7 @@ class MemoryManager:
         
         # Initialize storage
         db_path = self.config.get_db_path()
-        self.storage = MemoryStorage(db_path)
+        self.storage = MemoryStorage.for_path(db_path)
         
         # Initialize chunker
         self.chunker = TextChunker(

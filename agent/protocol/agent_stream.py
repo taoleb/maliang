@@ -1001,6 +1001,9 @@ class AgentStreamExecutor:
         final_response = ""
         turn = 0
         self.run_usage = None
+        from common import timing as _timing
+        _run_started = _timing.start()
+        self._llm_turn = 0
 
         # Respect a run id an outer scope already set (a subagent spawn or a
         # delegated task passes one down); only mint a fresh one when this turn
@@ -1440,6 +1443,11 @@ class AgentStreamExecutor:
                 # Emit before agent_end so channels can mark UI as cancelled
                 self._emit_event("agent_cancelled", {"final_response": final_response})
             logger.info(f"[Agent] 🏁 Done ({turn} turns)" + (" [cancelled]" if cancelled else ""))
+            _timing.log(
+                "run_total",
+                turns=turn,
+                elapsed_ms=_timing.elapsed_ms(_run_started),
+            )
             self._emit_event("agent_end", {"final_response": final_response, "cancelled": cancelled})
 
         return final_response
@@ -1754,7 +1762,26 @@ class AgentStreamExecutor:
             _cancel_probe_counter = 0
             _CANCEL_PROBE_EVERY = 8
 
+            from common import timing as _timing
+            self._llm_turn = getattr(self, "_llm_turn", 0) + 1
+            _llm_turn = self._llm_turn
+            _llm_started = _timing.start()
+            _llm_ttft_logged = False
+            _llm_first_bytes = 0
+
             for chunk in stream:
+                if not _llm_ttft_logged:
+                    _llm_ttft_logged = True
+                    try:
+                        _llm_first_bytes = len(str(chunk).encode("utf-8"))
+                    except Exception:
+                        _llm_first_bytes = 0
+                    _timing.log(
+                        "llm_ttft",
+                        turn=_llm_turn,
+                        elapsed_ms=_timing.elapsed_ms(_llm_started),
+                        bytes=_llm_first_bytes,
+                    )
                 _cancel_probe_counter += 1
                 if _cancel_probe_counter >= _CANCEL_PROBE_EVERY:
                     _cancel_probe_counter = 0
@@ -1917,8 +1944,35 @@ class AgentStreamExecutor:
                 full_content += _think_tail_out
                 self._emit_event("message_update", {"delta": _think_tail_out})
 
+            cache_hit = "-"
+            try:
+                usage_src = stream_usage
+                if usage_src is not None:
+                    cache_hit = self._normalize_stream_usage(usage_src).get(
+                        "prompt_cache_hit_tokens", "-"
+                    )
+                elif getattr(self.agent, "last_usage", None):
+                    cache_hit = self.agent.last_usage.get("prompt_cache_hit_tokens", "-")
+            except Exception:
+                cache_hit = "-"
+            _timing.log(
+                "llm_total",
+                turn=_llm_turn,
+                elapsed_ms=_timing.elapsed_ms(_llm_started),
+                cache_hit=cache_hit,
+            )
+
         except AgentCancelledError:
             # Must propagate untouched; never treat as a retryable error.
+            try:
+                _timing.log(
+                    "llm_total",
+                    turn=_llm_turn,
+                    elapsed_ms=_timing.elapsed_ms(_llm_started),
+                    cancelled=1,
+                )
+            except Exception:
+                pass
             raise
 
         except Exception as e:
@@ -2486,6 +2540,20 @@ class AgentStreamExecutor:
                 tool.event_callback = None
                 tool.tool_call_id = None
             execution_time = time.time() - start_time
+
+            try:
+                from common import timing as _timing
+                path = None
+                if tool_name == "read" and isinstance(arguments, dict):
+                    path = arguments.get("path") or arguments.get("file_path")
+                _timing.log(
+                    "tool",
+                    name=tool_name,
+                    **({"path": path} if path else {}),
+                    elapsed_ms=int(execution_time * 1000),
+                )
+            except Exception:
+                pass
 
             result_dict = {
                 "status": result.status,

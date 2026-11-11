@@ -180,6 +180,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     localStorage.setItem(ACTIVE_KEY, id)
     activateOwner(id)
     set({ activeId: id })
+    const owner = ownerOf(id) || undefined
+    void apiClient.prewarmSession(id, owner).catch(() => {})
   },
 
   newSession: (ownerId) => {

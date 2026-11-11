@@ -44,16 +44,16 @@ function sendVoiceMessage(text, audioUrl) {
             if (data.status === 'success') {
                 rememberLiveSpeaker(data);
                 setLoadingSpeaker(loadingEl, data.request_id);
-                if (titleInfo && !data.inline_reply) {
-                    generateSessionTitle(titleInfo.sid, titleInfo.userMsg, '');
-                }
                 if (data.inline_reply) {
                     // Synchronous fast-path reply (e.g. /cancel); skip SSE.
                     loadingEl.remove();
                     addBotMessage(data.inline_reply, new Date());
+                    if (titleInfo) {
+                        generateSessionTitle(titleInfo.sid, titleInfo.userMsg, data.inline_reply || '');
+                    }
                 } else if (data.stream) {
                     setSendBtnCancelMode(data.request_id);
-                    startSSE(data.request_id, loadingEl, timestamp);
+                    startSSE(data.request_id, loadingEl, timestamp, undefined, undefined, titleInfo);
                 } else {
                     loadingContainers[data.request_id] = loadingEl;
                 }

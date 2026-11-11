@@ -155,19 +155,17 @@ function sendMessage() {
             if (data.status === 'success') {
                 rememberLiveSpeaker(data);
                 setLoadingSpeaker(loadingEl, data.request_id);
-                // Title on acceptance, not on the reply's "done": a session the
-                // user leaves mid-reply stops rendering, and would never be titled.
-                if (titleInfo && !data.inline_reply) {
-                    generateSessionTitle(titleInfo.sid, titleInfo.userMsg, '');
-                }
                 if (data.inline_reply) {
                     // Channel handled synchronously (e.g. /cancel fast-path);
                     // render as a bot bubble and skip SSE entirely.
                     loadingEl.remove();
                     addBotMessage(data.inline_reply, new Date());
+                    if (titleInfo) {
+                        generateSessionTitle(titleInfo.sid, titleInfo.userMsg, data.inline_reply || '');
+                    }
                 } else if (data.stream) {
                     setSendBtnCancelMode(data.request_id);
-                    startSSE(data.request_id, loadingEl, timestamp);
+                    startSSE(data.request_id, loadingEl, timestamp, undefined, undefined, titleInfo);
                 } else {
                     loadingContainers[data.request_id] = loadingEl;
                 }
@@ -208,7 +206,16 @@ function reloadHistoryView() {
 
 // `resume` ({ el, afterSeq }) picks up a reply already in flight: events up to
 // afterSeq are skipped, and `el`, the bubble of its stored steps, is written on.
-function startSSE(requestId, loadingEl, timestamp, replayItems, resume) {
+function startSSE(requestId, loadingEl, timestamp, replayItems, resume, titleInfo) {
+    let titleRequested = false;
+    const requestSessionTitle = (reply) => {
+        if (!titleInfo || titleRequested) return;
+        titleRequested = true;
+        try {
+            generateSessionTitle(titleInfo.sid, titleInfo.userMsg, reply || '');
+        } catch (e) { /* ignore */ }
+    };
+
     let botEl = null;
     let stepsEl = null;    // .agent-steps  (thinking summaries + tool indicators)
     let contentEl = null;  // .answer-content (final streaming answer)
@@ -920,6 +927,7 @@ function startSSE(requestId, loadingEl, timestamp, replayItems, resume) {
                 if (item.bot_seq !== undefined && item.bot_seq !== null) {
                     completedBotSeq = item.bot_seq;
                 }
+                requestSessionTitle(item.content || accumulatedText || '');
                 // Scheduler deliveries are notified solely by the global runs
                 // poller (maybeNotifyScheduledRun), which forces a notice across
                 // all sessions and dedupes by run id. Notifying here too would
@@ -928,6 +936,7 @@ function startSSE(requestId, loadingEl, timestamp, replayItems, resume) {
                     notifyTaskFinished(ownerSession, 'done', item.content, ownerAgent);
                 }
             } else if (item.type === 'error') {
+                requestSessionTitle(accumulatedText || '');
                 if (!cancelled && !mainDone && !isSchedulerRequest(requestId)) notifyTaskFinished(ownerSession, 'error', '', ownerAgent);
             } else if (
                 item.type === 'voice_attach'

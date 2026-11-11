@@ -26,17 +26,126 @@ import hashlib
 import json
 import os
 import re
+import threading
 import uuid
 from typing import Any, Dict, Generator, Optional
 from urllib.parse import urlparse
 
 import requests
+from requests.adapters import HTTPAdapter
 
 from common.log import logger
 
 
 DEFAULT_API_BASE = "https://api.openai.com/v1"
 DEFAULT_TIMEOUT = 600  # seconds; matches old openai SDK default
+
+_SESSION_LOCK = threading.Lock()
+_SHARED_SESSION = None
+
+
+def _shared_session() -> requests.Session:
+    """Process-level Session so TCP/TLS can be reused across requests.
+
+    Headers are passed per request and never mutated on the Session, so
+    concurrent posts/streams may share the connection pool safely.
+    """
+    global _SHARED_SESSION
+    if _SHARED_SESSION is not None:
+        return _SHARED_SESSION
+    with _SESSION_LOCK:
+        if _SHARED_SESSION is None:
+            session = requests.Session()
+            adapter = HTTPAdapter(pool_connections=8, pool_maxsize=16, max_retries=0)
+            session.mount("http://", adapter)
+            session.mount("https://", adapter)
+            _SHARED_SESSION = session
+    return _SHARED_SESSION
+
+
+def reset_shared_session() -> None:
+    """Drop the shared Session. For tests."""
+    global _SHARED_SESSION
+    with _SESSION_LOCK:
+        session = _SHARED_SESSION
+        _SHARED_SESSION = None
+    if session is not None:
+        try:
+            session.close()
+        except Exception:
+            pass
+
+
+def warmup_http_base(api_base: Optional[str], timeout: float = 3.0) -> None:
+    """Non-blocking-safe probe of a provider base (no completion, no tokens).
+
+    Callers should invoke this from a daemon thread. Failures are logged and
+    ignored so startup and config saves never depend on the probe.
+    """
+    base = (api_base or "").strip().rstrip("/")
+    if not base:
+        return
+    urls = [base]
+    if not base.endswith("/models"):
+        urls.append(f"{base}/models")
+    session = _shared_session()
+    last_error = None
+    for url in urls:
+        try:
+            resp = session.head(url, timeout=timeout, allow_redirects=True)
+            if resp.status_code < 500:
+                logger.info(f"[OpenAIHTTP] warmup {url} -> {resp.status_code}")
+                return
+            last_error = f"HTTP {resp.status_code}"
+        except requests.RequestException as exc:
+            last_error = str(exc)
+        try:
+            resp = session.get(url, timeout=timeout)
+            if resp.status_code < 500:
+                logger.info(f"[OpenAIHTTP] warmup GET {url} -> {resp.status_code}")
+                return
+            last_error = f"HTTP {resp.status_code}"
+        except requests.RequestException as exc:
+            last_error = str(exc)
+    logger.info(f"[OpenAIHTTP] warmup skipped/failed for {base}: {last_error}")
+
+
+def schedule_http_warmup(api_base: Optional[str] = None) -> None:
+    """Start a failure-tolerant background warmup of one or more bases."""
+    bases = []
+    if api_base:
+        bases.append(api_base)
+    else:
+        try:
+            from config import conf
+            from channel.web.core.providers import PROVIDER_MODELS
+            cfg = conf()
+            for meta in PROVIDER_MODELS.values():
+                field = meta.get("api_base_key")
+                default = meta.get("api_base_default") or ""
+                if field:
+                    bases.append((cfg.get(field) or default or "").strip())
+        except Exception as exc:
+            logger.debug(f"[OpenAIHTTP] warmup config lookup failed: {exc}")
+    seen = set()
+    targets = []
+    for base in bases:
+        if not base or base in seen:
+            continue
+        seen.add(base)
+        targets.append(base)
+    if not targets:
+        return
+
+    def _run():
+        for base in targets:
+            try:
+                warmup_http_base(base)
+            except Exception as exc:
+                logger.info(f"[OpenAIHTTP] warmup failed for {base}: {exc}")
+
+    threading.Thread(target=_run, daemon=True, name="http-warmup").start()
+
 
 
 _APP_TITLE = "maliang"
@@ -372,7 +481,7 @@ class OpenAIHTTPClient:
             )
 
         try:
-            resp = requests.post(
+            resp = _shared_session().post(
                 url,
                 headers=headers,
                 json=clean_payload,
@@ -420,7 +529,7 @@ class OpenAIHTTPClient:
               followed by termination of the generator.
         """
         try:
-            resp = requests.post(
+            resp = _shared_session().post(
                 url,
                 headers=headers,
                 json=payload,

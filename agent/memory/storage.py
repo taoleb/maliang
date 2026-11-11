@@ -33,6 +33,9 @@ except ImportError:
 # which risks FTS5 rowid drift on chunk updates (see save_chunk docstring).
 _HAS_UPSERT = sqlite3.sqlite_version_info >= (3, 24, 0)
 
+_storage_by_path = {}
+_storage_by_path_lock = threading.Lock()
+
 # ---------------------------------------------------------------------------
 # CJK character ranges, compiled once at module load.
 # Covers: CJK Symbols/Punctuation, Japanese kana (hiragana + katakana),
@@ -130,6 +133,28 @@ class SearchResult:
 
 class MemoryStorage:
     """SQLite-based storage with FTS5 for keyword search"""
+
+    @classmethod
+    def for_path(
+        cls,
+        db_path: Path,
+        vector_backend: Optional[VectorBackend] = None,
+    ) -> "MemoryStorage":
+        """Reuse one MemoryStorage per resolved db path for this process."""
+        key = str(Path(db_path).expanduser().resolve())
+        with _storage_by_path_lock:
+            inst = _storage_by_path.get(key)
+            if inst is not None:
+                return inst
+            inst = cls(db_path, vector_backend=vector_backend)
+            _storage_by_path[key] = inst
+            return inst
+
+    @classmethod
+    def reset_instances(cls) -> None:
+        """Drop the process-level cache. For tests."""
+        with _storage_by_path_lock:
+            _storage_by_path.clear()
     
     def __init__(
         self,

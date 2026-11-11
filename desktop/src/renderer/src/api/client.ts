@@ -736,6 +736,13 @@ class ApiClient {
     })
   }
 
+  async prewarmSession(sessionId: string, agentId?: string): Promise<{ status: string }> {
+    return this.request(this.scoped(`/api/sessions/${encodeURIComponent(sessionId)}/prewarm`, agentId), {
+      method: 'POST',
+      body: JSON.stringify(agentId ? { agent_id: agentId } : {}),
+    })
+  }
+
   async generateSessionTitle(
     sessionId: string,
     userMessage: string,

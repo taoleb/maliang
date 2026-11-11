@@ -21,7 +21,7 @@ import Mascot from '../components/Mascot'
 import { t, getLang } from '../i18n'
 import apiClient from '../api/client'
 import type { Attachment, ChatMessage } from '../types'
-import { useChatStore } from '../store/chatStore'
+import { useChatStore, waitForSessionIdle } from '../store/chatStore'
 import { useSessionStore, sessionOwner } from '../store/sessionStore'
 import { useAgentStore } from '../store/agentStore'
 import { useWorkspaceStore } from '../store/workspaceStore'
@@ -136,6 +136,13 @@ const ChatPage: React.FC<ChatPageProps> = ({ baseUrl }) => {
   }, [navigate])
   const [loadingMore, setLoadingMore] = useState(false)
   const titlePendingRef = useRef(false)
+
+  // Build the session runtime before the first message is sent.
+  useEffect(() => {
+    if (!activeId) return
+    const owner = sessionOwner(activeId) || undefined
+    void apiClient.prewarmSession(activeId, owner).catch(() => {})
+  }, [activeId])
 
   useEffect(() => {
     apiClient.setBaseUrl(baseUrl)
@@ -331,10 +338,16 @@ const ChatPage: React.FC<ChatPageProps> = ({ baseUrl }) => {
       cancelQueuedScroll()
       useTimelineStore.getState().setJumping(false)
       await send(sid, text, attachments, display)
-      // After the first message, refresh the list and ask backend to title it.
+      // After the first message, wait for the reply to finish so title
+      // generation does not compete with the first streaming completion.
       if (isFirst) {
         try {
-          const res = await apiClient.generateSessionTitle(sid, display || text, undefined, owner)
+          await waitForSessionIdle(sid)
+          const assistants = (useChatStore.getState().sessions[sid]?.messages || []).filter(
+            (m) => m.role === 'assistant'
+          )
+          const reply = assistants.length ? assistants[assistants.length - 1].content : undefined
+          const res = await apiClient.generateSessionTitle(sid, display || text, reply, owner)
           if (res.status === 'success' && res.title) {
             useSessionStore.setState((s) => ({
               sessions: s.sessions.map((x) => (x.session_id === sid ? { ...x, title: res.title } : x)),

@@ -129,6 +129,24 @@ class AgentInitializer:
         Returns:
             Initialized agent instance
         """
+        from common import timing as _timing
+
+        _t0 = _timing.start()
+        try:
+            return self._initialize_agent_inner(session_id, agent_id, host_agent_id)
+        finally:
+            _timing.log(
+                "initialize_agent",
+                session=session_id or "-",
+                elapsed_ms=_timing.elapsed_ms(_t0),
+            )
+
+    def _initialize_agent_inner(
+        self,
+        session_id,
+        agent_id,
+        host_agent_id,
+    ):
         from agent.registry import get_agent_registry
         from common.runtime_identity import current_identity
 

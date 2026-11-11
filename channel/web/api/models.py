@@ -1835,17 +1835,17 @@ class ModelsHandler:
     def _dispatch_write_action(self, action: str, data: dict) -> str:
         """The POST actions that persist config (all run under the save lock)."""
         if action == "set_provider":
-            return self._handle_set_provider(data)
+            return self._after_provider_write(self._handle_set_provider(data))
         if action == "delete_provider":
             return self._handle_delete_provider(data)
         if action == "set_custom_provider":
-            return self._handle_set_custom_provider(data)
+            return self._after_provider_write(self._handle_set_custom_provider(data))
         if action == "delete_custom_provider":
             return self._handle_delete_custom_provider(data)
         if action == "set_active_custom_provider":
-            return self._handle_set_active_custom_provider(data)
+            return self._after_provider_write(self._handle_set_active_custom_provider(data))
         if action == "set_capability":
-            return self._handle_set_capability(data)
+            return self._after_provider_write(self._handle_set_capability(data))
         if action == "save_catalog":
             return self._handle_save_catalog(data)
         if action == "set_voice_reply_mode":
@@ -1855,6 +1855,21 @@ class ModelsHandler:
         if action == "set_search_provider_enabled":
             return self._handle_set_search_provider_enabled(data)
         return json.dumps({"status": "error", "message": f"unknown action: {action!r}"})
+
+    @staticmethod
+    def _after_provider_write(result: str) -> str:
+        """Kick a non-blocking HTTP warmup after credentials/base change."""
+        try:
+            payload = json.loads(result) if isinstance(result, str) else None
+        except ValueError:
+            payload = None
+        if isinstance(payload, dict) and payload.get("status") == "success":
+            try:
+                from models.openai.openai_http_client import schedule_http_warmup
+                schedule_http_warmup()
+            except Exception as exc:
+                logger.debug(f"[ModelsHandler] HTTP warmup not started: {exc}")
+        return result
 
     def _handle_discover_models(self, data: dict) -> str:
         """Probe a provider's model endpoint without persisting credentials."""

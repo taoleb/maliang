@@ -650,6 +650,7 @@ function switchSession(newSessionId, agentId) {
     sessionId = newSessionId;
     updateEditButtonsState();
     localStorage.setItem(activeSessionStorageKey(), sessionId);
+    prewarmSession(sessionId);
     refreshWorkspaceSelector();
     refreshSessionSettings();
     // Reflect the new session's context in the mini pie right away.
@@ -895,6 +896,19 @@ function clearContext() {
             scrollChatToBottom();
         })
         .catch(() => {});
+}
+
+function prewarmSession(sid) {
+    if (!sid) return;
+    const body = {};
+    try {
+        if (typeof activeAgentId !== 'undefined' && activeAgentId) body.agent_id = activeAgentId;
+    } catch (e) { /* ignore */ }
+    fetch(`/api/sessions/${encodeURIComponent(sid)}/prewarm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+    }).catch(() => {});
 }
 
 function generateSessionTitle(sid, userMsg, assistantReply) {

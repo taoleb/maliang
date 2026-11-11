@@ -359,33 +359,31 @@ def _build_skills_section(skill_manager: Any, tools: Optional[List[Any]], langua
     
     if language == "en":
         lines = [
-            "## 🧩 Skills (mandatory)",
+            "## 🧩 Skills",
             "",
-            "Before replying: scan the <description> of every skill in <available_skills> below.",
+            "Use a skill only when the user's request clearly matches that skill's purpose in <available_skills> below.",
             "",
-            f"- If a skill's description matches the user's need: use the `{read_tool_name}` tool to read the SKILL.md at its <location> path, then strictly follow the instructions in the file. "
-            "Prefer using a skill when one matches.",
-            "- If multiple skills apply, pick the best-matching one, then read and follow it.",
-            "- If no skill clearly applies: do not read any SKILL.md, just use the general tools.",
+            f"- When it clearly matches: use the `{read_tool_name}` tool to read the SKILL.md at its <location> path, then strictly follow the instructions in the file.",
+            "- If several skills could apply, pick the best-matching one, then read and follow it.",
+            "- If no skill clearly matches: do not read any SKILL.md; answer directly with the general tools.",
             "",
             f"**Important**: skills are not tools and cannot be called directly. The only way to use a skill is to read its SKILL.md with `{read_tool_name}`, then act on the file's content. "
-            "Never read multiple skills at once — only read one after selecting it.",
+            "Never read multiple skills at once — only read one after selecting it. Do not read a skill just in case.",
             "",
             "Available skills:"
         ]
     else:
         lines = [
-            "## 🧩 技能系统（mandatory）",
+            "## 🧩 技能系统",
             "",
-            "在回复之前：扫描下方 <available_skills> 中每个技能的 <description>。",
+            "仅当用户请求明显符合下方 <available_skills> 中某个技能的用途时，才使用该技能。",
             "",
-            f"- 如果有技能的描述与用户需求匹配：使用 `{read_tool_name}` 工具读取其 <location> 路径的 SKILL.md 文件，然后严格遵循文件中的指令。"
-            "当有匹配的技能时，应优先使用技能",
-            "- 如果多个技能都适用则选择最匹配的一个，然后读取并遵循。",
-            "- 如果没有技能明确适用：不要读取任何 SKILL.md，直接使用通用工具。",
+            f"- 明显匹配时：使用 `{read_tool_name}` 工具读取其 <location> 路径的 SKILL.md 文件，然后严格遵循文件中的指令。",
+            "- 若多个技能都可能适用，选择最匹配的一个，然后读取并遵循。",
+            "- 若没有技能明显匹配：不要读取任何 SKILL.md，直接使用通用工具作答。",
             "",
             f"**重要**: 技能不是工具，不能直接调用。使用技能的唯一方式是用 `{read_tool_name}` 读取 SKILL.md 文件，然后按文件内容操作。"
-            "永远不要一次性读取多个技能，只在选择后再读取。",
+            "永远不要一次性读取多个技能，只在选定后再读取；不要为了以防万一而读取技能。",
             "",
             "以下是可用技能："
         ]

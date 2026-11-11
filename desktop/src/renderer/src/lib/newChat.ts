@@ -28,6 +28,8 @@ export function startNewChat(opts?: { ownerId?: string; inheritProject?: boolean
   useSessionStore.getState().addOptimistic(id, inherited)
   useUIStore.getState().setSessionsCollapsed(false)
   if (inherited) apiClient.selectProject(id, inherited.path).catch(() => {})
+  const owner = opts?.ownerId || useAgentStore.getState().activeAgentId || undefined
+  void apiClient.prewarmSession(id, owner).catch(() => {})
   return id
 }
 

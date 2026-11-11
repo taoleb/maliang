@@ -821,6 +821,46 @@ class SessionSettingsHandler:
             return json.dumps({"status": "error", "message": str(e)})
 
 
+class SessionPrewarmHandler:
+    """Start building the session Agent in the background so the first
+    message does not pay initialize_agent() on the send path."""
+
+    def POST(self, session_id: str):
+        _require_auth()
+        web.header('Content-Type', 'application/json; charset=utf-8')
+        try:
+            if not session_id:
+                return json.dumps({"status": "error", "message": "session_id required"})
+            body = {}
+            raw = web.data() or b""
+            if raw:
+                try:
+                    body = json.loads(raw)
+                except ValueError:
+                    body = {}
+            agent_id = _request_agent_id(body)
+
+            def _run():
+                try:
+                    from bridge.bridge import Bridge
+                    Bridge().get_agent_bridge().get_agent(
+                        session_id=session_id, agent_id=agent_id
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        f"[WebChannel] session prewarm failed sid={session_id}: {exc}"
+                    )
+
+            import threading
+            threading.Thread(
+                target=_run, daemon=True, name=f"prewarm-{session_id[:12]}"
+            ).start()
+            return json.dumps({"status": "success"})
+        except Exception as e:
+            logger.error(f"[WebChannel] Session prewarm error: {e}")
+            return json.dumps({"status": "error", "message": str(e)})
+
+
 class SessionTitleHandler:
     def POST(self, session_id: str):
         _require_auth()

@@ -115,11 +115,21 @@ def generate_session_title(user_message: str, assistant_reply: str = "",
         + "\n".join(prompt_parts)
     )
 
-    title = _title_from_primary(prompt, session_id) or _title_from_fallback_chain(prompt)
-    if title:
-        return title
-    logger.warning("[SessionService] Title generation failed on all models, using fallback")
-    return _truncate_fallback_title(user_message)
+    from common import timing as _timing
+    _timing.log("title_generation", phase="start", session=session_id or "-")
+    _t0 = _timing.start()
+    try:
+        title = _title_from_primary(prompt, session_id) or _title_from_fallback_chain(prompt)
+        if title:
+            return title
+        logger.warning("[SessionService] Title generation failed on all models, using fallback")
+        return _truncate_fallback_title(user_message)
+    finally:
+        _timing.log(
+            "title_generation",
+            session=session_id or "-",
+            elapsed_ms=_timing.elapsed_ms(_t0),
+        )
 
 
 # Built-in fallback config, used when prompts.json is missing or broken.

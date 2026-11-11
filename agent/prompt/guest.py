@@ -108,16 +108,16 @@ def _skills_section(skills: List[Dict[str, str]], language: str) -> List[str]:
         lines = [
             "## Skills",
             "",
-            "If a skill below matches the request, read its SKILL.md with the read tool first and follow it. "
-            "Skills are not tools and cannot be called directly. Read only the one you pick.",
+            "If a skill below clearly matches the request, read its SKILL.md with the read tool and follow it; otherwise answer with general tools. "
+            "Skills are not tools and cannot be called directly. Read only the one you pick, and only when it is clearly relevant.",
             "",
         ]
     else:
         lines = [
             "## 技能",
             "",
-            "如果下列技能与请求匹配，先用 read 工具读取它的 SKILL.md 并按其中的说明执行。"
-            "技能不是工具，不能直接调用；只读取你选定的那一个。",
+            "仅当下列技能与请求明显匹配时，才用 read 工具读取它的 SKILL.md 并按其中的说明执行；否则直接使用通用工具作答。"
+            "技能不是工具，不能直接调用；只读取你选定的那一个，且不要在并不相关时读取。",
             "",
         ]
     lines.append("<available_skills>")

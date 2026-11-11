@@ -4,6 +4,7 @@ Agent Bridge - Integrates Agent system with existing COW bridge
 
 import os
 import re
+import concurrent.futures
 import threading
 import uuid
 from typing import Dict, Iterator, Optional, List, Tuple
@@ -602,6 +603,11 @@ class AgentBridge:
         self._agent_instances: Dict[Tuple[str, str], Agent] = {}
         self._default_agents: Dict[str, Agent] = {}
         self._agents_lock = threading.RLock()
+        # In-flight initialize_agent() calls, keyed like the runtime caches.
+        # The Future is stored under the global lock; the build itself runs
+        # outside it so prewarm and a first message cannot double-init or
+        # block unrelated sessions.
+        self._agent_inflight: Dict[object, "concurrent.futures.Future"] = {}
         # Backward-compatible view for integrations that inspect sessions of
         # the configured default agent directly.
         self.agents: Dict[str, Agent] = {}
@@ -1250,48 +1256,87 @@ class AgentBridge:
             Agent instance for this session
         """
         resolved_agent_id = self._resolve_agent_id(agent_id)
-        with self._agents_lock:
-            if session_id is None:
-                agent = self._default_agents.get(resolved_agent_id)
-                if agent is None:
-                    agent = self.initializer.initialize_agent(
-                        session_id=None, agent_id=resolved_agent_id
-                    )
-                    self._default_agents[resolved_agent_id] = agent
-                if resolved_agent_id == self.agent_registry.default_agent_id:
-                    self.default_agent = agent
-                return agent
-
-            host_id = self._resolve_agent_id(host_agent_id or resolved_agent_id)
-            key = self._runtime_key(resolved_agent_id, session_id)
-            agent = self._agent_instances.get(key)
-            if agent is None:
-                agent = self.initializer.initialize_agent(
-                    session_id=session_id,
-                    agent_id=resolved_agent_id,
-                    host_agent_id=host_id,
-                )
-                self._agent_instances[key] = agent
-                if resolved_agent_id == self.agent_registry.default_agent_id:
-                    self.agents[session_id] = agent
-            # Point the working directory at the session's project (if any).
-            # Applied on every fetch, so switching projects — or back to the
-            # default — takes effect on the next message without rebuilding the
-            # agent. Memory/skills stay anchored to the workspace regardless.
-            # Project and per-session settings belong to the conversation, so a
-            # guest follows the host's, not its own unrelated ones.
-            self._apply_session_project(agent, session_id, host_id)
-            # Same idea for the session's permission mode, a per-conversation
-            # override that falls back to the global config. The model is not
-            # shared with a guest — see apply_session_prefs.
-            self.apply_session_prefs(
-                agent,
-                session_id,
-                host_id,
-                owns_conversation=resolved_agent_id == host_id,
-                permission_mode=permission_mode,
+        if session_id is None:
+            agent = self._get_or_create_runtime(
+                cache=self._default_agents,
+                key=resolved_agent_id,
+                build=lambda: self.initializer.initialize_agent(
+                    session_id=None, agent_id=resolved_agent_id
+                ),
             )
+            if resolved_agent_id == self.agent_registry.default_agent_id:
+                self.default_agent = agent
             return agent
+
+        host_id = self._resolve_agent_id(host_agent_id or resolved_agent_id)
+        key = self._runtime_key(resolved_agent_id, session_id)
+        agent = self._get_or_create_runtime(
+            cache=self._agent_instances,
+            key=key,
+            build=lambda: self.initializer.initialize_agent(
+                session_id=session_id,
+                agent_id=resolved_agent_id,
+                host_agent_id=host_id,
+            ),
+            after_store=lambda built: self._remember_default_session(
+                resolved_agent_id, session_id, built
+            ),
+        )
+        # Point the working directory at the session's project (if any).
+        # Applied on every fetch, so switching projects — or back to the
+        # default — takes effect on the next message without rebuilding the
+        # agent. Memory/skills stay anchored to the workspace regardless.
+        # Project and per-session settings belong to the conversation, so a
+        # guest follows the host's, not its own unrelated ones.
+        self._apply_session_project(agent, session_id, host_id)
+        # Same idea for the session's permission mode, a per-conversation
+        # override that falls back to the global config. The model is not
+        # shared with a guest — see apply_session_prefs.
+        self.apply_session_prefs(
+            agent,
+            session_id,
+            host_id,
+            owns_conversation=resolved_agent_id == host_id,
+            permission_mode=permission_mode,
+        )
+        return agent
+
+    def _remember_default_session(self, agent_id: str, session_id: str, agent) -> None:
+        if agent_id == self.agent_registry.default_agent_id:
+            self.agents[session_id] = agent
+
+    def _get_or_create_runtime(self, cache: dict, key, build, after_store=None):
+        """Return a cached runtime, building it once per key outside the global lock."""
+        builder = False
+        future = None
+        with self._agents_lock:
+            agent = cache.get(key)
+            if agent is not None:
+                return agent
+            future = self._agent_inflight.get(key)
+            if future is None:
+                future = concurrent.futures.Future()
+                self._agent_inflight[key] = future
+                builder = True
+
+        if not builder:
+            return future.result()
+
+        try:
+            agent = build()
+        except Exception as exc:
+            with self._agents_lock:
+                self._agent_inflight.pop(key, None)
+            future.set_exception(exc)
+            raise
+
+        with self._agents_lock:
+            cache[key] = agent
+            if after_store is not None:
+                after_store(agent)
+            self._agent_inflight.pop(key, None)
+        future.set_result(agent)
+        return agent
 
     def _sync_shared_transcript(self, agent, session_id: str, host_agent_id: str) -> None:
         """Reload the host's transcript so every teammate sees the same history.
