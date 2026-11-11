@@ -56,6 +56,7 @@ desktop/build/*
 !desktop/build/maliang-backend.spec
 !desktop/build/requirements-desktop.txt
 !desktop/build/build-backend.sh
+!desktop/build/smoke-backend.ps1
 !desktop/build/stamp-backend-version.sh
 !desktop/build/build-feishu-vendor.py
 !desktop/build/entitlements.mac.plist

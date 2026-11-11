@@ -36,6 +36,15 @@ jobs:
           .\desktop\build\.venv-build\Scripts\pip install pyinstaller
           .\desktop\build\.venv-build\Scripts\pyinstaller desktop/build/maliang-backend.spec --noconfirm --distpath desktop/build/dist --workpath desktop/build/build-work
 
+      - name: Smoke-test packaged backend
+        shell: pwsh
+        run: |
+          $exe = "desktop/build/dist/maliang-backend/maliang-backend.exe"
+          if (-not (Test-Path $exe)) {
+            throw "PyInstaller finished but $exe was not produced"
+          }
+          powershell -File desktop/build/smoke-backend.ps1 -ExePath $exe -Port 19876 -TimeoutSec 120
+
       - name: Install frontend dependencies
         working-directory: desktop
         run: npm ci
@@ -80,6 +89,25 @@ jobs:
           if ($exes.Count -eq 0) {
             throw "electron-builder finished but no .exe was found under desktop/release"
           }
+
+      - name: Smoke-test win-unpacked backend
+        shell: pwsh
+        run: |
+          $candidates = @(
+            "desktop/release/win-unpacked/resources/backend/maliang-backend/maliang-backend.exe",
+            "desktop/release/win-unpacked/resources/backend/maliang-backend.exe"
+          )
+          $exe = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $exe) {
+            Write-Host "win-unpacked backend search:"
+            if (Test-Path "desktop/release/win-unpacked/resources") {
+              Get-ChildItem -Recurse "desktop/release/win-unpacked/resources/backend" -ErrorAction SilentlyContinue |
+                ForEach-Object { Write-Host $_.FullName }
+            }
+            throw "Packaged win-unpacked tree is missing maliang-backend.exe"
+          }
+          # A different port so this cannot collide with a leftover from the earlier smoke test.
+          powershell -File desktop/build/smoke-backend.ps1 -ExePath $exe -Port 29876 -TimeoutSec 120
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

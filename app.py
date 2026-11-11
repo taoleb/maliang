@@ -6,22 +6,61 @@ import os
 import signal
 import sys
 import time
+import traceback
 
-from channel import channel_factory
-from common import const
-from common.log import logger
-from common.ssl_certs import ensure_ca_bundle
-from config import load_config, conf
-from plugins import *
-import threading
+# Write a line to stderr and, when packaged, to <MALIANG_DATA_DIR>/run.log
+# BEFORE any local imports. A hang or crash while importing channel/plugins
+# used to leave the desktop shell with an empty log: Python never reached
+# common.log, and the Electron health check only saw silence.
+def _bootstrap_log(msg):
+    line = "[BOOT][{}] {}\n".format(time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), msg)
+    try:
+        sys.stderr.write(line)
+        sys.stderr.flush()
+    except Exception:
+        pass
+    data_dir = os.environ.get("MALIANG_DATA_DIR")
+    if not data_dir:
+        return
+    try:
+        data_dir = os.path.expanduser(data_dir)
+        os.makedirs(data_dir, exist_ok=True)
+        with open(os.path.join(data_dir, "run.log"), "a", encoding="utf-8") as fh:
+            fh.write(line)
+    except Exception:
+        pass
 
 
-# The manager lives in common.channel_registry, not here: app.py runs as
-# ``__main__`` (``python app.py``), so a module-level global here would be
-# invisible to any code that does ``from app import ...`` (that import builds a
-# second, separate ``app`` module). The registry is a single shared cell every
-# caller sees — see common/channel_registry.py and issue #3120.
-from common.channel_registry import get_channel_manager, set_channel_manager  # noqa: F401 - re-exported for `from app import get_channel_manager`
+_bootstrap_log(
+    "process starting pid={} frozen={} exe={}".format(
+        os.getpid(), getattr(sys, "frozen", False), getattr(sys, "executable", "")
+    )
+)
+
+try:
+    from channel import channel_factory
+    from common import const
+    from common.log import logger
+    from common.ssl_certs import ensure_ca_bundle
+    from config import load_config, conf
+    from plugins import *
+    import threading
+    # The manager lives in common.channel_registry, not here: app.py runs as
+    # ``__main__`` (``python app.py``), so a module-level global here would be
+    # invisible to any code that does ``from app import ...`` (that import builds a
+    # second, separate ``app`` module). The registry is a single shared cell every
+    # caller sees — see common/channel_registry.py and issue #3120.
+    from common.channel_registry import get_channel_manager, set_channel_manager  # noqa: F401 - re-exported for `from app import get_channel_manager`
+except Exception:
+    _bootstrap_log("import failed:\n" + traceback.format_exc())
+    # Desktop shell treats exit 0 as a clean shutdown and would spin on
+    # "connecting". Non-zero lets it surface the traceback in run.log.
+    if os.environ.get("MALIANG_DESKTOP") == "1":
+        logging.shutdown()
+        os._exit(1)
+    raise
+
+_bootstrap_log("imports complete")
 
 # Desktop mode: a lighter runtime for the packaged Electron client. Plugins are
 # loaded in a background thread (so command plugins like maliang_cli/godcmd work
@@ -581,7 +620,11 @@ def _preload_heavy_imports():
         logger.warning(f"[App] Import preload failed (non-fatal): {e}")
 
 
-WEB_STARTUP_TIMEOUT = 25
+# Desktop must stay below STARTUP_HEALTH_TIMEOUT_MS in python-manager (120s
+# on Windows) so a hang still produces a thread dump in run.log before the
+# shell gives up. 25s was too tight once skill sync and Defender scanning
+# pushed frozen Windows startups past that window with no web bind yet.
+WEB_STARTUP_TIMEOUT = 90 if DESKTOP_MODE else 25
 
 
 def _start_web_watchdog(timeout: int = WEB_STARTUP_TIMEOUT):

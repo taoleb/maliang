@@ -33,6 +33,14 @@ const FALLBACK_PORTS = [19876, 29876, 39876, 49876, 55876]
 // is a safety net against a hung probe, not a normal code path.
 const PORT_READY_TIMEOUT_MS = 15_000
 
+// How long start() waits for /api/health. Windows first launches of an
+// unsigned onedir exe are often delayed 30-90s by Defender scanning
+// maliang-backend.exe and its _internal DLLs, during which the process
+// is alive but completely silent. A 30s budget expired before Python
+// had even started, which is the "初始化失败" with an empty run.log
+// and a later SIGTERM (exit code null) on retry.
+const STARTUP_HEALTH_TIMEOUT_MS = process.platform === 'win32' ? 120_000 : 45_000
+
 // Liveness supervision, active only AFTER the backend has been ready once.
 // Without it a backend that died or wedged hours later went unnoticed: the
 // shell kept reporting 'ready', the window looked fine, and every renderer
@@ -875,17 +883,41 @@ export class PythonBackend extends EventEmitter {
 
   private waitForReady(): Promise<void> {
     return new Promise((resolve) => {
-      // Wall-clock deadline rather than an attempt counter: if the machine
-      // sleeps/suspends, the 1s timers stretch out and a counter would give up
-      // far too early. Time-based bounding tracks real elapsed time instead.
-      // Only reachable when the process is alive yet never answers /api/health:
-      // a crash exits immediately and a wedged startup is killed by the
-      // backend's own watchdog, and both paths report a real cause. So this is
-      // a backstop, kept just above that watchdog so its message wins the race.
-      const timeoutMs = 30_000
-      const startedAt = Date.now()
+      // Hard wall-clock deadline. The per-request timeout is not enough: a
+      // connect to a black-holed local port can hang until the OS TCP timeout
+      // (often 20-75s on Windows), and req.setTimeout only starts after the
+      // socket connects — so retry() (which is where the old deadline lived)
+      // never ran and start() blocked the shell well past 30s.
+      const timeoutMs = STARTUP_HEALTH_TIMEOUT_MS
+      let settled = false
+      const finish = () => {
+        if (settled) return
+        settled = true
+        resolve()
+      }
+
+      const hardTimer = setTimeout(() => {
+        if (this.status === 'ready' || this.status === 'stopped' || this.status === 'error') {
+          finish()
+          return
+        }
+        this.fail(
+          'backend_timeout',
+          this.withLastError(`The app failed to start within ${Math.round(timeoutMs / 1000)} seconds`),
+        )
+        // A wedged backend must not be left resident: the next retry would
+        // fight it for the port, and on Windows SIGTERM from a later stop()
+        // is how the user's run.log got "exited with code null".
+        try {
+          this.process?.kill('SIGTERM')
+        } catch {
+          // ignore
+        }
+        finish()
+      }, timeoutMs)
 
       const check = () => {
+        if (settled) return
         // Probe the unauthenticated health endpoint, NOT /config: /config
         // requires auth once a web_password is set, which would make this poll
         // 401 forever and hang startup.
@@ -893,38 +925,35 @@ export class PythonBackend extends EventEmitter {
           // Drain the body so the socket isn't held out of the keep-alive pool.
           res.resume()
           if (res.statusCode === 200) {
+            clearTimeout(hardTimer)
             this.status = 'ready'
             this.emit('log', `Backend ready on port ${this.port}`)
             this.emit('ready', this.port)
             // From here on the renderer trusts 'ready', so this monitor is the
             // only thing that can notice the backend going away later.
             this.startHealthMonitor()
-            resolve()
+            finish()
           } else {
             retry()
           }
         })
 
         req.on('error', () => retry())
-        req.setTimeout(2000, () => {
+        // Independent of req.setTimeout, which may not fire until connected.
+        const probeTimer = setTimeout(() => {
           req.destroy()
           retry()
-        })
+        }, 2000)
+        req.on('close', () => clearTimeout(probeTimer))
       }
 
       const retry = () => {
+        if (settled) return
         // Backend already settled: ready (done), or stopped/errored by the exit
         // handler (don't keep polling a dead process — the error was emitted).
         if (this.status === 'ready' || this.status === 'stopped' || this.status === 'error') {
-          resolve()
-          return
-        }
-        if (Date.now() - startedAt >= timeoutMs) {
-          this.fail(
-            'backend_timeout',
-            this.withLastError(`The app failed to start within ${Math.round(timeoutMs / 1000)} seconds`),
-          )
-          resolve()
+          clearTimeout(hardTimer)
+          finish()
           return
         }
         setTimeout(check, 1000)
